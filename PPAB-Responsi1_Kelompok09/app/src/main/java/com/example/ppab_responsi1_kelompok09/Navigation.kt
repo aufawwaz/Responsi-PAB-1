@@ -9,9 +9,9 @@ import androidx.navigation.compose.composable
 fun AppNavGraph(navController : NavHostController) {
     NavHost(navController = navController, startDestination = "home"){
         composable("home")      { /* HomeScreen(navController) */}
-        composable("produk")    { /* ProdukScreen(navController) */}
-        composable("transaksi") { /* TransaksiScreen(navController) */}
-        composable("kontak")    { /* KontakScreen(navController) */}
-        composable("profile")   { /* ProfileScreen(navController) */}
+        composable("produk")    { /* ProductScreen(navController) */}
+        composable("transaksi") { /* TransactionScreen(navController) */}
+        composable("kontak")    { /* ContactScreen(navController) */}
+        composable("more")   { /* MoreScreen(navController) */}
     }
 }
