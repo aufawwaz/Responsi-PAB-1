@@ -1,0 +1,107 @@
+package com.example.ppab_responsi1_kelompok09
+
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.ppab_responsi1_kelompok09.data.NavItem
+import com.example.ppab_responsi1_kelompok09.pages.ContactPage.ContactScreen
+import com.example.ppab_responsi1_kelompok09.pages.HomePage.HomeScreen
+import com.example.ppab_responsi1_kelompok09.pages.MorePage.MoreScreen
+import com.example.ppab_responsi1_kelompok09.pages.ProductPage.ProductScreen
+import com.example.ppab_responsi1_kelompok09.pages.TransactionPage.TransactionScreen
+import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
+import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
+import com.example.ppab_responsi1_kelompok09.ui.theme.White
+
+@Composable
+fun MainNavigation(
+    modifier : Modifier = Modifier
+) {
+    val navController = rememberNavController()
+
+    val navItemList = listOf(
+        NavItem("home", R.drawable.home, R.drawable.home_fill),
+        NavItem("product", R.drawable.produk, R.drawable.produk_fill),
+        NavItem("transaction", R.drawable.transaction, R.drawable.transaction_fill),
+        NavItem("contact", R.drawable.pelanggan, R.drawable.pelanggan_fill),
+        NavItem("more", R.drawable.dashboard, R.drawable.dashboard_fill)
+    )
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route ?: "home"
+
+    val selectedColor = Primary
+    val unselectedColor = Gray
+    val navbarColor = White
+
+    Scaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        containerColor = White,
+        bottomBar = {
+            NavigationBar(containerColor = navbarColor) {
+                navItemList.forEach { navItem ->
+                    val isSelected = currentRoute == navItem.route
+                    val iconRes = if (isSelected) navItem.selectedIcon else navItem.icon
+                    val tintColor = if (isSelected) selectedColor else unselectedColor
+
+                    NavigationBarItem(
+                        selected = isSelected,
+                        onClick = {
+                            navController.navigate(navItem.route) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                painter = painterResource(id = iconRes),
+                                contentDescription = null,
+                                tint = tintColor,
+                                modifier = Modifier.size(28.dp)
+                            )
+                        },
+                        colors = NavigationBarItemDefaults.colors(
+                            indicatorColor = Color.Transparent,
+                            selectedIconColor = selectedColor,
+                            unselectedIconColor = unselectedColor,
+                            selectedTextColor = selectedColor,
+                            unselectedTextColor = unselectedColor
+                        )
+                    )
+                }
+            }
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "home",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable("home") { HomeScreen() }
+            composable("product") { ProductScreen() }
+            composable("transaction") { TransactionScreen() }
+            composable("contact") { ContactScreen() }
+            composable("more") { MoreScreen() }
+        }
+    }
+}
