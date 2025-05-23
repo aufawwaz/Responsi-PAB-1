@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.ppab_responsi1_kelompok09.pages.MorePage.MoreScreen
 import com.example.ppab_responsi1_kelompok09.ui.theme.PPABResponsi1_Kelompok09Theme
 
 class MainActivity : ComponentActivity() {
@@ -19,29 +20,24 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PPABResponsi1_Kelompok09Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MainNavigation()
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PPABResponsi1_Kelompok09Theme {
-        Greeting("Android")
-    }
-}
+//@Composable
+//fun Greeting(name: String, modifier: Modifier = Modifier) {
+//    Text(
+//        text = "Hello $name!",
+//        modifier = modifier
+//    )
+//}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview() {
+//    PPABResponsi1_Kelompok09Theme {
+//        Greeting("Android")
+//    }
+//}
