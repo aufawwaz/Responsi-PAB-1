@@ -8,7 +8,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
@@ -19,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.ppab_responsi1_kelompok09.data.NavItem
+import com.example.ppab_responsi1_kelompok09.data.DataClass
 import com.example.ppab_responsi1_kelompok09.pages.ContactPage.ContactScreen
 import com.example.ppab_responsi1_kelompok09.pages.HomePage.HomeScreen
 import com.example.ppab_responsi1_kelompok09.pages.MorePage.MoreScreen
@@ -35,12 +34,12 @@ fun MainNavigation(
 ) {
     val navController = rememberNavController()
 
-    val navItemList = listOf(
-        NavItem("home", R.drawable.home, R.drawable.home_fill),
-        NavItem("product", R.drawable.produk, R.drawable.produk_fill),
-        NavItem("transaction", R.drawable.transaction, R.drawable.transaction_fill),
-        NavItem("contact", R.drawable.pelanggan, R.drawable.pelanggan_fill),
-        NavItem("more", R.drawable.dashboard, R.drawable.dashboard_fill)
+    val dataClassLists = listOf(
+        DataClass("home", R.drawable.home, R.drawable.home_fill),
+        DataClass("product", R.drawable.produk, R.drawable.produk_fill),
+        DataClass("transaction", R.drawable.transaction, R.drawable.transaction_fill),
+        DataClass("contact", R.drawable.pelanggan, R.drawable.pelanggan_fill),
+        DataClass("more", R.drawable.dashboard, R.drawable.dashboard_fill)
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -56,7 +55,7 @@ fun MainNavigation(
         containerColor = White,
         bottomBar = {
             NavigationBar(containerColor = navbarColor) {
-                navItemList.forEach { navItem ->
+                dataClassLists.forEach { navItem ->
                     val isSelected = currentRoute == navItem.route
                     val iconRes = if (isSelected) navItem.selectedIcon else navItem.icon
                     val tintColor = if (isSelected) selectedColor else unselectedColor

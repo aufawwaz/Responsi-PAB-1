@@ -27,11 +27,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ppab_responsi1_kelompok09.R
+import com.example.ppab_responsi1_kelompok09.common.style.AppText
 import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Poppins
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
+
+// Component buat satu deret profil
 
 @Composable
 fun ProfileContainer (
@@ -58,7 +61,7 @@ fun ProfileContainer (
                     .height(28.dp)
                     .clip(CircleShape)
             )
-            Text(
+            AppText(
                 text = text,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
@@ -75,12 +78,11 @@ fun ProfileContainer (
                         .clip(RoundedCornerShape(8.dp))
                         .background(White)
                 ) {
-                    Text(
+                    AppText(
                         modifier = Modifier
                             .padding(vertical = 4.dp, horizontal = 8.dp)
                             .align(Alignment.Center),
                         text = "BASIC",
-                        fontFamily = Poppins,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Medium,
                         color = Primary
