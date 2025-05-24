@@ -1,4 +1,4 @@
-package com.example.ppab_responsi1_kelompok09.component
+package com.example.ppab_responsi1_kelompok09.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
+import com.example.ppab_responsi1_kelompok09.ui.theme.Poppins
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
@@ -79,6 +80,7 @@ fun ProfileContainer (
                             .padding(vertical = 4.dp, horizontal = 8.dp)
                             .align(Alignment.Center),
                         text = "BASIC",
+                        fontFamily = Poppins,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Medium,
                         color = Primary

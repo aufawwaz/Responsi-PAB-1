@@ -1,4 +1,4 @@
-package com.example.ppab_responsi1_kelompok09.component
+package com.example.ppab_responsi1_kelompok09.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
