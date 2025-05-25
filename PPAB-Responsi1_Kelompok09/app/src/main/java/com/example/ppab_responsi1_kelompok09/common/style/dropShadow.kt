@@ -11,6 +11,8 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+// Component shadow yang bisa dikustomisasi
+
 fun Modifier.shadow(
     color: Color = Color.Black,
     borderRadius: Dp = 0.dp,
@@ -48,6 +50,8 @@ fun Modifier.shadow(
         }
     }
 )
+
+// Pake ini kalo mau ngasih shadow, sesuaikan border radius dengan yang ada pada parent component
 
 fun Modifier.dropShadow200(borderRadius: Dp): Modifier =
     this

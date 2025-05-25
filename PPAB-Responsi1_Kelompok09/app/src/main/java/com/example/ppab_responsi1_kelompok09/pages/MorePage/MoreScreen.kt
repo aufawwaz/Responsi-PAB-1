@@ -9,12 +9,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,11 +26,11 @@ import androidx.compose.ui.unit.sp
 import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.common.component.HeaderGradient
 import com.example.ppab_responsi1_kelompok09.common.component.ProfileContainer
+import com.example.ppab_responsi1_kelompok09.common.component.TonalIcon
+import com.example.ppab_responsi1_kelompok09.common.style.AppText
 import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
 import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
-import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
-import com.example.ppab_responsi1_kelompok09.ui.theme.Poppins
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
@@ -48,16 +47,18 @@ fun MoreScreen () {
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = 20.dp, horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .offset(y = 52.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ProfileContainer(
-                R.drawable.login,
+                R.drawable.img_profile_picture,
                 "Biru",
                 true
             )
             Box (
                 modifier = Modifier
+                    .padding(top = 4.dp)
                     .dropShadow200(8.dp)
                     .clip(RoundedCornerShape(8.dp))
             ) {
@@ -67,15 +68,13 @@ fun MoreScreen () {
                     R.drawable.pelanggan_fill
                 )
             }
-            Text(
+            AppText(
                 text = "Manajemen",
-                fontFamily = Poppins,
                 fontWeight = FontWeight.Medium,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onBackground
+                fontSize = 14.sp
             )
             ManajemenItemContainer()
-            Column (
+            Box (
                 modifier = Modifier
                     .dropShadow200(8.dp)
                     .clip(RoundedCornerShape(8.dp))
@@ -89,7 +88,7 @@ fun MoreScreen () {
 }
 
 @Composable
-fun ManajemenItemContainer () {
+private fun ManajemenItemContainer () {
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -105,7 +104,7 @@ fun ManajemenItemContainer () {
 }
 
 @Composable
-fun ManajemenItem (
+private fun ManajemenItem (
     isAkun : Boolean = false,
     text : String,
     icon : Int
@@ -124,35 +123,21 @@ fun ManajemenItem (
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Primary.copy(0.1f))
-            ) {
-                Icon(
-//                            Perlu diganti login fill
-                    painter = painterResource(icon),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .align(Alignment.Center),
-                    tint = Primary
-                )
-            }
+            TonalIcon(
+                iconHeight = 24.dp,
+                iconRes = icon,
+                boxSize = 40.dp
+            )
             if (isAkun == true) {
-                Text(
+                AppText(
                     text = "Akun saya",
                     color = Primary,
-                    fontFamily = Poppins,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
             } else {
-                Text(
+                AppText(
                     text = text,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontFamily = Poppins,
                     fontWeight = FontWeight.Normal,
                     fontSize = 14.sp
                 )
@@ -169,7 +154,7 @@ fun ManajemenItem (
 }
 
 @Composable
-fun Logout () {
+private fun Logout () {
     Row (
         modifier = Modifier
             .fillMaxSize()
@@ -184,24 +169,14 @@ fun Logout () {
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Danger.copy(0.1f))
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.previous),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .align(Alignment.Center),
-                    tint = Danger
-                )
-            }
-            Text(
+            TonalIcon(
+                iconHeight = 24.dp,
+                iconRes = R.drawable.home_fill,
+                iconBackground = Danger,
+                boxSize = 40.dp
+            )
+            AppText(
                 text = "Logout",
-                fontFamily = Poppins,
                 color = Danger,
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp

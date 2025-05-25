@@ -1,5 +1,6 @@
 package com.example.ppab_responsi1_kelompok09.common.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -21,17 +22,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ppab_responsi1_kelompok09.R
+import com.example.ppab_responsi1_kelompok09.common.style.AppText
 import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Poppins
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
+
+// Component buat satu deret profil
 
 @Composable
 fun ProfileContainer (
@@ -49,16 +54,28 @@ fun ProfileContainer (
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Icon(
-                painter = painterResource(icon),
-                contentDescription = null,
-                tint = White,
-                modifier = Modifier
-                    .width(28.dp)
-                    .height(28.dp)
-                    .clip(CircleShape)
-            )
-            Text(
+            if (isLogin == false) {
+                Icon(
+                    painter = painterResource(icon),
+                    contentDescription = null,
+                    tint = White,
+                    modifier = Modifier
+                        .width(28.dp)
+                        .height(28.dp)
+                        .clip(CircleShape)
+                )
+            } else {
+                Image(
+                    painter = painterResource(icon),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .width(28.dp)
+                        .height(28.dp)
+                        .clip(CircleShape)
+                )
+            }
+            AppText(
                 text = text,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
@@ -75,12 +92,11 @@ fun ProfileContainer (
                         .clip(RoundedCornerShape(8.dp))
                         .background(White)
                 ) {
-                    Text(
+                    AppText(
                         modifier = Modifier
                             .padding(vertical = 4.dp, horizontal = 8.dp)
                             .align(Alignment.Center),
                         text = "BASIC",
-                        fontFamily = Poppins,
                         fontSize = 10.sp,
                         fontWeight = FontWeight.Medium,
                         color = Primary

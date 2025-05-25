@@ -11,13 +11,19 @@ import androidx.compose.ui.unit.dp
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpRect
+import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
+
+//Component buat awalan setiap navigation kecuali homescreen
 
 @Composable
-fun HeaderGradient () {
+fun HeaderGradient (height : Dp = 132.dp) {
     Box (
         modifier = Modifier
             .fillMaxWidth()
-            .height(96.dp)
+            .height(height)
+            .dropShadow200(0.dp)
             .background(
                 brush = Brush.linearGradient(
                     colors = listOf(Primary900, Primary),
