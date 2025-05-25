@@ -1,11 +1,14 @@
 package com.example.ppab_responsi1_kelompok09.pages.HomePage
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,9 +19,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -31,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.approachLayout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,10 +49,14 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import com.example.ppab_responsi1_kelompok09.R
+import com.example.ppab_responsi1_kelompok09.common.component.KnowledgeCard
 import com.example.ppab_responsi1_kelompok09.common.component.TonalIcon
 import com.example.ppab_responsi1_kelompok09.common.style.AppText
+import com.example.ppab_responsi1_kelompok09.common.style.HomeTextHeader
 import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
+import com.example.ppab_responsi1_kelompok09.data.KnowledgeCardItem
 import com.example.ppab_responsi1_kelompok09.data.MenuItem
+import com.example.ppab_responsi1_kelompok09.data.TabelItem
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
@@ -61,7 +71,7 @@ fun HomeScreen() {
             .verticalScroll(rememberScrollState())
     ) {
         Box (
-            modifier = Modifier.height(1336.dp)
+            Modifier.height(1200.dp)
         ) {
             HeaderHome()
             Column (
@@ -284,6 +294,13 @@ private fun UpgradeButton() {
 
 @Composable
 private fun KnowledgeCardSection() {
+    val knowledgeCardItem = listOf(
+        KnowledgeCardItem(R.drawable.img_business_1, "Mau Jadi Pebisnis Sukses? Yuk Terapkan 7 Kebiasaan Positif ...", "Ada begitu banyak contoh pebisnis sukses diberbagai ..."),
+        KnowledgeCardItem(R.drawable.img_business_2, "Mau Jadi Pebisnis Sukses? Yuk Terapkan 7 Kebiasaan Positif ...", "Ada begitu banyak contoh pebisnis sukses diberbagai ..."),
+        KnowledgeCardItem(R.drawable.img_business_3, "Mau Jadi Pebisnis Sukses? Yuk Terapkan 7 Kebiasaan Positif ...", "Ada begitu banyak contoh pebisnis sukses diberbagai ..."),
+        KnowledgeCardItem(R.drawable.img_business_4, "Mau Jadi Pebisnis Sukses? Yuk Terapkan 7 Kebiasaan Positif ...", "Ada begitu banyak contoh pebisnis sukses diberbagai ..."),
+        )
+
     Spacer(Modifier.height(10.dp))
     Row (
         modifier = Modifier
@@ -291,11 +308,7 @@ private fun KnowledgeCardSection() {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        AppText(
-            text = "BERITA",
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
-        )
+        HomeTextHeader(text = "BERITA")
         Box (
             modifier = Modifier
                 .weight(1f)
@@ -320,7 +333,136 @@ private fun KnowledgeCardSection() {
             )
         }
     }
+    LazyRow (
+        modifier = Modifier
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items (knowledgeCardItem.size) { i ->
+            val item = knowledgeCardItem[i]
+            KnowledgeCard(
+                imageRes = item.imageRes,
+                title = item.title,
+                description = item.description
+            )
+        }
+    }
 }
 
 @Composable
-private fun PesananTerbaru() {}
+private fun PesananTerbaru() {
+    Column (
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .padding(top = 16.dp)
+            .dropShadow200(16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(White)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            HomeTextHeader("PESANAN TERBARU")
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                AppText(
+                    text = "Lihat semua",
+                    color = Primary,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Normal
+                )
+                Icon (
+                    painter = painterResource(R.drawable.next),
+                    contentDescription = null,
+                    tint = Primary,
+                    modifier = Modifier.height(20.dp)
+                )
+            }
+        }
+        Box (
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Gray.copy(0.5f))
+                .height(1.dp)
+        )
+        TabelPesanan()
+    }
+}
+
+@Composable
+private fun TabelPesanan() {
+    val tabelItem = listOf(
+        TabelItem(R.drawable.img_profile_picture, "John Doe", "11 Mei 2025", "+ Rp100.000"),
+        TabelItem(R.drawable.img_profile_picture, "Ariel Josua", "09 Mei 2025", "+ Rp200.000"),
+        TabelItem(R.drawable.img_profile_picture, "Aufa Fawwaz", "09 Mei 2025", "+ Rp1.000.000"),
+        TabelItem(R.drawable.img_profile_picture, "Aril Fadla Huda...", "01 Mei 2025", "+ Rp300.000"),
+        TabelItem(R.drawable.img_profile_picture, "Budiman", "01 Januari 2025", "+ Rp300.000"),
+    )
+
+    LazyColumn (
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(tabelItem.size) { i ->
+            val item = tabelItem[i]
+            TabelItemRow(
+                image = item.imageRes,
+                name = item.name,
+                date = item.date,
+                money = item.money
+            )
+        }
+    }
+}
+
+@Composable
+private fun TabelItemRow(
+    image : Int,
+    name : String,
+    date : String,
+    money : String
+) {
+    Row (
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row (
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Image (
+                painter = painterResource(image),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape)
+            )
+            Column {
+                AppText(
+                    text = name,
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 12.sp
+                )
+                AppText(
+                    text = date,
+                    fontWeight = FontWeight.ExtraLight,
+                    fontSize = 10.sp
+                )
+            }
+        }
+        AppText(
+            text = money,
+            fontWeight = FontWeight.Medium,
+            fontSize = 12.sp,
+            color = Success
+        )
+    }
+}

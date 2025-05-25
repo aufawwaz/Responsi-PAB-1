@@ -32,3 +32,20 @@ fun AppText(
         modifier = modifier
     )
 }
+
+@Composable
+fun HomeTextHeader(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = text,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 0.sp,
+        lineHeight = 14.sp,
+        fontFamily = Poppins,
+        color = Dark,
+        modifier = modifier
+    )
+}
