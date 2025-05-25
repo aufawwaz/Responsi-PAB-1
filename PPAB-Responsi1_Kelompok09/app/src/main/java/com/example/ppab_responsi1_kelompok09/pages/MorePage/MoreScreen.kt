@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -46,16 +47,18 @@ fun MoreScreen () {
         Column (
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = 20.dp, horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .offset(y = 52.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ProfileContainer(
-                R.drawable.login,
+                R.drawable.img_profile_picture,
                 "Biru",
                 true
             )
             Box (
                 modifier = Modifier
+                    .padding(top = 4.dp)
                     .dropShadow200(8.dp)
                     .clip(RoundedCornerShape(8.dp))
             ) {

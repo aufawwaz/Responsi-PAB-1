@@ -49,6 +49,7 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import com.example.ppab_responsi1_kelompok09.R
+import com.example.ppab_responsi1_kelompok09.common.component.BottomSpacer
 import com.example.ppab_responsi1_kelompok09.common.component.KnowledgeCard
 import com.example.ppab_responsi1_kelompok09.common.component.TonalIcon
 import com.example.ppab_responsi1_kelompok09.common.style.AppText
@@ -71,7 +72,7 @@ fun HomeScreen() {
             .verticalScroll(rememberScrollState())
     ) {
         Box (
-            Modifier.height(1200.dp)
+            Modifier.height(1336.dp)
         ) {
             HeaderHome()
             Column (
@@ -115,7 +116,7 @@ private fun HeaderHome() {
         )
         {
             ProfileContainer(
-                icon = R.drawable.login,
+                icon = R.drawable.img_profile_picture,
                 text = "Biru",
                 isLogin = true
             )

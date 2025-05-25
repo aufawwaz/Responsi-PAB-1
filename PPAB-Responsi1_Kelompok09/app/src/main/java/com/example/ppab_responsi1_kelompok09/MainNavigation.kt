@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
 import com.example.ppab_responsi1_kelompok09.data.DataClass
 import com.example.ppab_responsi1_kelompok09.pages.ContactPage.ContactScreen
 import com.example.ppab_responsi1_kelompok09.pages.HomePage.HomeScreen
@@ -54,7 +55,9 @@ fun MainNavigation(
             .fillMaxSize(),
         containerColor = White,
         bottomBar = {
-            NavigationBar(containerColor = navbarColor) {
+            NavigationBar(
+                modifier = Modifier.dropShadow200(0.dp),
+                containerColor = navbarColor) {
                 dataClassLists.forEach { navItem ->
                     val isSelected = currentRoute == navItem.route
                     val iconRes = if (isSelected) navItem.selectedIcon else navItem.icon
@@ -90,14 +93,13 @@ fun MainNavigation(
                 }
             }
         }
-    ) { innerPadding ->
+    ) {
         NavHost(
             navController = navController,
             startDestination = "home",
-            modifier = Modifier.padding(innerPadding)
         ) {
             composable("home") { HomeScreen() }
-            composable("product") { ProductScreen() }
+            composable("product") { ProductScreen()}
             composable("transaction") { TransactionScreen() }
             composable("contact") { ContactScreen() }
             composable("more") { MoreScreen() }
