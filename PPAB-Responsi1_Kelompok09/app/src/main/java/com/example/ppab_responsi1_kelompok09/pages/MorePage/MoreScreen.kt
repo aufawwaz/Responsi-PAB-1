@@ -1,6 +1,7 @@
 package com.example.ppab_responsi1_kelompok09.pages.MorePage
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,13 +17,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.common.component.HeaderGradient
 import com.example.ppab_responsi1_kelompok09.common.component.ProfileContainer
@@ -34,9 +35,8 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
-@Preview
 @Composable
-fun MoreScreen () {
+fun MoreScreen (navController: NavController) {
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -81,7 +81,7 @@ fun MoreScreen () {
                     .fillMaxWidth()
                     .height(60.dp)
             ) {
-                Logout()
+                Logout(navController)
             }
         }
     }
@@ -154,9 +154,10 @@ private fun ManajemenItem (
 }
 
 @Composable
-private fun Logout () {
+private fun Logout (navController: NavController) {
     Row (
         modifier = Modifier
+            .clickable{ navController.navigate("login") }
             .fillMaxSize()
             .clip(RoundedCornerShape(8.dp))
 //          MaterialTheme.colorScheme.background

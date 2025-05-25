@@ -1,7 +1,6 @@
 package com.example.ppab_responsi1_kelompok09
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -22,6 +21,8 @@ import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
 import com.example.ppab_responsi1_kelompok09.data.DataClass
 import com.example.ppab_responsi1_kelompok09.pages.ContactPage.ContactScreen
 import com.example.ppab_responsi1_kelompok09.pages.HomePage.HomeScreen
+import com.example.ppab_responsi1_kelompok09.pages.LoginPage.LoginScreen
+import com.example.ppab_responsi1_kelompok09.pages.LoginPage.RegisterScreen
 import com.example.ppab_responsi1_kelompok09.pages.MorePage.MoreScreen
 import com.example.ppab_responsi1_kelompok09.pages.ProductPage.ProductScreen
 import com.example.ppab_responsi1_kelompok09.pages.TransactionPage.TransactionScreen
@@ -30,11 +31,8 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
 @Composable
-fun MainNavigation(
-    modifier : Modifier = Modifier
-) {
+fun MainNavigation() {
     val navController = rememberNavController()
-
     val dataClassLists = listOf(
         DataClass("home", R.drawable.home, R.drawable.home_fill),
         DataClass("product", R.drawable.produk, R.drawable.produk_fill),
@@ -42,67 +40,76 @@ fun MainNavigation(
         DataClass("contact", R.drawable.pelanggan, R.drawable.pelanggan_fill),
         DataClass("more", R.drawable.dashboard, R.drawable.dashboard_fill)
     )
+    val otherScreen = listOf("login", "register")
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route ?: "home"
+    val currentRoute = navBackStackEntry?.destination?.route
 
     val selectedColor = Primary
     val unselectedColor = Gray
     val navbarColor = White
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        containerColor = White,
-        bottomBar = {
-            NavigationBar(
-                modifier = Modifier.dropShadow200(0.dp),
-                containerColor = navbarColor) {
-                dataClassLists.forEach { navItem ->
-                    val isSelected = currentRoute == navItem.route
-                    val iconRes = if (isSelected) navItem.selectedIcon else navItem.icon
-                    val tintColor = if (isSelected) selectedColor else unselectedColor
 
-                    NavigationBarItem(
-                        selected = isSelected,
-                        onClick = {
-                            navController.navigate(navItem.route) {
-                                launchSingleTop = true
-                                restoreState = true
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = White,
+
+        // Bottom bar ga muncul di screen dalam otherScreen
+        bottomBar = {
+            if (currentRoute !in otherScreen) {
+                NavigationBar(
+                    modifier = Modifier.dropShadow200(0.dp),
+                    containerColor = navbarColor
+                ) {
+                    dataClassLists.forEach { navItem ->
+                        val isSelected = currentRoute == navItem.route
+                        val iconRes = if (isSelected) navItem.selectedIcon else navItem.icon
+                        val tintColor = if (isSelected) selectedColor else unselectedColor
+
+                        NavigationBarItem(
+                            selected = isSelected,
+                            onClick = {
+                                navController.navigate(navItem.route) {
+                                    launchSingleTop = true
+                                    restoreState = true
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
+                                    }
                                 }
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                painter = painterResource(id = iconRes),
-                                contentDescription = null,
-                                tint = tintColor,
-                                modifier = Modifier.size(28.dp)
+                            },
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = iconRes),
+                                    contentDescription = null,
+                                    tint = tintColor,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                indicatorColor = Color.Transparent,
+                                selectedIconColor = selectedColor,
+                                unselectedIconColor = unselectedColor,
+                                selectedTextColor = selectedColor,
+                                unselectedTextColor = unselectedColor
                             )
-                        },
-                        colors = NavigationBarItemDefaults.colors(
-                            indicatorColor = Color.Transparent,
-                            selectedIconColor = selectedColor,
-                            unselectedIconColor = unselectedColor,
-                            selectedTextColor = selectedColor,
-                            unselectedTextColor = unselectedColor
                         )
-                    )
+                    }
                 }
             }
         }
     ) {
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "login"
         ) {
             composable("home") { HomeScreen() }
-            composable("product") { ProductScreen()}
+            composable("product") { ProductScreen() }
             composable("transaction") { TransactionScreen() }
             composable("contact") { ContactScreen() }
-            composable("more") { MoreScreen() }
+            composable("more") { MoreScreen(navController) }
+
+            composable("login") { LoginScreen(navController) }
+            composable("register") { RegisterScreen(navController) }
         }
     }
 }

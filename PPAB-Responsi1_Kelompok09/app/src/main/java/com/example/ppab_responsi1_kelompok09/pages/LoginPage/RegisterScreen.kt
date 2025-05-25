@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.example.ppab_responsi1_kelompok09.pages.LoginPage
 
 import androidx.compose.foundation.Image
@@ -18,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,14 +41,14 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 
 // @Preview(showBackground = true)
 @Composable
-fun LoginScreen(navController: NavController){
+fun RegisterScreen(navController: NavController){
     Box(
         modifier = Modifier.fillMaxSize().background(Primary900)
     ){
         Box(
             modifier = Modifier
                 .background(brush = Brush.linearGradient(
-                    listOf(Primary900 ,Primary),
+                    listOf(Primary900 , Primary),
                     start = Offset(0f, Float.POSITIVE_INFINITY),
                     end = Offset(0f, -5f)
                 ))
@@ -70,99 +67,90 @@ fun LoginScreen(navController: NavController){
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             Spacer(Modifier.height(24.dp))
-            AppText("Login", 18.sp, FontWeight.W600, MaterialTheme.colorScheme.onBackground)
+            AppText("Register", 18.sp, FontWeight.W600, MaterialTheme.colorScheme.onBackground)
             Spacer(Modifier.height(24.dp))
 
-            Spacer(Modifier.height(16.dp))
-            Column (
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(start = 56.dp, end = 56.dp)
-            ) {
-                LoginForm(navController)
-            }
+            RegisterForm(navController)
         }
     }
 }
 
 @Composable
-private fun LoginForm(navController: NavController){
-
-    // SIGN IN GOOGLE
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, Gray, RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
-            .padding(horizontal = 12.dp, vertical = 8.dp)
-            .height(IntrinsicSize.Min)
-            .clickable { /* sign in google */ },
-        contentAlignment = Alignment.CenterStart
+private fun RegisterForm(navController: NavController){
+    Spacer(Modifier.height(16.dp))
+    Column (
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(start = 56.dp, end = 56.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.google_logo),
-                contentDescription = null,
-                modifier = Modifier.width(20.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            AppText(
-                "Sign in with Google",
-                12.sp,
-                FontWeight.Bold,
-                MaterialTheme.colorScheme.onBackground
-            )
-        }
-    }
-    HorizontalLine()
-    InputTextForm("Email", R.drawable.email, false)
-    InputTextForm("Password", R.drawable.password, true)
-    InputTextForm("Confirm Password", R.drawable.password, true)
-
-    // LOGIN CONFIRMATION
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-    ){
-        Row(
+        // SIGN IN GOOGLE
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(36.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .border(1.dp, Gray, RoundedCornerShape(12.dp))
+                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .height(IntrinsicSize.Min)
+                .clickable { /* sign in google */ },
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.google_logo),
+                    contentDescription = null,
+                    modifier = Modifier.width(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                AppText(
+                    "Sign in with Google",
+                    12.sp,
+                    FontWeight.Bold,
+                    MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+        HorizontalLine()
+        InputTextForm("Username", R.drawable.login, false)
+        InputTextForm("Email", R.drawable.email, false)
+        InputTextForm("Password", R.drawable.password, true)
+
+        // REGISTER CONFIRMATION
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
         ){
-            Row (
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(36.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
                 CustomCheckbox(15.sp)
                 Spacer(Modifier.width(7.dp))
-                AppText("Remember me", 11.sp)
+                AppText("I agree to the ", 11.sp)
+                AppText("Terms & Conditions", 11.sp, color = Primary)
             }
-            AppText("Forgot Password?", 11.sp, color = Primary)
-        }
-        CustomButton(
-            { navController.navigate("home") },
-            "Login"
-        )
+            CustomButton({ }, "Sign Up")
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(36.dp)
-                .padding(bottom = 7.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            AppText("Don't have account? ", 11.sp)
-            AppText(
-                "Create account",
-                11.sp,
-                color = Primary,
-                modifier = Modifier.clickable{ navController.navigate("register") }
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(36.dp)
+                    .padding(bottom = 7.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                AppText("Already have an account? ", 11.sp)
+                AppText(
+                    "Sign In",
+                    11.sp,
+                    color = Primary,
+                    modifier = Modifier.clickable{ navController.navigate("login") }
+                )
+            }
         }
     }
 }
