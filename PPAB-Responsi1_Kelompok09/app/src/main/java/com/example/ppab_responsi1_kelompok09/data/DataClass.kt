@@ -1,5 +1,6 @@
 package com.example.ppab_responsi1_kelompok09.data
 
+import androidx.compose.ui.Modifier
 import java.time.LocalDate
 
 data class NavItem(
@@ -24,6 +25,16 @@ data class TabelItem(
     val name : String,
     val date: String,
     val money : String
+)
+
+data class ProductItem(
+    val onCLick : () -> Unit,
+    val productImage : Int,
+    val category : String,
+    val productName : String,
+    val sold : String,
+    val stock : String,
+    val price : String
 )
 
 data class Contact(
