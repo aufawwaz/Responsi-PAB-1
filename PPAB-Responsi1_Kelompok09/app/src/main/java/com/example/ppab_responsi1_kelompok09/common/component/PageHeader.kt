@@ -11,7 +11,7 @@ import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.common.style.PageTextHeader
 
 @Composable
-fun PageHeader(title : String, iconRes : Int, description : String){
+fun PageHeader(pagetitle : String, title : String, iconRes : Int, description : String){
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -19,13 +19,13 @@ fun PageHeader(title : String, iconRes : Int, description : String){
     ) {
         HeaderGradient()
         PageTextHeader(
-            text = "Kontak",
+            text = pagetitle,
             modifier = Modifier.offset(x = 16.dp, y = 56.dp)
         )
         HeaderBox(
-            iconRes = R.drawable.pelanggan_fill,
-            title = "Total Kontak",
-            description = "5 Kontak",
+            iconRes = iconRes,
+            title = title,
+            description = description,
             modifier = Modifier
                 .offset(y = 102.dp)
         )
