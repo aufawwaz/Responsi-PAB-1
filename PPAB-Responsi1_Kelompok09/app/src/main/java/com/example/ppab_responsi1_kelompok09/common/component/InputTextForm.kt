@@ -33,7 +33,7 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 // Component input form yang ada di register dan login screen
 
 @Composable
-fun InputTextForm(text: String, icon: Int, isPassword: Boolean) {
+fun InputTextForm(text: String, icon: Int, isPassword: Boolean = false) {
     var inputValue by remember { mutableStateOf("") }
 
     Box(
