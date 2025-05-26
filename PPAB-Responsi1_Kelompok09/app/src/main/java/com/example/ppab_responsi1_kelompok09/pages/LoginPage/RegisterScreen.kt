@@ -89,8 +89,8 @@ private fun RegisterForm(navController: NavController){
                 .fillMaxWidth()
                 .border(1.dp, Gray, RoundedCornerShape(12.dp))
                 .background(MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-                .height(IntrinsicSize.Min)
+                .padding(horizontal = 12.dp)
+                .height(44.dp)
                 .clickable { /* sign in google */ },
             contentAlignment = Alignment.CenterStart
         ) {
@@ -134,7 +134,7 @@ private fun RegisterForm(navController: NavController){
                 AppText("I agree to the ", 11.sp)
                 AppText("Terms & Conditions", 11.sp, color = Primary)
             }
-            CustomButton({ }, "Sign Up")
+            CustomButton({ navController.navigate("login") }, "Sign Up")
 
             Row(
                 modifier = Modifier

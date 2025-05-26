@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
-import com.example.ppab_responsi1_kelompok09.data.DataClass
+import com.example.ppab_responsi1_kelompok09.data.NavItem
 import com.example.ppab_responsi1_kelompok09.pages.ContactPage.ContactScreen
 import com.example.ppab_responsi1_kelompok09.pages.HomePage.HomeScreen
 import com.example.ppab_responsi1_kelompok09.pages.LoginPage.LoginScreen
@@ -34,11 +34,11 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.White
 fun MainNavigation() {
     val navController = rememberNavController()
     val dataClassLists = listOf(
-        DataClass("home", R.drawable.home, R.drawable.home_fill),
-        DataClass("product", R.drawable.produk, R.drawable.produk_fill),
-        DataClass("transaction", R.drawable.transaction, R.drawable.transaction_fill),
-        DataClass("contact", R.drawable.pelanggan, R.drawable.pelanggan_fill),
-        DataClass("more", R.drawable.dashboard, R.drawable.dashboard_fill)
+        NavItem("home", R.drawable.home, R.drawable.home_fill),
+        NavItem("product", R.drawable.produk, R.drawable.produk_fill),
+        NavItem("transaction", R.drawable.transaction, R.drawable.transaction_fill),
+        NavItem("contact", R.drawable.pelanggan, R.drawable.pelanggan_fill),
+        NavItem("more", R.drawable.dashboard, R.drawable.dashboard_fill)
     )
     val otherScreen = listOf("login", "register")
 
@@ -102,10 +102,10 @@ fun MainNavigation() {
             navController = navController,
             startDestination = "login"
         ) {
-            composable("home") { HomeScreen() }
-            composable("product") { ProductScreen() }
-            composable("transaction") { TransactionScreen() }
-            composable("contact") { ContactScreen() }
+            composable("home") { HomeScreen(navController) }
+            composable("product") { ProductScreen(navController) }
+            composable("transaction") { TransactionScreen(navController) }
+            composable("contact") { ContactScreen(navController) }
             composable("more") { MoreScreen(navController) }
 
             composable("login") { LoginScreen(navController) }

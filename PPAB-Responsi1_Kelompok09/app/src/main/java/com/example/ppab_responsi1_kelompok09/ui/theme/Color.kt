@@ -17,8 +17,11 @@ val Warning = Color(0xFFE8B931)
 val White = Color(0xFFFEFEFF)
 val Dark = Color(0xFF2C2C2C)
 val Gray = Color(0xFF999999)
+
 val Primary_Accent10 = Color(0xFF007AFF).copy(0.1f)
+val Dark_Accent = Color(0xFF440A0A)
 val Dark_Accent20 = Color(0xFF2C2C2C).copy(0.2f)
+
 val Primary100 = Color(0xFFD6F2FF)
 val Primary300 = Color(0xFF83DFFF)
 val Primary500 = Color(0xFF1EACFF)

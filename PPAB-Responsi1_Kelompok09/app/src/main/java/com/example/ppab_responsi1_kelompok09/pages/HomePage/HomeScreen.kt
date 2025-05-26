@@ -2,6 +2,7 @@ package com.example.ppab_responsi1_kelompok09.pages.HomePage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.rememberScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +28,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -43,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ppab_responsi1_kelompok09.common.component.ProfileContainer
 import com.example.ppab_responsi1_kelompok09.ui.theme.Poppins
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
@@ -62,17 +65,17 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
 
-@Preview
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .background(White)
+            .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
     ) {
         Box (
-            Modifier.height(1336.dp)
+            Modifier
+                .height(1336.dp)
         ) {
             HeaderHome()
             Column (
@@ -81,7 +84,7 @@ fun HomeScreen() {
             ) {
                 PendapatanCard()
                 MenuGrid()
-                UpgradeButton()
+                UpgradeButton(navController)
                 KnowledgeCardSection()
                 PesananTerbaru()
             }
@@ -150,7 +153,7 @@ private fun PendapatanCard() {
             .height(60.dp)
             .dropShadow200(8.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(White),
+            .background(MaterialTheme.colorScheme.background),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row (
@@ -174,14 +177,12 @@ private fun PendapatanCard() {
                     AppText(
                         text = "Pendapatan Hari Ini",
                         fontSize = 10.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Dark
+                        fontWeight = FontWeight.Normal
                     )
                     AppText(
                         text = "Rp1.000.000",
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Dark,
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
@@ -206,8 +207,7 @@ private fun PendapatanCard() {
                 AppText (
                     text = "Dari kemarin",
                     fontSize = 10.sp,
-                    fontWeight = FontWeight.Light,
-                    color = Dark
+                    fontWeight = FontWeight.Light
                 )
             }
         }
@@ -256,13 +256,14 @@ private fun MenuGrid() {
 }
 
 @Composable
-private fun UpgradeButton() {
+private fun UpgradeButton(navController: NavController) {
     Row (
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .height(40.dp)
             .clip(RoundedCornerShape(16.dp))
+            .clickable{}
             .background(Success.copy(0.1f)),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -359,7 +360,7 @@ private fun PesananTerbaru() {
             .padding(top = 16.dp)
             .dropShadow200(16.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {

@@ -2,7 +2,7 @@ package com.example.ppab_responsi1_kelompok09.data
 
 import java.time.LocalDate
 
-data class DataClass(
+data class NavItem(
     val route: String,
     val icon: Int,
     val selectedIcon: Int
