@@ -142,7 +142,7 @@ private fun ShowContact(list: List<Contact>) {
                 Column(
                     modifier = Modifier.padding(start = 8.dp)
                 ) {
-                    AppText(item.name, 14.sp, color = MaterialTheme.colorScheme.onBackground)
+                    AppText(item.name, 14.sp)
                     AppText(item.number, 12.sp, color = Gray)
                 }
             }

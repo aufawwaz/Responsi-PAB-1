@@ -59,8 +59,8 @@ fun InputTextForm(text: String, icon: Int, isPassword: Boolean = false, isLost: 
                     tint = Gray,
                     modifier = Modifier.width(16.dp)
                 )
+                Spacer(modifier = Modifier.width(8.dp))
             }
-            Spacer(modifier = Modifier.width(8.dp))
 
             BasicTextField(
                 value = inputValue,
@@ -74,11 +74,10 @@ fun InputTextForm(text: String, icon: Int, isPassword: Boolean = false, isLost: 
                 },
                 modifier = Modifier
                     .weight(1f)
-                    .onFocusChanged{ focusState ->
+                    .onFocusChanged { focusState ->
                         isFocused = focusState.isFocused
-
                     }
-                )
-            }
+            )
         }
     }
+}
