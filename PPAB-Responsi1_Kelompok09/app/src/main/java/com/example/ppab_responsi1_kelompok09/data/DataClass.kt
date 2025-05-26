@@ -25,3 +25,9 @@ data class TabelItem(
     val date: String,
     val money : String
 )
+
+data class Contact(
+    val imageRes : Int,
+    val name : String,
+    val number : String
+)
