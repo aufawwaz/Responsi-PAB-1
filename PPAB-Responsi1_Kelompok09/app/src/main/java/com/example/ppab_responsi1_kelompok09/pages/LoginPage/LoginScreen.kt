@@ -9,7 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -107,7 +105,7 @@ private fun LoginForm(navController: NavController){
             modifier = Modifier.fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.google_logo),
+                painter = painterResource(id = R.drawable.img_google_logo),
                 contentDescription = null,
                 modifier = Modifier.width(20.dp)
             )
@@ -120,9 +118,9 @@ private fun LoginForm(navController: NavController){
         }
     }
     HorizontalLine()
-    InputTextForm("Email", R.drawable.email, false)
-    InputTextForm("Password", R.drawable.password, true)
-    InputTextForm("Confirm Password", R.drawable.password, true)
+    InputTextForm("Email", R.drawable.ic_email, false)
+    InputTextForm("Password", R.drawable.ic_password, true)
+    InputTextForm("Confirm Password", R.drawable.ic_password, true)
 
     // LOGIN CONFIRMATION
     Column(

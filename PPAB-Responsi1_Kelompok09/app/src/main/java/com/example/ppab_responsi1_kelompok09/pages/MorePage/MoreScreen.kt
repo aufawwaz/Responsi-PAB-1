@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
@@ -65,7 +64,7 @@ fun MoreScreen (navController: NavController) {
                 ManajemenItem(
                     true,
                     "",
-                    R.drawable.pelanggan_fill
+                    R.drawable.ic_pelanggan_fill
                 )
             }
             AppText(
@@ -95,11 +94,11 @@ private fun ManajemenItemContainer () {
             .dropShadow200(8.dp)
             .clip(RoundedCornerShape(8.dp))
     ) {
-        ManajemenItem(false, "Profil Bisnis", R.drawable.home_fill)
+        ManajemenItem(false, "Profil Bisnis", R.drawable.ic_home_fill)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
-        ManajemenItem(false, "Kelola Saldo", R.drawable.home_fill)
+        ManajemenItem(false, "Kelola Saldo", R.drawable.ic_home_fill)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
-        ManajemenItem(false, "Lihat Laporan Keuangan", R.drawable.home_fill)
+        ManajemenItem(false, "Lihat Laporan Keuangan", R.drawable.ic_home_fill)
     }
 }
 
@@ -143,7 +142,7 @@ private fun ManajemenItem (
             }
         }
         Icon(
-            painter = painterResource(R.drawable.next),
+            painter = painterResource(R.drawable.ic_next),
             contentDescription = null,
             modifier = Modifier
                 .size(24.dp),
@@ -170,7 +169,7 @@ private fun Logout (navController: NavController) {
         ) {
             TonalIcon(
                 iconHeight = 24.dp,
-                iconRes = R.drawable.home_fill,
+                iconRes = R.drawable.ic_home_fill,
                 iconBackground = Danger,
                 boxSize = 40.dp
             )
@@ -182,7 +181,7 @@ private fun Logout (navController: NavController) {
             )
         }
         Icon(
-            painter = painterResource(R.drawable.next),
+            painter = painterResource(R.drawable.ic_next),
             contentDescription = null,
             modifier = Modifier
                 .size(24.dp),

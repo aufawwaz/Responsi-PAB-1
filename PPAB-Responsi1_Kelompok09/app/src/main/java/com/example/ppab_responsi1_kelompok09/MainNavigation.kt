@@ -37,11 +37,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun MainNavigation() {
     val navController = rememberNavController()
     val dataClassLists = listOf(
-        NavItem("home", R.drawable.home, R.drawable.home_fill),
-        NavItem("product", R.drawable.produk, R.drawable.produk_fill),
-        NavItem("transaction", R.drawable.transaction, R.drawable.transaction_fill),
-        NavItem("contact", R.drawable.pelanggan, R.drawable.pelanggan_fill),
-        NavItem("more", R.drawable.dashboard, R.drawable.dashboard_fill)
+        NavItem("home", R.drawable.ic_home, R.drawable.ic_home_fill),
+        NavItem("product", R.drawable.ic_produk, R.drawable.ic_produk_fill),
+        NavItem("transaction", R.drawable.ic_transaction, R.drawable.ic_transaction_fill),
+        NavItem("contact", R.drawable.ic_pelanggan, R.drawable.ic_pelanggan_fill),
+        NavItem("more", R.drawable.ic_dashboard, R.drawable.ic_dashboard_fill)
     )
     val otherScreen = listOf("login", "register")
 

@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -101,7 +100,7 @@ private fun RegisterForm(navController: NavController){
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.google_logo),
+                    painter = painterResource(id = R.drawable.img_google_logo),
                     contentDescription = null,
                     modifier = Modifier.width(20.dp)
                 )
@@ -114,9 +113,9 @@ private fun RegisterForm(navController: NavController){
             }
         }
         HorizontalLine()
-        InputTextForm("Username", R.drawable.login, false)
-        InputTextForm("Email", R.drawable.email, false)
-        InputTextForm("Password", R.drawable.password, true)
+        InputTextForm("Username", R.drawable.ic_login, false)
+        InputTextForm("Email", R.drawable.ic_email, false)
+        InputTextForm("Password", R.drawable.ic_password, true)
 
         // REGISTER CONFIRMATION
         Column(

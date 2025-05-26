@@ -25,7 +25,7 @@ fun ScaleUpFullLogo(modifier : Modifier = Modifier, size: TextUnit = 39.sp, colo
         val scaledDp = with(density) { size.toDp() }
 
         Icon(
-            painter = painterResource(R.drawable.scaleup_logo),
+            painter = painterResource(R.drawable.img_scaleup_logo),
             contentDescription = "Logo",
             tint = color,
             modifier = Modifier
