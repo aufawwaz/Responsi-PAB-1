@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,7 +52,7 @@ fun ProductCard (
             .background(White)
             .height(248.dp)
             .width(148.dp)
-            .clickable{}
+            .clickable{ onCLick }
     ) {
         Image(
             painter = painterResource(productImage),
@@ -97,7 +96,7 @@ fun ProductCard (
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.home_fill),
+                                painter = painterResource(R.drawable.ic_home_fill),
                                 contentDescription = null,
                                 modifier = Modifier.width(12.dp),
                                 tint = Gray
@@ -114,7 +113,7 @@ fun ProductCard (
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.home_fill),
+                                painter = painterResource(R.drawable.ic_home_fill),
                                 contentDescription = null,
                                 modifier = Modifier.width(12.dp),
                                 tint = Gray

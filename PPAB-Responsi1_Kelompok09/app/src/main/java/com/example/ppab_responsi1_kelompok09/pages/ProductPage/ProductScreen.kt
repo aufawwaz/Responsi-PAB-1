@@ -17,17 +17,12 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,14 +37,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.common.component.BottomSpacer
 import com.example.ppab_responsi1_kelompok09.common.component.CustomButton
-import com.example.ppab_responsi1_kelompok09.common.component.HeaderBox
-import com.example.ppab_responsi1_kelompok09.common.component.HeaderGradient
 import com.example.ppab_responsi1_kelompok09.common.component.InputTextForm
 import com.example.ppab_responsi1_kelompok09.common.component.PageHeader
 import com.example.ppab_responsi1_kelompok09.common.component.ProductCard
 import com.example.ppab_responsi1_kelompok09.common.style.AppText
-import com.example.ppab_responsi1_kelompok09.common.style.PageTextHeader
-import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
 import com.example.ppab_responsi1_kelompok09.data.ProductItem
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
@@ -71,7 +62,7 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
             PageHeader(
                 pagetitle = "Produk",
                 title = "Total Produk",
-                iconRes = R.drawable.produk_fill,
+                iconRes = R.drawable.ic_produk_fill,
                 description = "10 Produk"
             )
 
@@ -96,7 +87,7 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.produk_fill),
+                        painter = painterResource(R.drawable.ic_add_box),
                         contentDescription = null,
                         modifier = Modifier.size(20.dp)
                     )
@@ -118,13 +109,13 @@ private fun KategoriSatuanSection(navController: NavController) {
         KategoriSatuanItem(
             navController,
             modifier = Modifier.weight(1f),
-            iconRes = R.drawable.home_fill,
+            iconRes = R.drawable.ic_kategori_fill,
             text = "Kategori"
         )
         KategoriSatuanItem(
             navController,
             modifier = Modifier.weight(1f),
-            iconRes = R.drawable.home_fill,
+            iconRes = R.drawable.ic_satuan_fill,
             text = "Satuan"
         )
     }
@@ -165,7 +156,7 @@ private fun KategoriSatuanItem (
             )
         }
         Icon (
-            painter = painterResource(R.drawable.next),
+            painter = painterResource(R.drawable.ic_next),
             contentDescription = null,
             tint = Primary,
             modifier = Modifier.size(12.dp)
@@ -188,7 +179,7 @@ private fun SearchBarFilterSection() {
         ) {
             InputTextForm(
                 text = "Search",
-                icon = R.drawable.search,
+                icon = R.drawable.ic_search,
                 isPassword = false,
                 isLost = true
             )
@@ -200,7 +191,7 @@ private fun SearchBarFilterSection() {
             contentAlignment = Alignment.Center
         ) {
             Icon (
-                painter = painterResource(R.drawable.home_fill),
+                painter = painterResource(R.drawable.ic_filter),
                 contentDescription = null,
                 modifier = Modifier.width(16.dp),
                 tint = Gray

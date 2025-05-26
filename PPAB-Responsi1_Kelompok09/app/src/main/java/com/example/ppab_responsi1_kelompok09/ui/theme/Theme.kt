@@ -49,7 +49,7 @@ private val ScaleUpDarkTheme = darkColorScheme(
 
 
 @Composable
-fun PPABResponsi1_Kelompok09Theme(
+fun ScaleUpTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
