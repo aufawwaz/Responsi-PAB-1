@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SearchBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.common.component.HeaderBox
 import com.example.ppab_responsi1_kelompok09.common.component.HeaderGradient
+import com.example.ppab_responsi1_kelompok09.common.component.InputTextForm
+import com.example.ppab_responsi1_kelompok09.common.component.PageHeader
 import com.example.ppab_responsi1_kelompok09.common.style.AppText
 import com.example.ppab_responsi1_kelompok09.common.style.PageTextHeader
 import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
@@ -47,24 +50,14 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            HeaderGradient()
-            PageTextHeader(
-                text = "Produk",
-                modifier = Modifier.offset(x = 16.dp, y = 56.dp)
-            )
-            HeaderBox(
-                iconRes = R.drawable.produk_fill,
-                title = "Total produk",
-                description = "4 Produk",
-                modifier = Modifier
-                    .offset(y = 102.dp)
-            )
-        }
+        PageHeader(
+            pagetitle = "Product",
+            title = "Total Produk",
+            iconRes = R.drawable.produk_fill,
+            description = "10 Produk"
+        )
         Column (
-            modifier = Modifier.padding(top = 32.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             KategoriSatuanSection(navController)
         }
