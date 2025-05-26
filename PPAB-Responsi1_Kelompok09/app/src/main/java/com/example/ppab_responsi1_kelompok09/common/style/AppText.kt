@@ -20,7 +20,7 @@ fun AppText(
     text: String,
     fontSize: TextUnit,
     fontWeight: FontWeight = FontWeight.Normal,
-    color: Color = MaterialTheme.colorScheme.onBackground,
+    color: Color = Dark,
     modifier: Modifier = Modifier
 ) {
     Text(

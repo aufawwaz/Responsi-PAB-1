@@ -70,7 +70,7 @@ fun HomeScreen(navController: NavController) {
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
+            .background(White)
             .verticalScroll(rememberScrollState())
     ) {
         Box (
@@ -153,7 +153,7 @@ private fun PendapatanCard() {
             .height(60.dp)
             .dropShadow200(8.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.background),
+            .background(White),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row (
@@ -360,7 +360,7 @@ private fun PesananTerbaru() {
             .padding(top = 16.dp)
             .dropShadow200(16.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.background)
+            .background(White)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
