@@ -40,8 +40,7 @@ fun MoreScreen (navController: NavController) {
     Box (
         modifier = Modifier
             .fillMaxSize()
-//            MaterialTheme.colorScheme.background
-            .background(MaterialTheme.colorScheme.background)
+            .background(White)
     ) {
         HeaderGradient()
         Column (
@@ -112,8 +111,7 @@ private fun ManajemenItem (
     Row (
         modifier = Modifier
             .fillMaxWidth()
-//            MaterialTheme.colorScheme.background
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(White)
             .padding(horizontal = 16.dp)
             .height(60.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -160,8 +158,7 @@ private fun Logout (navController: NavController) {
             .clickable{ navController.navigate("login") }
             .fillMaxSize()
             .clip(RoundedCornerShape(8.dp))
-//          MaterialTheme.colorScheme.background
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(White)
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically

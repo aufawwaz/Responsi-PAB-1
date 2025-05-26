@@ -38,6 +38,7 @@ import com.example.ppab_responsi1_kelompok09.common.style.AppText
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
+import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
 // @Preview(showBackground = true)
 @Composable
@@ -62,7 +63,7 @@ fun RegisterScreen(navController: NavController){
                 .fillMaxWidth()
                 .height(630.dp)
                 .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                .background(MaterialTheme.colorScheme.background)
+                .background(White)
                 .align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
@@ -88,7 +89,7 @@ private fun RegisterForm(navController: NavController){
             modifier = Modifier
                 .fillMaxWidth()
                 .border(1.dp, Gray, RoundedCornerShape(12.dp))
-                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
+                .background(White, RoundedCornerShape(12.dp))
                 .padding(horizontal = 12.dp)
                 .height(44.dp)
                 .clickable { /* sign in google */ },
@@ -108,8 +109,7 @@ private fun RegisterForm(navController: NavController){
                 AppText(
                     "Sign in with Google",
                     12.sp,
-                    FontWeight.Bold,
-                    MaterialTheme.colorScheme.onBackground
+                    FontWeight.Bold
                 )
             }
         }

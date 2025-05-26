@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
+import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
 @Composable
 fun CustomCheckbox(scaleSp : TextUnit) {
@@ -35,9 +36,9 @@ fun CustomCheckbox(scaleSp : TextUnit) {
             colors = CheckboxColors(
                 checkedCheckmarkColor = Primary,
                 checkedBorderColor = Primary,
-                checkedBoxColor = MaterialTheme.colorScheme.background,
+                checkedBoxColor = White,
                 uncheckedCheckmarkColor = Primary,
-                uncheckedBoxColor = MaterialTheme.colorScheme.background,
+                uncheckedBoxColor = White,
                 uncheckedBorderColor = Primary,
                 disabledCheckedBoxColor = Primary,
                 disabledBorderColor = Primary,
