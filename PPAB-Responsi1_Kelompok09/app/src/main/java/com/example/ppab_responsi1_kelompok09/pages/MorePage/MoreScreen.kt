@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ import com.example.ppab_responsi1_kelompok09.common.style.AppText
 import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
 import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
+import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
@@ -41,7 +43,7 @@ fun MoreScreen (navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
 //            MaterialTheme.colorScheme.background
-            .background(White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         HeaderGradient()
         Column (
@@ -96,9 +98,9 @@ private fun ManajemenItemContainer () {
             .clip(RoundedCornerShape(8.dp))
     ) {
         ManajemenItem(false, "Profil Bisnis", R.drawable.home_fill)
-        Spacer(modifier = Modifier.height(0.5.dp).background(Dark.copy(0.2f)))
+        Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
         ManajemenItem(false, "Kelola Saldo", R.drawable.home_fill)
-        Spacer(modifier = Modifier.height(0.5.dp).background(Dark.copy(0.2f)))
+        Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
         ManajemenItem(false, "Lihat Laporan Keuangan", R.drawable.home_fill)
     }
 }
@@ -113,7 +115,7 @@ private fun ManajemenItem (
         modifier = Modifier
             .fillMaxWidth()
 //            MaterialTheme.colorScheme.background
-            .background(White)
+            .background(MaterialTheme.colorScheme.secondary)
             .padding(horizontal = 16.dp)
             .height(60.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -161,7 +163,7 @@ private fun Logout (navController: NavController) {
             .fillMaxSize()
             .clip(RoundedCornerShape(8.dp))
 //          MaterialTheme.colorScheme.background
-            .background(White)
+            .background(MaterialTheme.colorScheme.secondary)
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically

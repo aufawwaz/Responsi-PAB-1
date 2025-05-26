@@ -1,5 +1,6 @@
 package com.example.ppab_responsi1_kelompok09.common.style
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Poppins
+import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
 // Kalau mau bikin teks pake ini
 // Fontnya udah poppins, lineheight sama letterspacing udah direset
@@ -18,7 +20,7 @@ fun AppText(
     text: String,
     fontSize: TextUnit,
     fontWeight: FontWeight = FontWeight.Normal,
-    color: Color = Dark,
+    color: Color = MaterialTheme.colorScheme.onBackground,
     modifier: Modifier = Modifier
 ) {
     Text(
@@ -38,14 +40,24 @@ fun HomeTextHeader(
     text: String,
     modifier: Modifier = Modifier
 ) {
-    Text(
+    AppText(
         text = text,
         fontSize = 14.sp,
         fontWeight = FontWeight.Bold,
-        letterSpacing = 0.sp,
-        lineHeight = 14.sp,
-        fontFamily = Poppins,
-        color = Dark,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun PageTextHeader (
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    AppText(
+        text = text,
+        fontSize = 20.sp,
+        fontWeight = FontWeight.SemiBold,
+        color = White,
         modifier = modifier
     )
 }

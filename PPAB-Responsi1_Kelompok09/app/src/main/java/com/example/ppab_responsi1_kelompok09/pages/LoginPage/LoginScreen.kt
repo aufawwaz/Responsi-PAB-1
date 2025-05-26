@@ -93,10 +93,11 @@ private fun LoginForm(navController: NavController){
         modifier = Modifier
             .fillMaxWidth()
             .border(1.dp, Gray, RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
-            .padding(horizontal = 12.dp, vertical = 8.dp)
-            .height(IntrinsicSize.Min)
-            .clickable { /* sign in google */ },
+            .clickable { /* sign in google */ }
+            .padding(horizontal = 12.dp)
+            .height(44.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         Row(

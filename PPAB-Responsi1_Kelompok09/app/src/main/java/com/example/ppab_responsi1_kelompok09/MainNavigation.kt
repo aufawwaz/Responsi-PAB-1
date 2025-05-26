@@ -102,10 +102,10 @@ fun MainNavigation() {
             navController = navController,
             startDestination = "login"
         ) {
-            composable("home") { HomeScreen() }
-            composable("product") { ProductScreen() }
-            composable("transaction") { TransactionScreen() }
-            composable("contact") { ContactScreen() }
+            composable("home") { HomeScreen(navController) }
+            composable("product") { ProductScreen(navController) }
+            composable("transaction") { TransactionScreen(navController) }
+            composable("contact") { ContactScreen(navController) }
             composable("more") { MoreScreen(navController) }
 
             composable("login") { LoginScreen(navController) }

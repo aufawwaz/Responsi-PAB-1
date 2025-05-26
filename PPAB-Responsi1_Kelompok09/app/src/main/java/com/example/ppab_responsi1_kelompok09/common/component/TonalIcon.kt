@@ -1,6 +1,7 @@
 package com.example.ppab_responsi1_kelompok09.common.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -20,6 +21,7 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 
 @Composable
 fun TonalIcon (
+    onClick : () -> Unit = {},
     iconHeight : Dp,
     iconRes : Int,
     iconBackground : Color = Primary,
@@ -29,6 +31,7 @@ fun TonalIcon (
         modifier = Modifier
             .size(boxSize)
             .clip(RoundedCornerShape(8.dp))
+            .clickable{onClick}
             .background(iconBackground.copy(0.1f))
     ) {
         Icon(

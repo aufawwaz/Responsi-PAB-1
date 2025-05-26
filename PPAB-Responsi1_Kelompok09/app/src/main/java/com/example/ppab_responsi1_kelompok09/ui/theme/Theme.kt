@@ -12,22 +12,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-data class ScaleUpColors(
-    val primary: Color,
-    val background: Color,
-    val text: Color,
-    val success: Color,
-    val danger: Color,
-    val warning: Color,
-    val gray: Color,
-    val dark: Color
-)
+//data class ScaleUpColors(
+//    val primary: Color,
+//    val background: Color,
+//    val text: Color,
+//    val success: Color,
+//    val danger: Color,
+//    val warning: Color,
+//    val gray: Color,
+//    val dark: Color
+//)
 
 private val ScaleUpLightTheme = lightColorScheme(
     primary = Primary,
     onPrimary = White,
     background = White,
     onBackground = Dark,
+    secondary = White,
     error = Warning,
 )
 
@@ -36,6 +37,7 @@ private val ScaleUpDarkTheme = darkColorScheme(
     onPrimary = White,
     background = Dark,
     onBackground = White,
+    secondary = Dark_Accent,
     error = Warning,
 )
 

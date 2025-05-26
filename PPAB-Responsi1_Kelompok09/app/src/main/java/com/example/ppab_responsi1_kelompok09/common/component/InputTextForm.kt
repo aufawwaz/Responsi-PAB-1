@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,8 +41,8 @@ fun InputTextForm(text: String, icon: Int, isPassword: Boolean) {
             .fillMaxWidth()
             .border(1.dp, Gray, RoundedCornerShape(12.dp))
             .background(MaterialTheme.colorScheme.background, RoundedCornerShape(12.dp))
-            .padding(horizontal = 12.dp, vertical = 8.dp)
-            .height(IntrinsicSize.Min),
+            .padding(horizontal = 12.dp)
+            .height(44.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
