@@ -3,12 +3,9 @@ package com.example.ppab_responsi1_kelompok09.pages.HomePage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,31 +25,23 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.approachLayout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ppab_responsi1_kelompok09.common.component.ProfileContainer
-import com.example.ppab_responsi1_kelompok09.ui.theme.Poppins
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import com.example.ppab_responsi1_kelompok09.R
-import com.example.ppab_responsi1_kelompok09.common.component.BottomSpacer
 import com.example.ppab_responsi1_kelompok09.common.component.KnowledgeCard
 import com.example.ppab_responsi1_kelompok09.common.component.TonalIcon
 import com.example.ppab_responsi1_kelompok09.common.style.AppText
@@ -168,7 +157,7 @@ private fun PendapatanCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 TonalIcon(
-                    iconRes = R.drawable.pendapatan,
+                    iconRes = R.drawable.ic_pendapatan,
                     iconHeight = 24.dp,
                     iconBackground = Dark,
                     boxSize = 40.dp
@@ -192,7 +181,7 @@ private fun PendapatanCard() {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.pendapatan_naik),
+                        painter = painterResource(R.drawable.ic_pendapatan_naik),
                         contentDescription = null,
                         tint = Success,
                         modifier = Modifier.width(16.dp)
@@ -217,15 +206,14 @@ private fun PendapatanCard() {
 @Composable
 private fun MenuGrid() {
     val gridItems = listOf(
-        MenuItem("Transaksi", R.drawable.transaction_fill),
-        MenuItem("Saldo", R.drawable.saldo),
-        MenuItem("Produk", R.drawable.produk_fill),
-        MenuItem("Pelanggan", R.drawable.pelanggan_fill),
-        MenuItem("Keuangan", R.drawable.keuangan),
-//      Harusnya fill
-        MenuItem("Penjualan", R.drawable.penjualan),
-        MenuItem("Pembelian", R.drawable.pembelian),
-        MenuItem("Tagihan", R.drawable.tagihan)
+        MenuItem("Transaksi", R.drawable.ic_transaksi_fill),
+        MenuItem("Saldo", R.drawable.ic_saldo_fill),
+        MenuItem("Produk", R.drawable.ic_produk_fill),
+        MenuItem("Pelanggan", R.drawable.ic_pelanggan_fill),
+        MenuItem("Keuangan", R.drawable.ic_keuangan_fill),
+        MenuItem("Penjualan", R.drawable.ic_penjualan_fill),
+        MenuItem("Pembelian", R.drawable.ic_pembelian_fill),
+        MenuItem("Tagihan", R.drawable.ic_tagihan_fill)
     )
 
     LazyVerticalGrid(
@@ -240,7 +228,7 @@ private fun MenuGrid() {
             val item = gridItems[i]
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 TonalIcon(
-                    iconHeight = 24.dp,
+                    iconHeight = 28.dp,
                     iconRes = item.icon,
                     boxSize = 48.dp
                 )
@@ -274,9 +262,10 @@ private fun UpgradeButton(navController: NavController) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(
-                painter = painterResource(R.drawable.premium),
+                painter = painterResource(R.drawable.ic_premium_fill),
                 contentDescription = null,
-                tint = Success
+                tint = Success,
+                modifier = Modifier.width(24.dp)
             )
             AppText(
                 text = "Peroleh semua fitur!",
@@ -286,10 +275,12 @@ private fun UpgradeButton(navController: NavController) {
             )
         }
         Icon(
-            painter = painterResource(R.drawable.next),
+            painter = painterResource(R.drawable.ic_next),
             contentDescription = null,
             tint = Success,
-            modifier = Modifier.padding(end = 12.dp)
+            modifier = Modifier
+                .padding(end = 12.dp)
+                .height(18.dp)
         )
     }
 }
@@ -328,7 +319,7 @@ private fun KnowledgeCardSection() {
                 fontWeight = FontWeight.Normal
             )
             Icon (
-                painter = painterResource(R.drawable.next),
+                painter = painterResource(R.drawable.ic_next),
                 contentDescription = null,
                 tint = Primary,
                 modifier = Modifier.height(20.dp)
@@ -381,7 +372,7 @@ private fun PesananTerbaru() {
                     fontWeight = FontWeight.Normal
                 )
                 Icon (
-                    painter = painterResource(R.drawable.next),
+                    painter = painterResource(R.drawable.ic_next),
                     contentDescription = null,
                     tint = Primary,
                     modifier = Modifier.height(20.dp)

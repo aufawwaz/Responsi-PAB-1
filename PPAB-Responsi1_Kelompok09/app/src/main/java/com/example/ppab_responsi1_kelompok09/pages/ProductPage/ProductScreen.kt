@@ -87,7 +87,7 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_produk_fill),
+                        painter = painterResource(R.drawable.ic_add_box),
                         contentDescription = null,
                         modifier = Modifier.size(20.dp)
                     )
@@ -109,13 +109,13 @@ private fun KategoriSatuanSection(navController: NavController) {
         KategoriSatuanItem(
             navController,
             modifier = Modifier.weight(1f),
-            iconRes = R.drawable.ic_home_fill,
+            iconRes = R.drawable.ic_kategori_fill,
             text = "Kategori"
         )
         KategoriSatuanItem(
             navController,
             modifier = Modifier.weight(1f),
-            iconRes = R.drawable.ic_home_fill,
+            iconRes = R.drawable.ic_satuan_fill,
             text = "Satuan"
         )
     }
@@ -191,7 +191,7 @@ private fun SearchBarFilterSection() {
             contentAlignment = Alignment.Center
         ) {
             Icon (
-                painter = painterResource(R.drawable.ic_home_fill),
+                painter = painterResource(R.drawable.ic_filter),
                 contentDescription = null,
                 modifier = Modifier.width(16.dp),
                 tint = Gray

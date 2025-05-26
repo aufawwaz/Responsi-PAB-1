@@ -52,7 +52,7 @@ fun ProductCard (
             .background(White)
             .height(248.dp)
             .width(148.dp)
-            .clickable{}
+            .clickable{ onCLick }
     ) {
         Image(
             painter = painterResource(productImage),

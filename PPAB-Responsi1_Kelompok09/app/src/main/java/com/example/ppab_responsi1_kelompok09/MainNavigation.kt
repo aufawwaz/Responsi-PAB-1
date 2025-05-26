@@ -1,6 +1,8 @@
 package com.example.ppab_responsi1_kelompok09
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
@@ -34,16 +37,19 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun MainNavigation() {
+fun MainNavigation(loginNavController: NavController) {
     val navController = rememberNavController()
     val dataClassLists = listOf(
         NavItem("home", R.drawable.ic_home, R.drawable.ic_home_fill),
         NavItem("product", R.drawable.ic_produk, R.drawable.ic_produk_fill),
-        NavItem("transaction", R.drawable.ic_transaction, R.drawable.ic_transaction_fill),
+        NavItem("transaction", R.drawable.ic_transaksi, R.drawable.ic_transaksi_fill),
         NavItem("contact", R.drawable.ic_pelanggan, R.drawable.ic_pelanggan_fill),
         NavItem("more", R.drawable.ic_dashboard, R.drawable.ic_dashboard_fill)
     )
-    val otherScreen = listOf("login", "register")
+    val otherScreen = listOf(
+        "login",
+        "register"
+    )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -51,19 +57,6 @@ fun MainNavigation() {
     val selectedColor = Primary
     val unselectedColor = Gray
     val navbarColor = White
-    val systemUiController = rememberSystemUiController()
-
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Dark.copy(0.3f),
-            darkIcons = false
-        )
-        systemUiController.setNavigationBarColor(
-            color = Dark,
-            darkIcons = false
-        )
-    }
-
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -73,7 +66,10 @@ fun MainNavigation() {
         bottomBar = {
             if (currentRoute !in otherScreen) {
                 NavigationBar(
-                    modifier = Modifier.dropShadow200(0.dp),
+                    modifier = Modifier
+                        .dropShadow200(0.dp)
+                        .background(White)
+                        .padding(horizontal = 4.dp),
                     containerColor = navbarColor
                 ) {
                     dataClassLists.forEach { navItem ->
@@ -115,16 +111,16 @@ fun MainNavigation() {
     ) {
         NavHost(
             navController = navController,
-            startDestination = "login"
+            startDestination = "home"
         ) {
             composable("home") { HomeScreen(navController) }
             composable("product") { ProductScreen(navController) }
             composable("transaction") { TransactionScreen(navController) }
             composable("contact") { ContactScreen(navController) }
-            composable("more") { MoreScreen(navController) }
+            composable("more") { MoreScreen(navController, loginNavController) }
 
-            composable("login") { LoginScreen(navController) }
-            composable("register") { RegisterScreen(navController) }
+//            composable("login") { LoginScreen(navController) }
+//            composable("register") { RegisterScreen(navController) }
         }
     }
 }

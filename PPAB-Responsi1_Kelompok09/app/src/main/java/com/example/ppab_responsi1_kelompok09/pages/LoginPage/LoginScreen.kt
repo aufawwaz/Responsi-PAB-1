@@ -41,7 +41,6 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
-// @Preview(showBackground = true)
 @Composable
 fun LoginScreen(navController: NavController){
     Box(
@@ -144,7 +143,7 @@ private fun LoginForm(navController: NavController){
             AppText("Forgot Password?", 11.sp, color = Primary)
         }
         CustomButton(
-            { navController.navigate("home") },
+            { navController.navigate("main") },
             "Login"
         )
 
