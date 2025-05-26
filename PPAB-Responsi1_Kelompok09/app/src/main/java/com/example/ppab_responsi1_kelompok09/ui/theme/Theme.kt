@@ -28,8 +28,7 @@ private val ScaleUpLightTheme = lightColorScheme(
     onPrimary = White,
     background = White,
     onBackground = Dark,
-    secondary = White,
-    error = Warning,
+    error = Warning
 )
 
 private val ScaleUpDarkTheme = darkColorScheme(
@@ -37,8 +36,7 @@ private val ScaleUpDarkTheme = darkColorScheme(
     onPrimary = White,
     background = Dark,
     onBackground = White,
-    secondary = Dark_Accent,
-    error = Warning,
+    error = Warning
 )
 
 //data class ScaleUpPadding(
