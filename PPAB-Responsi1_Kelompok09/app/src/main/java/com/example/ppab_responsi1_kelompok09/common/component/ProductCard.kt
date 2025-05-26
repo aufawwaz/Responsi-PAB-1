@@ -2,6 +2,7 @@ package com.example.ppab_responsi1_kelompok09.common.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,6 +53,7 @@ fun ProductCard (
             .background(White)
             .height(248.dp)
             .width(148.dp)
+            .clickable{}
     ) {
         Image(
             painter = painterResource(productImage),
@@ -59,6 +61,7 @@ fun ProductCard (
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .height(140.dp)
+                .dropShadow200(16.dp)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
         )
@@ -125,7 +128,7 @@ fun ProductCard (
                         }
                     }
                 }
-                Text(
+                AppText(
                     text = price + satuan,
                     fontWeight = FontWeight.Medium,
                     fontSize = 12.sp,
