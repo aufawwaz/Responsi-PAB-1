@@ -42,3 +42,28 @@ data class Contact(
     val name : String,
     val number : String
 )
+
+sealed class Transaction{
+    data class Sell(
+        val id : String,
+        val customer : String,
+        val date : String,
+        val paymentMethod : String,
+        val total : String
+     ) : Transaction()
+
+    data class Purchase(
+        val id : String,
+        val seller : String,
+        val date : String,
+        val total : String
+    ) : Transaction()
+
+    data class Bill(
+        val id : String,
+        val customer : String,
+        val date : String,
+        val status : String,
+        val total : String
+    ) : Transaction()
+}

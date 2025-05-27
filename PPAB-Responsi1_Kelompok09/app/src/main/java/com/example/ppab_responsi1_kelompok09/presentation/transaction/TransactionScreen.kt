@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -27,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.Transition
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
@@ -34,7 +37,11 @@ import com.example.ppab_responsi1_kelompok09.common.component.BottomSpacer
 import com.example.ppab_responsi1_kelompok09.common.component.CustomButton
 import com.example.ppab_responsi1_kelompok09.common.component.PageHeader
 import com.example.ppab_responsi1_kelompok09.common.component.SearchBarFilter
+import com.example.ppab_responsi1_kelompok09.common.component.TonalIcon
+import com.example.ppab_responsi1_kelompok09.common.component.TransactionCard
 import com.example.ppab_responsi1_kelompok09.common.style.AppText
+import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
+import com.example.ppab_responsi1_kelompok09.data.Transaction
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
@@ -151,5 +158,50 @@ private fun KategoriTransaksiItem (
 
 @Composable
 private fun PesananTerbaruList() {
+    val transactionList = listOf(
+        Transaction.Sell("TRSPJL11052025001", "Ariel Josua Simanjuntak", "19 Mei 2025", "Tunai", "5.194.000"),
+        Transaction.Sell("TRSPJL11052025002", "Ariel Josua Simanjuntak", "19 Mei 2025", "QRIS", "5.194.000"),
+        Transaction.Sell("TRSPJL11052025003", "Ariel Josua Simanjuntak", "19 Mei 2025", "Kartu Kredit", "5.194.000"),
+        Transaction.Sell("TRSPJL11052025004", "Ariel Josua Simanjuntak", "19 Mei 2025", "Lainnya", "5.194.000"),
+        Transaction.Purchase("TRSPBL11052025001", "PT Bumi Cermai", "19 Mei 2025", "290.000.000"),
+        Transaction.Bill("TRSTGH11052025001", "Aufa Fawwaz Aryasatya", "19 Mei 2025", "Lunas", "5.194.000"),
+        Transaction.Bill("TRSTGH11052025002", "Aril Fadla Hudallah", "19 Mei 2025", "Diproses", "5.194.000"),
+        Transaction.Bill("TRSTGH11052025003", "PT Bumi Cermai", "19 Mei 2025", "Jatuh Tempo", "5.194.000")
+    )
 
+    LazyColumn (
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height((transactionList.size * 97).dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(transactionList) { transactionItem ->
+            val iconRes = when (transactionItem) {
+                is Transaction.Sell -> R.drawable.ic_penjualan_fill
+                is Transaction.Purchase -> R.drawable.ic_pembelian_fill
+                is Transaction.Bill -> R.drawable.ic_tagihan_fill
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .dropShadow200(8.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(White)
+                    .clickable { }
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TonalIcon(
+                    iconRes = iconRes,
+                    iconHeight = 20.dp,
+                    boxSize = 40.dp
+                )
+                TransactionCard(
+                    transaction = transactionItem
+                )
+            }
+        }
+    }
 }
