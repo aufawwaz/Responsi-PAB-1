@@ -1,4 +1,4 @@
-package com.example.ppab_responsi1_kelompok09.pages.ContactPage
+package com.example.ppab_responsi1_kelompok09.presentation.contact
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

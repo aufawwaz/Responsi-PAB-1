@@ -1,7 +1,6 @@
-package com.example.ppab_responsi1_kelompok09.pages.ProductPage
+package com.example.ppab_responsi1_kelompok09.presentation.product
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,12 +35,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.common.component.BottomSpacer
 import com.example.ppab_responsi1_kelompok09.common.component.CustomButton
-import com.example.ppab_responsi1_kelompok09.common.component.InputTextForm
 import com.example.ppab_responsi1_kelompok09.common.component.PageHeader
 import com.example.ppab_responsi1_kelompok09.common.component.ProductCard
+import com.example.ppab_responsi1_kelompok09.common.component.SearchBarFilter
 import com.example.ppab_responsi1_kelompok09.common.style.AppText
 import com.example.ppab_responsi1_kelompok09.data.ProductItem
-import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
@@ -70,7 +67,7 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 KategoriSatuanSection(navController)
-                SearchBarFilterSection()
+                SearchBarFilter()
                 ProductGrid()
                 BottomSpacer()
             }
@@ -161,42 +158,6 @@ private fun KategoriSatuanItem (
             tint = Primary,
             modifier = Modifier.size(12.dp)
         )
-    }
-}
-
-@Composable
-private fun SearchBarFilterSection() {
-    Row (
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(44.dp)
-    ) {
-        Box (
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-        ) {
-            InputTextForm(
-                text = "Search",
-                icon = R.drawable.ic_search,
-                isPassword = false,
-                isLost = true
-            )
-        }
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .border(1.dp, Gray, RoundedCornerShape(12.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon (
-                painter = painterResource(R.drawable.ic_filter),
-                contentDescription = null,
-                modifier = Modifier.width(16.dp),
-                tint = Gray
-            )
-        }
     }
 }
 

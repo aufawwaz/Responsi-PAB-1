@@ -10,7 +10,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -23,18 +22,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
 import com.example.ppab_responsi1_kelompok09.data.NavItem
-import com.example.ppab_responsi1_kelompok09.pages.ContactPage.ContactScreen
-import com.example.ppab_responsi1_kelompok09.pages.HomePage.HomeScreen
-import com.example.ppab_responsi1_kelompok09.pages.LoginPage.LoginScreen
-import com.example.ppab_responsi1_kelompok09.pages.LoginPage.RegisterScreen
-import com.example.ppab_responsi1_kelompok09.pages.MorePage.MoreScreen
-import com.example.ppab_responsi1_kelompok09.pages.ProductPage.ProductScreen
-import com.example.ppab_responsi1_kelompok09.pages.TransactionPage.TransactionScreen
-import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
+import com.example.ppab_responsi1_kelompok09.presentation.contact.ContactScreen
+import com.example.ppab_responsi1_kelompok09.presentation.home.HomeScreen
+import com.example.ppab_responsi1_kelompok09.presentation.more.MoreScreen
+import com.example.ppab_responsi1_kelompok09.presentation.product.ProductScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.TransactionScreen
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun MainNavigation(loginNavController: NavController) {

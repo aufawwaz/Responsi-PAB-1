@@ -21,6 +21,7 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 
 @Composable
 fun TonalIcon (
+    isClickable : Boolean = false,
     onClick : () -> Unit = {},
     iconHeight : Dp,
     iconRes : Int,
@@ -31,7 +32,10 @@ fun TonalIcon (
         modifier = Modifier
             .size(boxSize)
             .clip(RoundedCornerShape(8.dp))
-            .clickable{onClick}
+            .clickable(
+                enabled = isClickable,
+                onClick = onClick
+            )
             .background(iconBackground.copy(0.1f))
     ) {
         Icon(

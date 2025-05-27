@@ -9,8 +9,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.ppab_responsi1_kelompok09.pages.LoginPage.LoginScreen
-import com.example.ppab_responsi1_kelompok09.pages.LoginPage.RegisterScreen
+import com.example.ppab_responsi1_kelompok09.presentation.login.LoginScreen
+import com.example.ppab_responsi1_kelompok09.presentation.login.RegisterScreen
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.ScaleUpTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
