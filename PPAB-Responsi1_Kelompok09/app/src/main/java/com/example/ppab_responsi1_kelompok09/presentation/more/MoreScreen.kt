@@ -1,4 +1,4 @@
-package com.example.ppab_responsi1_kelompok09.pages.MorePage
+package com.example.ppab_responsi1_kelompok09.presentation.more
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,9 +34,14 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
+import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
 
 @Composable
-fun MoreScreen (navController: NavController, loginNavController: NavController) {
+fun MoreScreen (
+    navController: NavController,
+    loginNavController: NavController,
+    userViewModel: UserViewModel
+) {
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +57,7 @@ fun MoreScreen (navController: NavController, loginNavController: NavController)
         ) {
             ProfileContainer(
                 R.drawable.img_profile_picture,
-                "Biru",
+                userViewModel.username,
                 true
             )
             Box (
@@ -61,10 +66,9 @@ fun MoreScreen (navController: NavController, loginNavController: NavController)
                     .dropShadow200(8.dp)
                     .clip(RoundedCornerShape(8.dp))
             ) {
-                ManajemenItem(
-                    true,
-                    "",
-                    R.drawable.ic_pelanggan_fill
+                OptionItem(
+                    isAkun = true,
+                    icon = R.drawable.ic_pelanggan_fill
                 )
             }
             AppText(
@@ -73,6 +77,12 @@ fun MoreScreen (navController: NavController, loginNavController: NavController)
                 fontSize = 14.sp
             )
             ManajemenItemContainer()
+            AppText(
+                text = "Laporan Keuangan",
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp
+            )
+            LaporanKeuanganItemContainer()
             Box (
                 modifier = Modifier
                     .dropShadow200(8.dp)
@@ -80,7 +90,7 @@ fun MoreScreen (navController: NavController, loginNavController: NavController)
                     .fillMaxWidth()
                     .height(60.dp)
             ) {
-                Logout(loginNavController)
+                Logout(loginNavController, userViewModel)
             }
         }
     }
@@ -94,22 +104,48 @@ private fun ManajemenItemContainer () {
             .dropShadow200(8.dp)
             .clip(RoundedCornerShape(8.dp))
     ) {
-        ManajemenItem(false, "Profil Bisnis", R.drawable.ic_profil_bisnis)
+        OptionItem(
+            text = "Profil Bisnis",
+            icon = R.drawable.ic_profil_bisnis)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
-        ManajemenItem(false, "Kelola Saldo", R.drawable.ic_saldo_fill)
-        Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
-        ManajemenItem(false, "Lihat Laporan Keuangan", R.drawable.ic_keuangan_fill)
+        OptionItem(
+            text = "Kelola Saldo",
+            icon = R.drawable.ic_saldo_fill)
     }
 }
 
 @Composable
-private fun ManajemenItem (
+private fun LaporanKeuanganItemContainer() {
+    Column (
+        modifier = Modifier
+            .fillMaxWidth()
+            .dropShadow200(8.dp)
+            .clip(RoundedCornerShape(8.dp))
+    ) {
+        OptionItem(
+            text = "Laporan Penjualan",
+            icon = R.drawable.ic_penjualan_fill)
+        Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
+        OptionItem(
+            text = "Laporan Pembelian",
+            icon = R.drawable.ic_pembelian_fill)
+        Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
+        OptionItem(
+            text = "Laporan Tagihan",
+            icon = R.drawable.ic_tagihan_fill)
+    }
+}
+
+@Composable
+private fun OptionItem (
+    onClick : () -> Unit = {},
     isAkun : Boolean = false,
-    text : String,
+    text : String = "",
     icon : Int
 ) {
     Row (
         modifier = Modifier
+            .clickable{ onClick }
             .fillMaxWidth()
             .background(White)
             .padding(horizontal = 16.dp)
@@ -152,10 +188,13 @@ private fun ManajemenItem (
 }
 
 @Composable
-private fun Logout (loginNavController: NavController) {
+private fun Logout (loginNavController: NavController, userViewModel: UserViewModel) {
     Row (
         modifier = Modifier
-            .clickable{ loginNavController.navigate("login") }
+            .clickable{
+                userViewModel.logout()
+                loginNavController.navigate("login")
+            }
             .fillMaxSize()
             .clip(RoundedCornerShape(8.dp))
             .background(White)

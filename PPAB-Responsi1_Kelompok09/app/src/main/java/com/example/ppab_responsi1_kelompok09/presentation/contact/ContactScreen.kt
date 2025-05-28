@@ -1,4 +1,4 @@
-package com.example.ppab_responsi1_kelompok09.pages.ContactPage
+package com.example.ppab_responsi1_kelompok09.presentation.contact
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +73,13 @@ fun ContactScreen(navController: NavController = rememberNavController()) {
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ){
-                InputTextForm("Search Contact", R.drawable.ic_search)
+                var contactSearchValue by rememberSaveable { mutableStateOf("") }
+                InputTextForm(
+                    contactSearchValue,
+                    { contactSearchValue = it },
+                    "Search Contact",
+                    R.drawable.ic_search
+                )
 
                 var isChecked by remember { mutableStateOf(false) }
                 CustomSwitch(

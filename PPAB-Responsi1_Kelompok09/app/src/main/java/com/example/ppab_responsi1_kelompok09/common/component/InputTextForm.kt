@@ -30,11 +30,17 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
+// { Stateless Component }
 // Component input form yang ada di register dan login screen
-
 @Composable
-fun InputTextForm(text: String, icon: Int, isPassword: Boolean = false, isLost: Boolean = false) {
-    var inputValue by remember { mutableStateOf("") }
+fun InputTextForm(
+    value : String,
+    onValueChange: (String) -> Unit, // onValueChange nanti diisi sama { value = it }
+    placeholder : String,
+    icon: Int,
+    isPassword: Boolean = false,
+    isLost: Boolean = false
+) {
     var isFocused by remember { mutableStateOf(isLost) }
 
     Box(
@@ -52,7 +58,7 @@ fun InputTextForm(text: String, icon: Int, isPassword: Boolean = false, isLost: 
         contentAlignment = Alignment.CenterStart
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (inputValue.isEmpty() && !isFocused) {
+            if (value.isEmpty() && !isFocused) {
                 Icon(
                     painter = painterResource(id = icon),
                     contentDescription = null,
@@ -63,12 +69,12 @@ fun InputTextForm(text: String, icon: Int, isPassword: Boolean = false, isLost: 
             }
 
             BasicTextField(
-                value = inputValue,
-                onValueChange = { inputValue = it },
+                value = value,
+                onValueChange = { onValueChange(it) },
                 visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
                 decorationBox = { innerTextField ->
-                    if (inputValue.isEmpty() && !isFocused) {
-                        AppText(text, 12.sp, color = Gray)
+                    if (value.isEmpty() && !isFocused) {
+                        AppText(placeholder, 12.sp, color = Gray)
                     }
                     innerTextField()
                 },

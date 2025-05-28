@@ -1,4 +1,4 @@
-package com.example.ppab_responsi1_kelompok09.pages.LoginPage
+package com.example.ppab_responsi1_kelompok09.presentation.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,14 +14,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -34,49 +42,63 @@ import com.example.ppab_responsi1_kelompok09.common.component.HorizontalLine
 import com.example.ppab_responsi1_kelompok09.common.component.InputTextForm
 import com.example.ppab_responsi1_kelompok09.common.component.ScaleUpFullLogo
 import com.example.ppab_responsi1_kelompok09.common.style.AppText
+import com.example.ppab_responsi1_kelompok09.data.Users
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
+import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
+import kotlinx.coroutines.launch
 
 // @Preview(showBackground = true)
 @Composable
-fun RegisterScreen(navController: NavController){
+fun RegisterScreen(navController: NavController, userViewModel: UserViewModel){
     Box(
-        modifier = Modifier.fillMaxSize().background(Primary900)
+        Modifier.fillMaxSize().background(White)
     ){
-        Box(
+        Column(
             modifier = Modifier
-                .background(brush = Brush.linearGradient(
-                    listOf(Primary900 , Primary),
-                    start = Offset(0f, Float.POSITIVE_INFINITY),
-                    end = Offset(0f, -5f)
-                ))
-                .fillMaxWidth()
-                .height(240.dp)
-        ) {
-            ScaleUpFullLogo( modifier = Modifier.align(Alignment.Center) )
-        }
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(630.dp)
-                .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                .background(White)
-                .align(Alignment.BottomCenter),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .background(Primary900)
+                .verticalScroll(rememberScrollState())
         ){
-            Spacer(Modifier.height(24.dp))
-            AppText("Register", 18.sp, FontWeight.W600, MaterialTheme.colorScheme.onBackground)
-            Spacer(Modifier.height(24.dp))
+            Box(
+                modifier = Modifier
+                    .background(
+                        brush = Brush.linearGradient(
+                            listOf(Primary900, Primary),
+                            start = Offset(0f, Float.POSITIVE_INFINITY),
+                            end = Offset(0f, -5f)
+                        )
+                    )
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
+                    .height(200.dp)
+            ) {
+                ScaleUpFullLogo( modifier = Modifier.align(Alignment.Center) )
+            }
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                    .background(White),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Spacer(Modifier.height(24.dp))
+                AppText("Register", 18.sp, FontWeight.W600, MaterialTheme.colorScheme.onBackground)
+                Spacer(Modifier.height(24.dp))
 
-            RegisterForm(navController)
+                RegisterForm(navController, userViewModel)
+            }
         }
+
     }
 }
 
 @Composable
-private fun RegisterForm(navController: NavController){
+private fun RegisterForm(navController: NavController, userViewModel: UserViewModel){
+    val context = LocalContext.current // context user data
+    val coroutineScope = rememberCoroutineScope()
+
     Spacer(Modifier.height(16.dp))
     Column (
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -113,11 +135,34 @@ private fun RegisterForm(navController: NavController){
             }
         }
         HorizontalLine()
-        InputTextForm("Username", R.drawable.ic_login, false)
-        InputTextForm("Email", R.drawable.ic_email, false)
-        InputTextForm("Password", R.drawable.ic_password, true)
+        var usernameRValue by rememberSaveable { mutableStateOf("") }
+        InputTextForm(
+            usernameRValue,
+            { usernameRValue = it },
+            "Username",
+            R.drawable.ic_login,
+            false
+        )
+
+        var emailRValue by rememberSaveable { mutableStateOf("") }
+        InputTextForm(
+            emailRValue, { emailRValue = it },
+            "Email",
+            R.drawable.ic_email,
+            false
+        )
+
+        var passwordRValue by rememberSaveable { mutableStateOf("") }
+        InputTextForm(
+            passwordRValue,
+            { passwordRValue = it },
+            "Password",
+            R.drawable.ic_password,
+            true
+        )
 
         // REGISTER CONFIRMATION
+        var isAgreeToTnC by rememberSaveable { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -128,12 +173,26 @@ private fun RegisterForm(navController: NavController){
                     .height(36.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                CustomCheckbox(15.sp)
+                CustomCheckbox(isAgreeToTnC, { isAgreeToTnC = it }, 15.sp)
                 Spacer(Modifier.width(7.dp))
                 AppText("I agree to the ", 11.sp)
                 AppText("Terms & Conditions", 11.sp, color = Primary)
             }
-            CustomButton({ navController.navigate("login") }, "Sign Up")
+            CustomButton(
+                {
+                    if (isAgreeToTnC &&
+                        Users.isValidUsername(usernameRValue) &&
+                        Users.isValidEmail(emailRValue) &&
+                        Users.isValidPassword(passwordRValue))
+                    {
+                        coroutineScope.launch {
+                            Users.addUser(context, usernameRValue, emailRValue, passwordRValue)
+                            navController.navigate("login")
+                        }
+                    }
+                },
+                "Sign Up"
+            )
 
             Row(
                 modifier = Modifier
@@ -152,4 +211,5 @@ private fun RegisterForm(navController: NavController){
             }
         }
     }
+    Spacer(Modifier.height(40.dp))
 }
