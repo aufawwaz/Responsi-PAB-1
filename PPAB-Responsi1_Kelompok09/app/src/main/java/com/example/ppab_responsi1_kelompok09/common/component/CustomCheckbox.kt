@@ -20,9 +20,13 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
 @Composable
-fun CustomCheckbox(scaleSp : TextUnit) {
+fun CustomCheckbox(
+    checkBoxValue : Boolean,
+    onCheckedChange : (Boolean) -> Unit,
+    scaleSp : TextUnit)
+{
     val density = LocalDensity.current
-    var isChecked by remember { mutableStateOf(false) }
+    var isChecked = checkBoxValue
 
     // konversi sp ke dp
     val scaledDp = with(density) { scaleSp.toDp() }
@@ -32,7 +36,7 @@ fun CustomCheckbox(scaleSp : TextUnit) {
     ){
         Checkbox(
             checked = isChecked,
-            onCheckedChange = { isChecked = it },
+            onCheckedChange = onCheckedChange,
             colors = CheckboxColors(
                 checkedCheckmarkColor = Primary,
                 checkedBorderColor = Primary,

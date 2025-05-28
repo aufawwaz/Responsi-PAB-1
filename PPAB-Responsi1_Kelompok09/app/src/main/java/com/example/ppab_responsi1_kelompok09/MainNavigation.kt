@@ -34,10 +34,11 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
+import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun MainNavigation(loginNavController: NavController) {
+fun MainNavigation(loginNavController: NavController, userViewModel: UserViewModel) {
     val navController = rememberNavController()
     val dataClassLists = listOf(
         NavItem("home", R.drawable.ic_home, R.drawable.ic_home_fill),
@@ -113,11 +114,11 @@ fun MainNavigation(loginNavController: NavController) {
             navController = navController,
             startDestination = "home"
         ) {
-            composable("home") { HomeScreen(navController) }
+            composable("home") { HomeScreen(navController, userViewModel) }
             composable("product") { ProductScreen(navController) }
             composable("transaction") { TransactionScreen(navController) }
             composable("contact") { ContactScreen(navController) }
-            composable("more") { MoreScreen(navController, loginNavController) }
+            composable("more") { MoreScreen(navController, loginNavController, userViewModel) }
 
 //            composable("login") { LoginScreen(navController) }
 //            composable("register") { RegisterScreen(navController) }

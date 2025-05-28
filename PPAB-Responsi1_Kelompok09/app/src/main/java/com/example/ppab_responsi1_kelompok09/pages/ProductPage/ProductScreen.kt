@@ -24,6 +24,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -177,8 +181,11 @@ private fun SearchBarFilterSection() {
                 .weight(1f)
                 .fillMaxHeight()
         ) {
+            var productSearchValue by rememberSaveable { mutableStateOf("") }
             InputTextForm(
-                text = "Search",
+                value = productSearchValue,
+                onValueChange = { productSearchValue = it },
+                placeholder = "Search",
                 icon = R.drawable.ic_search,
                 isPassword = false,
                 isLost = true

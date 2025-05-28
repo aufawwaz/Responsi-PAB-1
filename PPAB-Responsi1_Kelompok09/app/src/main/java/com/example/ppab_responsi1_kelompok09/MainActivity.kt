@@ -4,8 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -13,7 +16,9 @@ import com.example.ppab_responsi1_kelompok09.pages.LoginPage.LoginScreen
 import com.example.ppab_responsi1_kelompok09.pages.LoginPage.RegisterScreen
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.ScaleUpTheme
+import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +27,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val loginNavController = rememberNavController()
+            val userViewModel: UserViewModel = viewModel(
+                factory = ViewModelProvider.AndroidViewModelFactory(application)
+            )
+            val isLogin = userViewModel.isLogin
 
             ScaleUpTheme {
                 val systemUiController = rememberSystemUiController()
@@ -39,15 +48,26 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = loginNavController,
-                    startDestination = "login"
+                    startDestination = "splash"
                 ) {
-                    composable("login") { LoginScreen(loginNavController) }
-                    composable("register") { RegisterScreen(loginNavController) }
-
-                    // Main screen with BottomBar
-                    composable("main") {
-                        MainNavigation(loginNavController)
+                    composable("splash") {
+                        LaunchedEffect(isLogin) {
+                            delay(500)
+                            if (isLogin) { // auto masuk ke main kalau login
+                                loginNavController.navigate("main") {
+                                    popUpTo("splash") { inclusive = true }
+                                }
+                            } else {
+                                loginNavController.navigate("login") {
+                                    popUpTo("splash") { inclusive = true }
+                                }
+                            }
+                        }
                     }
+
+                    composable("login") { LoginScreen(loginNavController, userViewModel) }
+                    composable("main") { MainNavigation(loginNavController, userViewModel) }
+                    composable("register") { RegisterScreen(loginNavController, userViewModel) }
                 }
             }
         }

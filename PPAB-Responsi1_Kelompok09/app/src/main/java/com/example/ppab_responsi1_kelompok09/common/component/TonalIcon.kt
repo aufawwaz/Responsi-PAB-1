@@ -1,6 +1,7 @@
 package com.example.ppab_responsi1_kelompok09.common.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
@@ -13,8 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 
 //Component buat icon (primary) dengan background tonal
@@ -25,13 +28,17 @@ fun TonalIcon (
     iconHeight : Dp,
     iconRes : Int,
     iconBackground : Color = Primary,
-    boxSize : Dp
+    boxSize : Dp,
+    isClickable : Boolean = true
 ) {
     Box(
         modifier = Modifier
             .size(boxSize)
             .clip(RoundedCornerShape(8.dp))
-            .clickable{onClick}
+            .then(
+                if (isClickable) Modifier.clickable{ onClick }
+                else Modifier
+            )
             .background(iconBackground.copy(0.1f))
     ) {
         Icon(
