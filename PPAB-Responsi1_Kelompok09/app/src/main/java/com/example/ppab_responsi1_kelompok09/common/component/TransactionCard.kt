@@ -30,22 +30,26 @@ fun getStatusColor(status : String) : Color {
 @Composable
 fun TransactionCard (
     transaction: Transaction,
-    modifier : Modifier = Modifier
+    modifier : Modifier = Modifier,
+    isIdInCard: Boolean = true
 ) {
     Column (
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         when (transaction) {
-            is Transaction.Sell -> SellCard(transaction)
-            is Transaction.Purchase -> PurchaseCard(transaction)
-            is Transaction.Bill -> BillCard(transaction)
+            is Transaction.Sell -> SellCard(transaction, isIdInCard)
+            is Transaction.Purchase -> PurchaseCard(transaction, isIdInCard)
+            is Transaction.Bill -> BillCard(transaction, isIdInCard)
         }
     }
 }
 
 @Composable
-fun SellCard (data: Transaction.Sell) {
+fun SellCard (
+    data: Transaction.Sell,
+    isIdVisible: Boolean
+) {
     Row (
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -62,11 +66,13 @@ fun SellCard (data: Transaction.Sell) {
             fontSize = 10.sp
         )
     }
-    AppText(
-        text = data.id,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
+    if (isIdVisible) {
+        AppText(
+            text = data.id,
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.sp
+        )
+    }
     Row (
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -79,14 +85,23 @@ fun SellCard (data: Transaction.Sell) {
         AppText(
             text = "Rp ${data.total}",
             fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             color = Success
         )
     }
 }
 
 @Composable
-fun PurchaseCard (data: Transaction.Purchase) {
+fun PurchaseCard (
+    data: Transaction.Purchase,
+    isIdVisible: Boolean
+) {
+    val arrangement = if (isIdVisible) {
+        Arrangement.SpaceBetween
+    } else {
+        Arrangement.End
+    }
+
     Row (
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -105,25 +120,30 @@ fun PurchaseCard (data: Transaction.Purchase) {
     }
     Row (
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = arrangement,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AppText(
-            text = data.id,
-            fontWeight = FontWeight.Normal,
-            fontSize = 12.sp
-        )
+        if (isIdVisible) {
+            AppText(
+                text = data.id,
+                fontWeight = FontWeight.Normal,
+                fontSize = 12.sp
+            )
+        }
         AppText(
             text = "Rp ${data.total}",
             fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             color = Danger
         )
     }
 }
 
 @Composable
-fun BillCard (data: Transaction.Bill) {
+fun BillCard (
+    data: Transaction.Bill,
+    isIdVisible: Boolean
+) {
     val statusColor = getStatusColor(data.status)
 
     Row (
@@ -142,11 +162,13 @@ fun BillCard (data: Transaction.Bill) {
             fontSize = 10.sp
         )
     }
-    AppText(
-        text = data.id,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
+    if (isIdVisible) {
+        AppText(
+            text = data.id,
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.sp
+        )
+    }
     Row (
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -159,7 +181,7 @@ fun BillCard (data: Transaction.Bill) {
         AppText(
             text = "Rp ${data.total}",
             fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             color = statusColor
         )
     }

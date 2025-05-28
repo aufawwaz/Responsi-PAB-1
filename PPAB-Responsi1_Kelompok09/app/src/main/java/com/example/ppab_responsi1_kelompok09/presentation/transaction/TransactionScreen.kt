@@ -1,5 +1,6 @@
 package com.example.ppab_responsi1_kelompok09.presentation.transaction
 
+import android.R.attr.id
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -42,6 +43,7 @@ import com.example.ppab_responsi1_kelompok09.common.component.TransactionCard
 import com.example.ppab_responsi1_kelompok09.common.style.AppText
 import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
 import com.example.ppab_responsi1_kelompok09.data.Transaction
+import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
@@ -172,7 +174,7 @@ private fun PesananTerbaruList() {
     LazyColumn (
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .height((transactionList.size * 97).dp),
+            .height((transactionList.size * 110).dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(transactionList) { transactionItem ->
@@ -182,25 +184,47 @@ private fun PesananTerbaruList() {
                 is Transaction.Bill -> R.drawable.ic_tagihan_fill
             }
 
-            Row(
+            val currentId = when (transactionItem) {
+                is Transaction.Sell -> transactionItem.id
+                is Transaction.Purchase -> transactionItem.id
+                is Transaction.Bill -> transactionItem.id
+            }
+
+            Column (
                 modifier = Modifier
-                    .fillMaxWidth()
                     .dropShadow200(8.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(White)
                     .clickable { }
                     .padding(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                TonalIcon(
-                    iconRes = iconRes,
-                    iconHeight = 20.dp,
-                    boxSize = 40.dp
+                AppText(
+                    text = currentId,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 12.sp
                 )
-                TransactionCard(
-                    transaction = transactionItem
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Gray.copy(0.2f))
+                        .height(0.5.dp)
                 )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TonalIcon(
+                        iconRes = iconRes,
+                        iconHeight = 24.dp,
+                        boxSize = 44.dp
+                    )
+                    TransactionCard(
+                        transaction = transactionItem,
+                        isIdInCard = false
+                    )
+                }
             }
         }
     }
