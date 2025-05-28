@@ -1,4 +1,4 @@
-package com.example.ppab_responsi1_kelompok09.pages.LoginPage
+package com.example.ppab_responsi1_kelompok09.presentation.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,14 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.common.component.CustomButton
 import com.example.ppab_responsi1_kelompok09.common.component.CustomCheckbox
@@ -51,14 +48,13 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
+import kotlinx.coroutines.launch
 
-//@Preview(showBackground = true)
+// @Preview(showBackground = true)
 @Composable
-fun LoginScreen(navController: NavController, userViewModel: UserViewModel){
+fun RegisterScreen(navController: NavController, userViewModel: UserViewModel){
     Box(
-        Modifier
-            .fillMaxSize()
-            .background(White)
+        Modifier.fillMaxSize().background(White)
     ){
         Column(
             modifier = Modifier
@@ -82,16 +78,16 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel){
             }
             Column (
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxWidth()
                     .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
                     .background(White),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Spacer(Modifier.height(24.dp))
-                AppText("Login", 18.sp, FontWeight.W600, MaterialTheme.colorScheme.onBackground)
+                AppText("Register", 18.sp, FontWeight.W600, MaterialTheme.colorScheme.onBackground)
                 Spacer(Modifier.height(24.dp))
 
-                LoginForm(navController, userViewModel)
+                RegisterForm(navController, userViewModel)
             }
         }
 
@@ -99,7 +95,10 @@ fun LoginScreen(navController: NavController, userViewModel: UserViewModel){
 }
 
 @Composable
-private fun LoginForm(navController: NavController, userViewModel: UserViewModel){
+private fun RegisterForm(navController: NavController, userViewModel: UserViewModel){
+    val context = LocalContext.current // context user data
+    val coroutineScope = rememberCoroutineScope()
+
     Spacer(Modifier.height(16.dp))
     Column (
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -111,11 +110,10 @@ private fun LoginForm(navController: NavController, userViewModel: UserViewModel
             modifier = Modifier
                 .fillMaxWidth()
                 .border(1.dp, Gray, RoundedCornerShape(12.dp))
-                .clip(RoundedCornerShape(12.dp))
                 .background(White, RoundedCornerShape(12.dp))
-                .clickable { /* sign in google */ }
                 .padding(horizontal = 12.dp)
-                .height(44.dp),
+                .height(44.dp)
+                .clickable { /* sign in google */ },
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
@@ -137,26 +135,34 @@ private fun LoginForm(navController: NavController, userViewModel: UserViewModel
             }
         }
         HorizontalLine()
-
-        var emailValue by rememberSaveable { mutableStateOf("") }
+        var usernameRValue by rememberSaveable { mutableStateOf("") }
         InputTextForm(
-            value = emailValue,
-            onValueChange = { emailValue = it },
-            placeholder = "Email",
-            icon = R.drawable.ic_email,
-            isPassword = false
+            usernameRValue,
+            { usernameRValue = it },
+            "Username",
+            R.drawable.ic_login,
+            false
         )
 
-        var passwordValue by rememberSaveable { mutableStateOf("") }
+        var emailRValue by rememberSaveable { mutableStateOf("") }
         InputTextForm(
-            value = passwordValue,
-            onValueChange = { passwordValue = it },
-            placeholder = "Password",
-            icon = R.drawable.ic_password,
-            isPassword = true
+            emailRValue, { emailRValue = it },
+            "Email",
+            R.drawable.ic_email,
+            false
         )
 
-        // LOGIN CONFIRMATION
+        var passwordRValue by rememberSaveable { mutableStateOf("") }
+        InputTextForm(
+            passwordRValue,
+            { passwordRValue = it },
+            "Password",
+            R.drawable.ic_password,
+            true
+        )
+
+        // REGISTER CONFIRMATION
+        var isAgreeToTnC by rememberSaveable { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -165,30 +171,27 @@ private fun LoginForm(navController: NavController, userViewModel: UserViewModel
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(36.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Row (
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    var isRememberMe by rememberSaveable { mutableStateOf(false) }
-                    CustomCheckbox(isRememberMe, { isRememberMe = it }, 15.sp)
-
-                    Spacer(Modifier.width(7.dp))
-                    AppText("Remember me", 11.sp)
-                }
-                AppText("Forgot Password?", 11.sp, color = Primary)
+                CustomCheckbox(isAgreeToTnC, { isAgreeToTnC = it }, 15.sp)
+                Spacer(Modifier.width(7.dp))
+                AppText("I agree to the ", 11.sp)
+                AppText("Terms & Conditions", 11.sp, color = Primary)
             }
             CustomButton(
                 {
-                    userViewModel.login(emailValue, passwordValue){ success ->
-                        if(success){
-                            navController.navigate("main")
+                    if (isAgreeToTnC &&
+                        Users.isValidUsername(usernameRValue) &&
+                        Users.isValidEmail(emailRValue) &&
+                        Users.isValidPassword(passwordRValue))
+                    {
+                        coroutineScope.launch {
+                            Users.addUser(context, usernameRValue, emailRValue, passwordRValue)
+                            navController.navigate("login")
                         }
-                        else {/* pop up gagal login */}
                     }
                 },
-                "Login"
+                "Sign Up"
             )
 
             Row(
@@ -198,12 +201,12 @@ private fun LoginForm(navController: NavController, userViewModel: UserViewModel
                     .padding(bottom = 7.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
-                AppText("Don't have account? ", 11.sp)
+                AppText("Already have an account? ", 11.sp)
                 AppText(
-                    "Create account",
+                    "Sign In",
                     11.sp,
                     color = Primary,
-                    modifier = Modifier.clickable{ navController.navigate("register") }
+                    modifier = Modifier.clickable{ navController.navigate("login") }
                 )
             }
         }

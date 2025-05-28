@@ -1,4 +1,4 @@
-package com.example.ppab_responsi1_kelompok09.pages.HomePage
+package com.example.ppab_responsi1_kelompok09.presentation.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -229,6 +229,7 @@ private fun MenuGrid() {
             val item = gridItems[i]
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 TonalIcon(
+                    isClickable = true,
                     iconHeight = 28.dp,
                     iconRes = item.icon,
                     boxSize = 48.dp

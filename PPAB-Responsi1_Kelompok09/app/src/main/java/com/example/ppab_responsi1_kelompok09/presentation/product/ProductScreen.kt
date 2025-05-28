@@ -1,4 +1,4 @@
-package com.example.ppab_responsi1_kelompok09.pages.ProductPage
+package com.example.ppab_responsi1_kelompok09.presentation.product
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

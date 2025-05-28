@@ -1,10 +1,5 @@
 package com.example.ppab_responsi1_kelompok09.data
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Modifier
-import java.time.LocalDate
-
 data class NavItem(
     val route: String,
     val icon: Int,
@@ -44,3 +39,28 @@ data class Contact(
     val name : String,
     val number : String
 )
+
+sealed class Transaction{
+    data class Sell(
+        val id : String,
+        val customer : String,
+        val date : String,
+        val paymentMethod : String,
+        val total : String
+     ) : Transaction()
+
+    data class Purchase(
+        val id : String,
+        val seller : String,
+        val date : String,
+        val total : String
+    ) : Transaction()
+
+    data class Bill(
+        val id : String,
+        val customer : String,
+        val date : String,
+        val status : String,
+        val total : String
+    ) : Transaction()
+}
