@@ -53,9 +53,10 @@ import com.example.ppab_responsi1_kelompok09.data.TabelItem
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
+import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController, userViewModel: UserViewModel) {
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -66,7 +67,7 @@ fun HomeScreen(navController: NavController) {
             Modifier
                 .height(1336.dp)
         ) {
-            HeaderHome()
+            HeaderHome(userViewModel = userViewModel)
             Column (
                 modifier = Modifier.offset(y = 206.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -88,7 +89,7 @@ fun HomeScreen(navController: NavController) {
 }
 
 @Composable
-private fun HeaderHome() {
+private fun HeaderHome(userViewModel: UserViewModel) {
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -109,7 +110,7 @@ private fun HeaderHome() {
         {
             ProfileContainer(
                 icon = R.drawable.img_profile_picture,
-                text = "Biru",
+                text = userViewModel.username,
                 isLogin = true
             )
         }

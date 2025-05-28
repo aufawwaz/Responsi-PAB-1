@@ -34,9 +34,14 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
+import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
 
 @Composable
-fun MoreScreen (navController: NavController, loginNavController: NavController) {
+fun MoreScreen (
+    navController: NavController,
+    loginNavController: NavController,
+    userViewModel: UserViewModel
+) {
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +57,7 @@ fun MoreScreen (navController: NavController, loginNavController: NavController)
         ) {
             ProfileContainer(
                 R.drawable.img_profile_picture,
-                "Biru",
+                userViewModel.username,
                 true
             )
             Box (
@@ -85,7 +90,7 @@ fun MoreScreen (navController: NavController, loginNavController: NavController)
                     .fillMaxWidth()
                     .height(60.dp)
             ) {
-                Logout(loginNavController)
+                Logout(loginNavController, userViewModel)
             }
         }
     }
@@ -183,10 +188,13 @@ private fun OptionItem (
 }
 
 @Composable
-private fun Logout (loginNavController: NavController) {
+private fun Logout (loginNavController: NavController, userViewModel: UserViewModel) {
     Row (
         modifier = Modifier
-            .clickable{ loginNavController.navigate("login") }
+            .clickable{
+                userViewModel.logout()
+                loginNavController.navigate("login")
+            }
             .fillMaxSize()
             .clip(RoundedCornerShape(8.dp))
             .background(White)
