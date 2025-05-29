@@ -16,7 +16,8 @@ import com.example.ppab_responsi1_kelompok09.presentation.login.LoginScreen
 import com.example.ppab_responsi1_kelompok09.presentation.login.RegisterScreen
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.ScaleUpTheme
-import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.onboard.OnboardingScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = loginNavController,
-                    startDestination = "splash"
+                    startDestination = "onboarding"
                 ) {
                     composable("splash") {
                         LaunchedEffect(isLogin) {
@@ -65,9 +66,10 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    composable("onboarding") { OnboardingScreen(loginNavController) }
+                    composable("register") { RegisterScreen(loginNavController, userViewModel) }
                     composable("login") { LoginScreen(loginNavController, userViewModel) }
                     composable("main") { MainNavigation(loginNavController, userViewModel) }
-                    composable("register") { RegisterScreen(loginNavController, userViewModel) }
                 }
             }
         }

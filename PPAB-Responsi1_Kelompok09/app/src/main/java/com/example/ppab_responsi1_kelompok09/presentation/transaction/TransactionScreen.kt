@@ -29,19 +29,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.Transition
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
-import com.example.ppab_responsi1_kelompok09.common.component.BottomSpacer
-import com.example.ppab_responsi1_kelompok09.common.component.CustomButton
-import com.example.ppab_responsi1_kelompok09.common.component.PageHeader
-import com.example.ppab_responsi1_kelompok09.common.component.SearchBarFilter
-import com.example.ppab_responsi1_kelompok09.common.component.TonalIcon
-import com.example.ppab_responsi1_kelompok09.common.component.TransactionCard
-import com.example.ppab_responsi1_kelompok09.common.style.AppText
-import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
-import com.example.ppab_responsi1_kelompok09.data.Transaction
+import com.example.ppab_responsi1_kelompok09.presentation.components.BottomSpacer
+import com.example.ppab_responsi1_kelompok09.presentation.components.CustomButton
+import com.example.ppab_responsi1_kelompok09.presentation.components.PageHeader
+import com.example.ppab_responsi1_kelompok09.presentation.components.SearchBarFilter
+import com.example.ppab_responsi1_kelompok09.presentation.components.TonalIcon
+import com.example.ppab_responsi1_kelompok09.presentation.components.TransactionCard
+import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
+import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
+import com.example.ppab_responsi1_kelompok09.domain.model.Transaction
+import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
@@ -69,7 +69,13 @@ fun TransactionScreen(navController: NavController = rememberNavController()) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 KategoriTransaksi()
-                SearchBarFilter()
+                AppText(
+                    text = "Transaksi Hari ini",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+                SearchBarFilter("Cari Transaksi")
                 PesananTerbaruList()
                 BottomSpacer()
             }
@@ -172,7 +178,7 @@ private fun PesananTerbaruList() {
     LazyColumn (
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .height((transactionList.size * 97).dp),
+            .height((transactionList.size * 113).dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(transactionList) { transactionItem ->
@@ -182,25 +188,47 @@ private fun PesananTerbaruList() {
                 is Transaction.Bill -> R.drawable.ic_tagihan_fill
             }
 
-            Row(
+            val currentId = when (transactionItem) {
+                is Transaction.Sell -> transactionItem.id
+                is Transaction.Purchase -> transactionItem.id
+                is Transaction.Bill -> transactionItem.id
+            }
+
+            Column (
                 modifier = Modifier
-                    .fillMaxWidth()
                     .dropShadow200(8.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(White)
                     .clickable { }
                     .padding(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                TonalIcon(
-                    iconRes = iconRes,
-                    iconHeight = 20.dp,
-                    boxSize = 40.dp
+                AppText(
+                    text = currentId,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 12.sp
                 )
-                TransactionCard(
-                    transaction = transactionItem
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Gray.copy(0.3f))
+                        .height(0.5.dp)
                 )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TonalIcon(
+                        iconRes = iconRes,
+                        iconHeight = 24.dp,
+                        boxSize = 44.dp
+                    )
+                    TransactionCard(
+                        transaction = transactionItem,
+                        isIdInCard = false
+                    )
+                }
             }
         }
     }

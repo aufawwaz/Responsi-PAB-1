@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
-import com.example.ppab_responsi1_kelompok09.data.NavItem
+import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
+import com.example.ppab_responsi1_kelompok09.domain.model.NavItem
 import com.example.ppab_responsi1_kelompok09.presentation.product.ProductScreen
 import com.example.ppab_responsi1_kelompok09.presentation.contact.ContactScreen
 import com.example.ppab_responsi1_kelompok09.presentation.home.HomeScreen
@@ -30,7 +30,7 @@ import com.example.ppab_responsi1_kelompok09.presentation.transaction.Transactio
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
-import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
 
 @Composable
 fun MainNavigation(loginNavController: NavController, userViewModel: UserViewModel) {

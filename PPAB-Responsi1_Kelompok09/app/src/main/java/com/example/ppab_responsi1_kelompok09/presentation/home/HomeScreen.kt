@@ -3,6 +3,7 @@ package com.example.ppab_responsi1_kelompok09.presentation.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,34 +27,36 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.ppab_responsi1_kelompok09.common.component.ProfileContainer
+import com.example.ppab_responsi1_kelompok09.presentation.components.ProfileContainer
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import com.example.ppab_responsi1_kelompok09.R
-import com.example.ppab_responsi1_kelompok09.common.component.KnowledgeCard
-import com.example.ppab_responsi1_kelompok09.common.component.TonalIcon
-import com.example.ppab_responsi1_kelompok09.common.style.AppText
-import com.example.ppab_responsi1_kelompok09.common.style.HomeTextHeader
-import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
-import com.example.ppab_responsi1_kelompok09.data.KnowledgeCardItem
-import com.example.ppab_responsi1_kelompok09.data.MenuItem
-import com.example.ppab_responsi1_kelompok09.data.TabelItem
+import com.example.ppab_responsi1_kelompok09.presentation.components.KnowledgeCard
+import com.example.ppab_responsi1_kelompok09.presentation.components.TonalIcon
+import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
+import com.example.ppab_responsi1_kelompok09.presentation.components.HomeTextHeader
+import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
+import com.example.ppab_responsi1_kelompok09.domain.model.KnowledgeCardItem
+import com.example.ppab_responsi1_kelompok09.domain.model.MenuItem
+import com.example.ppab_responsi1_kelompok09.domain.model.TabelItem
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
-import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
 
 @Composable
 fun HomeScreen(navController: NavController, userViewModel: UserViewModel) {
@@ -312,7 +315,12 @@ private fun KnowledgeCardSection() {
         )
         Row (
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {  }
         ) {
             AppText(
                 text = "Lihat semua",
@@ -354,18 +362,25 @@ private fun PesananTerbaru() {
             .dropShadow200(16.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(White)
-            .padding(16.dp),
+            .padding(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Row (
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             HomeTextHeader("PESANAN TERBARU")
             Row (
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {  }
             ) {
                 AppText(
                     text = "Lihat semua",
@@ -384,6 +399,7 @@ private fun PesananTerbaru() {
         Box (
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = 16.dp)
                 .background(Gray.copy(0.5f))
                 .height(1.dp)
         )
@@ -401,9 +417,7 @@ private fun TabelPesanan() {
         TabelItem(R.drawable.img_profile_picture, "Budiman", "01 Januari 2025", "+ Rp300.000"),
     )
 
-    LazyColumn (
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
+    LazyColumn {
         items(tabelItem.size) { i ->
             val item = tabelItem[i]
             TabelItemRow(
@@ -421,12 +435,17 @@ private fun TabelItemRow(
     image : Int,
     name : String,
     date : String,
-    money : String
+    money : String,
+    onClick : () -> Unit = {}
 ) {
     Row (
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Transparent)
+            .clickable{ onClick }
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row (
             verticalAlignment = Alignment.CenterVertically,

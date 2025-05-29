@@ -1,7 +1,6 @@
 package com.example.ppab_responsi1_kelompok09.presentation.product
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,33 +22,26 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
-import com.example.ppab_responsi1_kelompok09.common.component.BottomSpacer
-import com.example.ppab_responsi1_kelompok09.common.component.CustomButton
-import com.example.ppab_responsi1_kelompok09.common.component.InputTextForm
-import com.example.ppab_responsi1_kelompok09.common.component.PageHeader
-import com.example.ppab_responsi1_kelompok09.common.component.ProductCard
-import com.example.ppab_responsi1_kelompok09.common.style.AppText
-import com.example.ppab_responsi1_kelompok09.data.ProductItem
-import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
+import com.example.ppab_responsi1_kelompok09.presentation.components.BottomSpacer
+import com.example.ppab_responsi1_kelompok09.presentation.components.CustomButton
+import com.example.ppab_responsi1_kelompok09.presentation.components.PageHeader
+import com.example.ppab_responsi1_kelompok09.presentation.components.ProductCard
+import com.example.ppab_responsi1_kelompok09.presentation.components.SearchBarFilter
+import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
+import com.example.ppab_responsi1_kelompok09.domain.model.ProductItem
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
-@Preview
 @Composable
 fun ProductScreen(navController: NavController = rememberNavController()) {
     Box (
@@ -74,7 +65,7 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 KategoriSatuanSection(navController)
-                SearchBarFilterSection()
+                SearchBarFilter("Cari Produk")
                 ProductGrid()
                 BottomSpacer()
             }
@@ -169,57 +160,18 @@ private fun KategoriSatuanItem (
 }
 
 @Composable
-private fun SearchBarFilterSection() {
-    Row (
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .height(44.dp)
-    ) {
-        Box (
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-        ) {
-            var productSearchValue by rememberSaveable { mutableStateOf("") }
-            InputTextForm(
-                value = productSearchValue,
-                onValueChange = { productSearchValue = it },
-                placeholder = "Search",
-                icon = R.drawable.ic_search,
-                isPassword = false,
-                isLost = true
-            )
-        }
-        Box(
-            modifier = Modifier
-                .size(44.dp)
-                .border(1.dp, Gray, RoundedCornerShape(12.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon (
-                painter = painterResource(R.drawable.ic_filter),
-                contentDescription = null,
-                modifier = Modifier.width(16.dp),
-                tint = Gray
-            )
-        }
-    }
-}
-
-@Composable
 private fun ProductGrid () {
     var productList = listOf(
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
-        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", "100", "200", "Rp1.548.000"),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 200, 1548000),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 20, 1548000),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 0, 1548000),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 9, 1548000),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 200, 1548000),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 10, 1548000),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 200, 1548000),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 200, 1548000),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 200, 1548000),
+        ProductItem({}, R.drawable.img_product_1, "MEN SHOES", "Air Jordan 1 Mid", 100, 200, 1548000),
     )
 
     LazyVerticalGrid(

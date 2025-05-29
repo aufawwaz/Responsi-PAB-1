@@ -32,23 +32,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
-import com.example.ppab_responsi1_kelompok09.common.component.CustomButton
-import com.example.ppab_responsi1_kelompok09.common.component.CustomSwitch
-import com.example.ppab_responsi1_kelompok09.common.component.HorizontalLine
-import com.example.ppab_responsi1_kelompok09.common.component.InputTextForm
-import com.example.ppab_responsi1_kelompok09.common.component.PageHeader
-import com.example.ppab_responsi1_kelompok09.common.style.AppText
-import com.example.ppab_responsi1_kelompok09.data.Contact
+import com.example.ppab_responsi1_kelompok09.presentation.components.CustomButton
+import com.example.ppab_responsi1_kelompok09.presentation.components.CustomSwitch
+import com.example.ppab_responsi1_kelompok09.presentation.components.HorizontalLine
+import com.example.ppab_responsi1_kelompok09.presentation.components.InputTextForm
+import com.example.ppab_responsi1_kelompok09.presentation.components.PageHeader
+import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
+import com.example.ppab_responsi1_kelompok09.domain.model.Contact
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
-@Preview
+//@Preview (showBackground = true)
 @Composable
 fun ContactScreen(navController: NavController = rememberNavController()) {
     Box(
