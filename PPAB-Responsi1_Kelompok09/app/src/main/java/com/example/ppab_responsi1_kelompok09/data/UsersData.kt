@@ -5,18 +5,10 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.ppab_responsi1_kelompok09.domain.model.User
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
-
-// anggap ini database user ygy
-// tabel data
-@Serializable
-data class User(
-    val username : String,
-    val email : String,
-    val password : String
-)
 
 // DataStore Extension
 val Context.dataStore by preferencesDataStore(name = "user_prefs")
@@ -33,6 +25,7 @@ class Users {
         suspend fun loadUsers(context: Context) {
             listUser = getUserList(context).toMutableList()
         }
+
 
         suspend fun saveUsers(context: Context) {
             saveUserList(context, listUser)

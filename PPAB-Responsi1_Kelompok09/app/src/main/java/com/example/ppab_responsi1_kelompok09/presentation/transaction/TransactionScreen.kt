@@ -1,6 +1,5 @@
 package com.example.ppab_responsi1_kelompok09.presentation.transaction
 
-import android.R.attr.id
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,19 +29,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.Transition
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
-import com.example.ppab_responsi1_kelompok09.common.component.BottomSpacer
-import com.example.ppab_responsi1_kelompok09.common.component.CustomButton
-import com.example.ppab_responsi1_kelompok09.common.component.PageHeader
-import com.example.ppab_responsi1_kelompok09.common.component.SearchBarFilter
-import com.example.ppab_responsi1_kelompok09.common.component.TonalIcon
-import com.example.ppab_responsi1_kelompok09.common.component.TransactionCard
-import com.example.ppab_responsi1_kelompok09.common.style.AppText
-import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
-import com.example.ppab_responsi1_kelompok09.data.Transaction
+import com.example.ppab_responsi1_kelompok09.presentation.components.BottomSpacer
+import com.example.ppab_responsi1_kelompok09.presentation.components.CustomButton
+import com.example.ppab_responsi1_kelompok09.presentation.components.PageHeader
+import com.example.ppab_responsi1_kelompok09.presentation.components.SearchBarFilter
+import com.example.ppab_responsi1_kelompok09.presentation.components.TonalIcon
+import com.example.ppab_responsi1_kelompok09.presentation.components.TransactionCard
+import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
+import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
+import com.example.ppab_responsi1_kelompok09.domain.model.Transaction
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
@@ -71,7 +69,13 @@ fun TransactionScreen(navController: NavController = rememberNavController()) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 KategoriTransaksi()
-                SearchBarFilter()
+                AppText(
+                    text = "Transaksi Hari ini",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+                SearchBarFilter("Cari Transaksi")
                 PesananTerbaruList()
                 BottomSpacer()
             }
@@ -174,7 +178,7 @@ private fun PesananTerbaruList() {
     LazyColumn (
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .height((transactionList.size * 110).dp),
+            .height((transactionList.size * 113).dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(transactionList) { transactionItem ->
@@ -207,7 +211,7 @@ private fun PesananTerbaruList() {
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Gray.copy(0.2f))
+                        .background(Gray.copy(0.3f))
                         .height(0.5.dp)
                 )
                 Row(

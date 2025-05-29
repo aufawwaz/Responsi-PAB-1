@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,18 +35,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ppab_responsi1_kelompok09.R
-import com.example.ppab_responsi1_kelompok09.common.component.CustomButton
-import com.example.ppab_responsi1_kelompok09.common.component.CustomCheckbox
-import com.example.ppab_responsi1_kelompok09.common.component.HorizontalLine
-import com.example.ppab_responsi1_kelompok09.common.component.InputTextForm
-import com.example.ppab_responsi1_kelompok09.common.component.ScaleUpFullLogo
-import com.example.ppab_responsi1_kelompok09.common.style.AppText
+import com.example.ppab_responsi1_kelompok09.presentation.components.CustomButton
+import com.example.ppab_responsi1_kelompok09.presentation.components.CustomCheckbox
+import com.example.ppab_responsi1_kelompok09.presentation.components.HorizontalLine
+import com.example.ppab_responsi1_kelompok09.presentation.components.InputTextForm
+import com.example.ppab_responsi1_kelompok09.presentation.components.ScaleUpFullLogo
+import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
 import com.example.ppab_responsi1_kelompok09.data.Users
+import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary900
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
-import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
 import kotlinx.coroutines.launch
 
 // @Preview(showBackground = true)
@@ -84,7 +84,7 @@ fun RegisterScreen(navController: NavController, userViewModel: UserViewModel){
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Spacer(Modifier.height(24.dp))
-                AppText("Register", 18.sp, FontWeight.W600, MaterialTheme.colorScheme.onBackground)
+                AppText("Register", 18.sp, FontWeight.W600, Dark)
                 Spacer(Modifier.height(24.dp))
 
                 RegisterForm(navController, userViewModel)

@@ -25,16 +25,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ppab_responsi1_kelompok09.R
-import com.example.ppab_responsi1_kelompok09.common.component.HeaderGradient
-import com.example.ppab_responsi1_kelompok09.common.component.ProfileContainer
-import com.example.ppab_responsi1_kelompok09.common.component.TonalIcon
-import com.example.ppab_responsi1_kelompok09.common.style.AppText
-import com.example.ppab_responsi1_kelompok09.common.style.dropShadow200
+import com.example.ppab_responsi1_kelompok09.presentation.components.HeaderGradient
+import com.example.ppab_responsi1_kelompok09.presentation.components.ProfileContainer
+import com.example.ppab_responsi1_kelompok09.presentation.components.TonalIcon
+import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
+import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
 import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
-import com.example.ppab_responsi1_kelompok09.view_model.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
 
 @Composable
 fun MoreScreen (
