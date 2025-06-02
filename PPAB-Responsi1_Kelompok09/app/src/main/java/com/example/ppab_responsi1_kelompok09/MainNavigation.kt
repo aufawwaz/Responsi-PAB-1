@@ -30,10 +30,10 @@ import com.example.ppab_responsi1_kelompok09.presentation.transaction.Transactio
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
-import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.AuthViewModel
 
 @Composable
-fun MainNavigation(loginNavController: NavController, userViewModel: UserViewModel) {
+fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewModel) {
     val navController = rememberNavController()
     val dataClassLists = listOf(
         NavItem("home", R.drawable.ic_home, R.drawable.ic_home_fill),
@@ -109,14 +109,11 @@ fun MainNavigation(loginNavController: NavController, userViewModel: UserViewMod
             navController = navController,
             startDestination = "home"
         ) {
-            composable("home") { HomeScreen(navController, userViewModel) }
+            composable("home") { HomeScreen(navController, authViewModel) }
             composable("product") { ProductScreen(navController) }
             composable("transaction") { TransactionScreen(navController) }
             composable("contact") { ContactScreen(navController) }
-            composable("more") { MoreScreen(navController, loginNavController, userViewModel) }
-
-//            composable("login") { LoginScreen(navController) }
-//            composable("register") { RegisterScreen(navController) }
+            composable("more") { MoreScreen(navController, loginNavController, authViewModel) }
         }
     }
 }

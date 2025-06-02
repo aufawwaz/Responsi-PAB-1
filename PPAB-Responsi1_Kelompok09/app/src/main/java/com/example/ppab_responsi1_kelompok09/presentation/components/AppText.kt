@@ -13,9 +13,6 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Poppins
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import org.w3c.dom.Text
 
-// Kalau mau bikin teks pake ini
-// Fontnya udah poppins, lineheight sama letterspacing udah direset
-
 @Composable
 fun AppText(
     text: String,
@@ -65,3 +62,23 @@ fun PageTextHeader (
         modifier = modifier
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
