@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
@@ -34,14 +37,17 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
-import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.AuthViewModel
 
 @Composable
 fun MoreScreen (
     navController: NavController,
     loginNavController: NavController,
-    userViewModel: UserViewModel
+    authViewModel: AuthViewModel
 ) {
+
+    val userName by authViewModel.userName.collectAsState()
+
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -57,7 +63,7 @@ fun MoreScreen (
         ) {
             ProfileContainer(
                 R.drawable.img_profile_picture,
-                userViewModel.username,
+                userName, //authViewModel.username,
                 true
             )
             Box (
@@ -90,7 +96,7 @@ fun MoreScreen (
                     .fillMaxWidth()
                     .height(60.dp)
             ) {
-                Logout(loginNavController, userViewModel)
+                Logout(loginNavController, authViewModel)
             }
         }
     }
@@ -188,11 +194,11 @@ private fun OptionItem (
 }
 
 @Composable
-private fun Logout (loginNavController: NavController, userViewModel: UserViewModel) {
+private fun Logout (loginNavController: NavController, authViewModel: AuthViewModel) {
     Row (
         modifier = Modifier
             .clickable{
-                userViewModel.logout()
+                authViewModel.signOut()
                 loginNavController.navigate("login")
             }
             .fillMaxSize()
