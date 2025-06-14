@@ -34,8 +34,11 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import com.example.ppab_responsi1_kelompok09.presentation.login.AuthViewModel
 import com.example.ppab_responsi1_kelompok09.presentation.product.ProductDetailScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.bill.BillDetailScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.purchase.PurchaseDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.BillReportScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.PurchaseReportScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.SaleDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.SaleReportScreen
 
 @Composable
@@ -55,6 +58,9 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
         "laporan_penjualan",
         "laporan_pembelian",
         "laporan_tagihan",
+        "penjualan_detail/{saleId}",
+        "pembelian_detail/{purchaseId}",
+        "tagihan_detail/{billId}",
 
         "balance",
 
@@ -137,6 +143,18 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
             composable("laporan_penjualan") { SaleReportScreen(navController) }
             composable("laporan_pembelian") { PurchaseReportScreen(navController) }
             composable("laporan_tagihan") { BillReportScreen(navController) }
+            composable("penjualan_detail/{saleId}"){ backStackEntry ->
+                val saleId = backStackEntry.arguments?.getString("saleId")
+                SaleDetailScreen(navController, saleId = saleId ?: "")
+            }
+            composable("pembelian_detail/{purchaseId}"){ backStackEntry ->
+                val purchaseId = backStackEntry.arguments?.getString("purchaseId")
+                PurchaseDetailScreen(navController, purchaseId = purchaseId ?: "")
+            }
+            composable("tagihan_detail/{billId}"){ backStackEntry ->
+                val billId = backStackEntry.arguments?.getString("billId")
+                BillDetailScreen(navController, billId = billId ?: "")
+            }
 
             composable("contact") { ContactScreen(navController) }
             composable("contact_detail/{contactId}") { backStackEntry ->

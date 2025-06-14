@@ -80,7 +80,7 @@ fun TransactionScreen(navController: NavController = rememberNavController()) {
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
                 SearchBarFilter("Cari Transaksi")
-                PesananTerbaruList(transaction)
+                PesananTerbaruList(transaction, navController)
                 BottomSpacer()
             }
         }
@@ -167,7 +167,7 @@ private fun KategoriTransaksiItem (
 }
 
 @Composable
-private fun PesananTerbaruList(transactionList: List<Transaction>) {
+private fun PesananTerbaruList(transactionList: List<Transaction>, navController: NavController) {
     LazyColumn (
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -185,12 +185,17 @@ private fun PesananTerbaruList(transactionList: List<Transaction>) {
                 is Transaction.Purchase -> transactionItem.id
                 is Transaction.Bill -> transactionItem.id
             }
+            val detailRoute = when (transactionItem) {
+                is Transaction.Sell -> "penjualan_detail/$currentId"
+                is Transaction.Purchase -> "pembelian_detail/$currentId"
+                is Transaction.Bill -> "tagihan_detail/$currentId"
+            }
             Column (
                 modifier = Modifier
                     .dropShadow200(8.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(White)
-                    .clickable { }
+                    .clickable { navController.navigate(detailRoute) }
                     .padding(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {

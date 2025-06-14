@@ -91,7 +91,6 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel){
                 LoginForm(navController, authViewModel)
             }
         }
-
     }
 }
 

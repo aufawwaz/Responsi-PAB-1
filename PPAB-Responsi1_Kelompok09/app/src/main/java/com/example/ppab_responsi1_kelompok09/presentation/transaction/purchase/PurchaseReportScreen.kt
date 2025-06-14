@@ -108,7 +108,7 @@ fun PurchaseReportScreen(
                         fontSize = 16.sp
                     )
                 }
-                ListPembelian(pembelian = purchaseList)
+                ListPembelian(pembelian = purchaseList, navController)
                 BottomSpacer(40.dp)
             }
         }
@@ -125,18 +125,21 @@ fun PurchaseReportScreen(
 
 @Composable
 fun ListPembelian(
-    pembelian: List<Transaction.Purchase>
+    pembelian: List<Transaction.Purchase>,
+    navController: NavController
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
             .dropShadow200(8.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(White)
-            .padding(8.dp)
     ) {
         pembelian.forEachIndexed { index, transaksi ->
-            PurchaseCard(data = transaksi, isIdVisible = true)
+            PurchaseCard(
+                data = transaksi,
+                isIdVisible = true,
+                onClick = { navController.navigate("pembelian_detail/" + transaksi.id ) }
+            )
             if (index != pembelian.lastIndex) {
                 Box(
                     Modifier
