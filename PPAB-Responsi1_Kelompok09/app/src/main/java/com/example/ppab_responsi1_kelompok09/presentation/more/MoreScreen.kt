@@ -63,7 +63,7 @@ fun MoreScreen (
         ) {
             ProfileContainer(
                 R.drawable.img_profile_picture,
-                userName, //authViewModel.username,
+                userName, //authViewModel.name,
                 true
             )
             Box (
@@ -82,13 +82,13 @@ fun MoreScreen (
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp
             )
-            ManajemenItemContainer()
+            ManajemenItemContainer(navController)
             AppText(
                 text = "Laporan Keuangan",
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp
             )
-            LaporanKeuanganItemContainer()
+            LaporanKeuanganItemContainer(navController)
             Box (
                 modifier = Modifier
                     .dropShadow200(8.dp)
@@ -103,7 +103,9 @@ fun MoreScreen (
 }
 
 @Composable
-private fun ManajemenItemContainer () {
+private fun ManajemenItemContainer (
+    navController: NavController
+) {
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -115,13 +117,16 @@ private fun ManajemenItemContainer () {
             icon = R.drawable.ic_profil_bisnis)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
         OptionItem(
+            onClick = { navController.navigate("balance") },
             text = "Kelola Saldo",
             icon = R.drawable.ic_saldo_fill)
     }
 }
 
 @Composable
-private fun LaporanKeuanganItemContainer() {
+private fun LaporanKeuanganItemContainer(
+    navController: NavController
+) {
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -129,14 +134,17 @@ private fun LaporanKeuanganItemContainer() {
             .clip(RoundedCornerShape(8.dp))
     ) {
         OptionItem(
+            onClick = { navController.navigate("laporan_penjualan") },
             text = "Laporan Penjualan",
             icon = R.drawable.ic_penjualan_fill)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
         OptionItem(
+            onClick = { navController.navigate("laporan_pembelian") },
             text = "Laporan Pembelian",
             icon = R.drawable.ic_pembelian_fill)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
         OptionItem(
+            onClick = { navController.navigate("laporan_tagihan") },
             text = "Laporan Tagihan",
             icon = R.drawable.ic_tagihan_fill)
     }
@@ -151,7 +159,7 @@ private fun OptionItem (
 ) {
     Row (
         modifier = Modifier
-            .clickable{ onClick }
+            .clickable{ onClick() }
             .fillMaxWidth()
             .background(White)
             .padding(horizontal = 16.dp)

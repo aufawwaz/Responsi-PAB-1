@@ -41,7 +41,7 @@ import com.example.ppab_responsi1_kelompok09.presentation.components.Transaction
 import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
 import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
 import com.example.ppab_responsi1_kelompok09.domain.model.Transaction
-import com.example.ppab_responsi1_kelompok09.domain.model.transactionList
+import com.example.ppab_responsi1_kelompok09.domain.repository.TransactionRepository
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
@@ -49,6 +49,9 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.White
 @Preview
 @Composable
 fun TransactionScreen(navController: NavController = rememberNavController()) {
+    // Ambil semua data transaksi
+    val transaction = TransactionRepository.getAllTransaction()
+
     Box (
         modifier = Modifier.fillMaxSize()
     ) {
@@ -63,7 +66,7 @@ fun TransactionScreen(navController: NavController = rememberNavController()) {
                 pagetitle = "Transaksi",
                 title = "Total Transaksi",
                 iconRes = R.drawable.ic_transaksi_fill,
-                description = "10 Transaksi"
+                description = transaction.size.toString() + " Transaksi"
             )
 
             Column(
@@ -77,7 +80,7 @@ fun TransactionScreen(navController: NavController = rememberNavController()) {
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
                 SearchBarFilter("Cari Transaksi")
-                PesananTerbaruList()
+                PesananTerbaruList(transaction)
                 BottomSpacer()
             }
         }
@@ -143,7 +146,7 @@ private fun KategoriTransaksiItem (
             .height(44.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(Primary.copy(0.1f))
-            .clickable{ onClick },
+            .clickable{ onClick() },
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -164,7 +167,7 @@ private fun KategoriTransaksiItem (
 }
 
 @Composable
-private fun PesananTerbaruList() {
+private fun PesananTerbaruList(transactionList: List<Transaction>) {
     LazyColumn (
         modifier = Modifier
             .padding(horizontal = 16.dp)

@@ -192,12 +192,6 @@ private fun LoginForm(navController: NavController, authViewModel: AuthViewModel
             CustomButton(
                 {
                     authViewModel.login(emailLogin, passwordLogin)
-//                    authViewModel.login(emailValue, passwordValue){ success ->
-//                        if(success){
-//                            navController.navigate("main")
-//                        }
-//                        else {/* pop up gagal login */}
-//                    }
                 },
                 "Login"
             )

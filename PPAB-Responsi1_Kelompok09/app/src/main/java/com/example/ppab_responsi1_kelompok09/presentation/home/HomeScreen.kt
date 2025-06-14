@@ -79,7 +79,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 PendapatanCard()
-                MenuGrid()
+                MenuGrid(navController)
                 UpgradeButton(navController)
                 KnowledgeCardSection()
                 PesananTerbaru()
@@ -214,10 +214,12 @@ private fun PendapatanCard() {
 }
 
 @Composable
-private fun MenuGrid() {
+private fun MenuGrid(
+    navController: NavController
+) {
     val gridItems = listOf(
         MenuItem("Transaksi", R.drawable.ic_transaksi_fill),
-        MenuItem("Saldo", R.drawable.ic_saldo_fill),
+        MenuItem("Saldo", R.drawable.ic_saldo_fill) { navController.navigate("balance") },
         MenuItem("Produk", R.drawable.ic_produk_fill),
         MenuItem("Pelanggan", R.drawable.ic_pelanggan_fill),
         MenuItem("Keuangan", R.drawable.ic_keuangan_fill),
@@ -239,6 +241,7 @@ private fun MenuGrid() {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 TonalIcon(
                     isClickable = true,
+                    onClick = item.onClick,
                     iconHeight = 28.dp,
                     iconRes = item.icon,
                     boxSize = 48.dp

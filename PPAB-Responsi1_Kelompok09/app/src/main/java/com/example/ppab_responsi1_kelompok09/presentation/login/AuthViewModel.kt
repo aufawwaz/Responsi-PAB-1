@@ -7,16 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ppab_responsi1_kelompok09.data.Users
-import com.example.ppab_responsi1_kelompok09.data.getLoginData
 import com.example.ppab_responsi1_kelompok09.data.getOnboardingState
-import com.example.ppab_responsi1_kelompok09.data.saveLoginData
 import com.example.ppab_responsi1_kelompok09.data.seenOnboardingState
-import com.example.ppab_responsi1_kelompok09.presentation.login.AuthUiState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -109,7 +102,7 @@ class AuthViewModel (application: Application) : AndroidViewModel(application) {
                     val userId = user?.uid ?: return@addOnCompleteListener
 
                     val userMap = hashMapOf(
-                        "username" to username,
+                        "name" to username,
                         "email" to email,
                         "created_at" to FieldValue.serverTimestamp()
                     )
@@ -142,7 +135,7 @@ class AuthViewModel (application: Application) : AndroidViewModel(application) {
                 if (task.isSuccessful) {
                     val document = task.result
                     if (document != null && document.exists()) {
-                        val username = document.getString("username") ?: ""
+                        val username = document.getString("name") ?: ""
                         _userName.value = username
                     }
                 } else {

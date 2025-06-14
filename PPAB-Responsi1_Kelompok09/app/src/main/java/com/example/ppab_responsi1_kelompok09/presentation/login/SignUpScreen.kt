@@ -43,7 +43,7 @@ import com.example.ppab_responsi1_kelompok09.presentation.components.HorizontalL
 import com.example.ppab_responsi1_kelompok09.presentation.components.InputTextForm
 import com.example.ppab_responsi1_kelompok09.presentation.components.ScaleUpFullLogo
 import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
-import com.example.ppab_responsi1_kelompok09.data.Users
+//import com.example.ppab_responsi1_kelompok09.data.Users
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
@@ -194,16 +194,6 @@ private fun RegisterForm(navController: NavController, authViewModel: AuthViewMo
             CustomButton(
                 {
                     authViewModel.signUp(emailSignUp, passwordSignUp, usernameSignUp)
-//                    if (isAgreeToTnC &&
-//                        Users.isValidUsername(usernameRValue) &&
-//                        Users.isValidEmail(emailRValue) &&
-//                        Users.isValidPassword(passwordRValue))
-//                    {
-//                        coroutineScope.launch {
-//                            Users.addUser(context, usernameRValue, emailRValue, passwordRValue)
-//                            navController.navigate("login")
-//                        }
-//                    }
                 },
                 "Sign Up"
             )

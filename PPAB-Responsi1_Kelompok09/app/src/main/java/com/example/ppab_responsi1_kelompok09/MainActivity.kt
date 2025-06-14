@@ -29,10 +29,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             val loginNavController = rememberNavController()
             val authViewModel: AuthViewModel = viewModel()
-//                factory = ViewModelProvider.AndroidViewModelFactory(application)
-
-//            val isLogin = authViewModel.isLogin
-//            val onboardingHasOpened = authViewModel.onboardingHasOpened
 
             ScaleUpTheme {
                 val systemUiController = rememberSystemUiController()

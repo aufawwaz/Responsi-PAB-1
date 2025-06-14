@@ -16,6 +16,13 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
 import com.example.ppab_responsi1_kelompok09.ui.theme.Warning
+import java.text.SimpleDateFormat
+import java.util.*
+
+fun formatDate(date: Date): String {
+    val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+    return sdf.format(date)
+}
 
 fun getStatusColor(status : String) : Color {
     return when (status.lowercase()) {
@@ -30,37 +37,39 @@ fun getStatusColor(status : String) : Color {
 fun TransactionCard (
     transaction: Transaction,
     modifier : Modifier = Modifier,
-    isIdInCard: Boolean = true
+    isIdInCard: Boolean = true,
+    onClick: () -> Unit = {}
 ) {
     Column (
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         when (transaction) {
-            is Transaction.Sell -> SellCard(transaction, isIdInCard)
-            is Transaction.Purchase -> PurchaseCard(transaction, isIdInCard)
-            is Transaction.Bill -> BillCard(transaction, isIdInCard)
+            is Transaction.Sell -> SellCard(transaction, isIdInCard, onClick)
+            is Transaction.Purchase -> PurchaseCard(transaction, isIdInCard, onClick)
+            is Transaction.Bill -> BillCard(transaction, isIdInCard, onClick)
         }
     }
 }
 
 @Composable
-fun SellCard (
+fun SellCard(
     data: Transaction.Sell,
-    isIdVisible: Boolean
+    isIdVisible: Boolean,
+    onClick: () -> Unit = {}
 ) {
-    Row (
+    Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top
     ) {
         AppText(
-            text = data.customer,
+            text = data.customer.nama_kontak,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp
         )
         AppText(
-            text = data.date,
+            text = formatDate(data.date),
             fontWeight = FontWeight.Light,
             fontSize = 10.sp
         )
@@ -72,7 +81,7 @@ fun SellCard (
             fontSize = 12.sp
         )
     }
-    Row (
+    Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -82,7 +91,7 @@ fun SellCard (
             textColor = Primary
         )
         AppText(
-            text = "Rp ${data.total}",
+            text = formatToCurrency(data.total),
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp,
             color = Success
@@ -91,9 +100,10 @@ fun SellCard (
 }
 
 @Composable
-fun PurchaseCard (
+fun PurchaseCard(
     data: Transaction.Purchase,
-    isIdVisible: Boolean
+    isIdVisible: Boolean,
+    onClick: () -> Unit = {}
 ) {
     val arrangement = if (isIdVisible) {
         Arrangement.SpaceBetween
@@ -101,23 +111,24 @@ fun PurchaseCard (
         Arrangement.End
     }
 
-    Row (
+    Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top
     ) {
         AppText(
-            text = data.seller,
+            text = data.supplier.nama_kontak,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp
         )
         AppText(
-            text = data.date,
+            text = formatDate(data.date),
             fontWeight = FontWeight.Light,
             fontSize = 10.sp
         )
     }
-    Row (
+
+    Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = arrangement,
         verticalAlignment = Alignment.CenterVertically
@@ -130,7 +141,7 @@ fun PurchaseCard (
             )
         }
         AppText(
-            text = "Rp ${data.total}",
+            text = formatToCurrency(data.total),
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp,
             color = Danger
@@ -139,28 +150,30 @@ fun PurchaseCard (
 }
 
 @Composable
-fun BillCard (
+fun BillCard(
     data: Transaction.Bill,
-    isIdVisible: Boolean
+    isIdVisible: Boolean,
+    onClick: () -> Unit = {}
 ) {
     val statusColor = getStatusColor(data.status)
 
-    Row (
+    Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.Top
     ) {
         AppText(
-            text = data.customer,
+            text = data.customer.nama_kontak,
             fontWeight = FontWeight.SemiBold,
             fontSize = 14.sp
         )
         AppText(
-            text = data.date,
+            text = formatDate(data.date),
             fontWeight = FontWeight.Light,
             fontSize = 10.sp
         )
     }
+
     if (isIdVisible) {
         AppText(
             text = data.id,
@@ -168,7 +181,8 @@ fun BillCard (
             fontSize = 12.sp
         )
     }
-    Row (
+
+    Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -178,7 +192,7 @@ fun BillCard (
             textColor = statusColor
         )
         AppText(
-            text = "Rp ${data.total}",
+            text = formatToCurrency(data.total),
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp,
             color = statusColor
