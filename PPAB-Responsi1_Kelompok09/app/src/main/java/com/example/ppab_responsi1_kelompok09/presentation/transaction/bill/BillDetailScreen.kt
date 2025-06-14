@@ -97,14 +97,15 @@ fun BillDetailScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .background(White)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TransactionDescriptionCard(bill, billDate, billTotal)
-            AppText("Struk Pembayaran")
+            AppText("Struk Tagihan")
             Struk(items, bill, billDate, billTotal, hargaFormatter)
+            Spacer(Modifier.height(20.dp))
         }
     }
 }
@@ -112,10 +113,10 @@ fun BillDetailScreen(
 @Composable
 private fun TransactionDescriptionCard(bill : Transaction.Bill, billDate : String, billTotal : String){
     val statusColor = when (bill.status) {
-        "Lunas" -> Success.copy(0.2f)
-        "Diproses" -> Warning.copy(0.2f)
-        "Jatuh Tempo" -> Danger.copy(0.2f)
-        else -> Gray.copy(0.2f)
+        "Lunas" -> Success.copy(0.1f)
+        "Diproses" -> Warning.copy(0.1f)
+        "Jatuh Tempo" -> Danger.copy(0.1f)
+        else -> Gray.copy(0.1f)
     }
     val statusTextColor = when (bill.status) {
         "Lunas" -> Success
@@ -171,7 +172,7 @@ private fun TransactionDescriptionCard(bill : Transaction.Bill, billDate : Strin
                     modifier = Modifier.size(24.dp)
                 )
             }
-            AppText(bill.customer.nama_kontak, fontSize = 12.sp)
+            AppText(bill.customer.nama_kontak, fontSize = 14.sp)
         }
         Row (
             verticalAlignment = Alignment.CenterVertically,
@@ -189,7 +190,7 @@ private fun TransactionDescriptionCard(bill : Transaction.Bill, billDate : Strin
                     modifier = Modifier.size(24.dp)
                 )
             }
-            AppText(bill.balance.nama, fontSize = 12.sp)
+            AppText(bill.balance.nama, fontSize = 14.sp)
         }
     }
 }
@@ -208,9 +209,9 @@ private fun Struk(items : List<TransactionItem>, bill : Transaction.Bill, billDa
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AppText("ScaleUp",12.sp, FontWeight.SemiBold, textAlign = TextAlign.Center)
-            AppText("Kec. kecamatan, Kab. kabupaten, provinsi, Indonesia", 8.sp, color = Gray, textAlign = TextAlign.Center)
-            AppText(billDate, 8.sp, color = Gray)
+            AppText("ScaleUp",14.sp, FontWeight.SemiBold, textAlign = TextAlign.Center)
+            AppText("Kec. kecamatan, Kab. kabupaten, provinsi, Indonesia", 10.sp, color = Gray, textAlign = TextAlign.Center)
+            AppText(billDate, 10.sp, color = Gray)
         }
         HorizontalDivider(
             thickness = 1.dp,
@@ -220,15 +221,15 @@ private fun Struk(items : List<TransactionItem>, bill : Transaction.Bill, billDa
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ){
-            AppText("ID Transaksi", 8.sp)
-            AppText(bill.id, 8.sp)
+            AppText("ID Transaksi", 10.sp)
+            AppText(bill.id, 10.sp)
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ){
-            AppText("Kontak", 8.sp)
-            AppText(bill.customer.nama_kontak, 8.sp)
+            AppText("Pelanggan", 10.sp)
+            AppText(bill.customer.nama_kontak, 10.sp)
         }
         HorizontalDivider(
             thickness = 1.dp,
@@ -238,31 +239,31 @@ private fun Struk(items : List<TransactionItem>, bill : Transaction.Bill, billDa
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ){
-            AppText("Deskripsi", 10.sp, FontWeight.SemiBold)
-            AppText("Harga", 10.sp, FontWeight.SemiBold)
+            AppText("Deskripsi", 12.sp, FontWeight.SemiBold)
+            AppText("Harga", 12.sp, FontWeight.SemiBold)
         }
         items.forEach{
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ){
-                AppText(ProductRepository.getProductById(it.productId)?.productName ?: "Unknown Product", 8.sp)
-                AppText(hargaFormatter.format(ProductRepository.getProductById(it.productId)?.price) ?: "Unknown Price", 8.sp)
+                AppText(ProductRepository.getProductById(it.productId)?.productName ?: "Unknown Product", 10.sp)
+                AppText(hargaFormatter.format(ProductRepository.getProductById(it.productId)?.price) ?: "Unknown Price", 10.sp)
             }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ){
-            AppText("Total Pembayaran", 10.sp, FontWeight.SemiBold)
-            AppText(billTotal, 10.sp, FontWeight.SemiBold)
+            AppText("Total Pembayaran", 12.sp, FontWeight.SemiBold)
+            AppText(billTotal, 12.sp, FontWeight.SemiBold)
         }
         HorizontalDivider(
             thickness = 1.dp,
             color = Color.Gray.copy(0.5f)
         )
         Column(){
-            AppText("Supported By", 8.sp, FontWeight.Bold, Gray)
+            AppText("Supported By", 10.sp, FontWeight.Bold, Gray)
             Row(
                 horizontalArrangement = Arrangement.spacedBy(-(4.dp))
             ){
@@ -270,9 +271,9 @@ private fun Struk(items : List<TransactionItem>, bill : Transaction.Bill, billDa
                     painter = painterResource(R.drawable.img_scaleup_logo),
                     contentDescription = null,
                     tint = Primary,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(30.dp)
                 )
-                AppText("caleUp", 16.sp ,FontWeight.Bold, color = Primary)
+                AppText("caleUp", 20.sp ,FontWeight.Bold, color = Primary)
             }
         }
     }

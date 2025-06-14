@@ -90,19 +90,20 @@ fun PurchaseDetailScreen(
     ){
         HeaderPageOnBack(
             onClick = { navController.popBackStack() },
-            text = "Detail Tagihan"
+            text = "Detail Pembelian"
         )
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .background(White)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TransactionDescriptionCard(purchase, purchaseDate, purchaseTotal)
             AppText("Struk Pembelian")
             Struk(items, purchase, purchaseDate, purchaseTotal, hargaFormatter)
+            Spacer(Modifier.height(20.dp))
         }
     }
 }
@@ -150,7 +151,7 @@ private fun TransactionDescriptionCard(purchase: Transaction.Purchase, purchaseD
                     modifier = Modifier.size(24.dp)
                 )
             }
-            AppText(purchase.supplier.nama_kontak, fontSize = 12.sp)
+            AppText(purchase.supplier.nama_kontak, fontSize = 14.sp)
         }
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -169,7 +170,7 @@ private fun TransactionDescriptionCard(purchase: Transaction.Purchase, purchaseD
                     modifier = Modifier.size(24.dp)
                 )
             }
-            AppText(purchase.balance.nama, fontSize = 12.sp)
+            AppText(purchase.balance.nama, fontSize = 14.sp)
         }
     }
 }
@@ -188,60 +189,60 @@ private fun Struk(items : List<TransactionItem>, purchase : Transaction.Purchase
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AppText("ScaleUp", 12.sp, FontWeight.SemiBold, textAlign = TextAlign.Center)
-            AppText("Kec. kecamatan, Kab. kabupaten, provinsi, Indonesia", 8.sp, color = Gray, textAlign = TextAlign.Center)
-            AppText(purchaseDate, 8.sp, color = Gray)
+            AppText("ScaleUp", 14.sp, FontWeight.SemiBold, textAlign = TextAlign.Center)
+            AppText("Kec. kecamatan, Kab. kabupaten, provinsi, Indonesia", 10.sp, color = Gray, textAlign = TextAlign.Center)
+            AppText(purchaseDate, 10.sp, color = Gray)
         }
         HorizontalDivider(thickness = 1.dp, color = Color.Gray.copy(0.5f))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AppText("ID Transaksi", 8.sp)
-            AppText(purchase.id, 8.sp)
+            AppText("ID Transaksi", 10.sp)
+            AppText(purchase.id, 10.sp)
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AppText("Supplier", 8.sp)
-            AppText(purchase.supplier.nama_kontak, 8.sp)
+            AppText("Supplier", 10.sp)
+            AppText(purchase.supplier.nama_kontak, 10.sp)
         }
         HorizontalDivider(thickness = 1.dp, color = Color.Gray.copy(0.5f))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AppText("Deskripsi", 10.sp, FontWeight.SemiBold)
-            AppText("Harga", 10.sp, FontWeight.SemiBold)
+            AppText("Deskripsi", 12.sp, FontWeight.SemiBold)
+            AppText("Harga", 12.sp, FontWeight.SemiBold)
         }
         items.forEach {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                AppText(ProductRepository.getProductById(it.productId)?.productName ?: "Unknown", 8.sp)
-                AppText(hargaFormatter.format(ProductRepository.getProductById(it.productId)?.price) ?: "?", 8.sp)
+                AppText(ProductRepository.getProductById(it.productId)?.productName ?: "Unknown", 10.sp)
+                AppText(hargaFormatter.format(ProductRepository.getProductById(it.productId)?.price) ?: "?", 10.sp)
             }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AppText("Total Pembayaran", 10.sp, FontWeight.SemiBold)
-            AppText(purchaseTotal, 10.sp, FontWeight.SemiBold)
+            AppText("Total Pembayaran", 12.sp, FontWeight.SemiBold)
+            AppText(purchaseTotal, 12.sp, FontWeight.SemiBold)
         }
         HorizontalDivider(thickness = 1.dp, color = Color.Gray.copy(0.5f))
         Column {
-            AppText("Supported By", 8.sp, FontWeight.Bold, Gray)
+            AppText("Supported By", 10.sp, FontWeight.Bold, Gray)
             Row(horizontalArrangement = Arrangement.spacedBy(-(4.dp))) {
                 Icon(
                     painter = painterResource(R.drawable.img_scaleup_logo),
                     contentDescription = null,
                     tint = Primary,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(30.dp)
                 )
-                AppText("caleUp", 16.sp, FontWeight.Bold, color = Primary)
+                AppText("caleUp", 20.sp, FontWeight.Bold, color = Primary)
             }
         }
     }

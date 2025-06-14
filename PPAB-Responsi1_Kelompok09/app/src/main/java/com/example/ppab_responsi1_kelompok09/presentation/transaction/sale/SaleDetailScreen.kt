@@ -34,6 +34,7 @@ import com.example.ppab_responsi1_kelompok09.domain.repository.ProductRepository
 import com.example.ppab_responsi1_kelompok09.domain.repository.TransactionItemRepository
 import com.example.ppab_responsi1_kelompok09.domain.repository.TransactionRepository
 import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
+import com.example.ppab_responsi1_kelompok09.presentation.components.BottomSpacer
 import com.example.ppab_responsi1_kelompok09.presentation.components.CustomButton
 import com.example.ppab_responsi1_kelompok09.presentation.components.HeaderPageOnBack
 import com.example.ppab_responsi1_kelompok09.presentation.components.HorizontalLine
@@ -89,19 +90,20 @@ fun SaleDetailScreen(
     ){
         HeaderPageOnBack(
             onClick = { navController.popBackStack() },
-            text = "Detail Tagihan"
+            text = "Detail Penjualan"
         )
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .background(White)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             TransactionDescriptionCard(sale, saleDate, saleTotal)
             AppText("Struk Penjualan")
             Struk(items, sale, saleDate, saleTotal, hargaFormatter)
+            Spacer(Modifier.height(20.dp))
         }
     }
 }
@@ -134,8 +136,8 @@ private fun TransactionDescriptionCard(sale : Transaction.Sell, saleDate : Strin
             Row(
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))
-                    .background(Primary.copy(0.2f))
-                    .padding(horizontal = 10.dp)
+                    .background(Primary.copy(0.1f))
+                    .padding(horizontal = 14.dp)
             ) {
                 AppText(sale.paymentMethod, 12.sp, color = Primary)
             }
@@ -159,7 +161,7 @@ private fun TransactionDescriptionCard(sale : Transaction.Sell, saleDate : Strin
                     modifier = Modifier.size(24.dp)
                 )
             }
-            AppText(sale.customer.nama_kontak, fontSize = 12.sp)
+            AppText(sale.customer.nama_kontak, fontSize = 14.sp)
         }
         // Saldo:
         Row(
@@ -179,7 +181,7 @@ private fun TransactionDescriptionCard(sale : Transaction.Sell, saleDate : Strin
                     modifier = Modifier.size(24.dp)
                 )
             }
-            AppText(sale.balance.nama, fontSize = 12.sp)
+            AppText(sale.balance.nama, fontSize = 14.sp)
         }
     }
 }
@@ -198,60 +200,67 @@ private fun Struk(items : List<TransactionItem>, sale : Transaction.Sell, saleDa
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            AppText("ScaleUp", 12.sp, FontWeight.SemiBold, textAlign = TextAlign.Center)
-            AppText("Kec. kecamatan, Kab. kabupaten, provinsi, Indonesia", 8.sp, color = Gray, textAlign = TextAlign.Center)
-            AppText(saleDate, 8.sp, color = Gray)
+            AppText("ScaleUp", 14.sp, FontWeight.SemiBold, textAlign = TextAlign.Center)
+            AppText("Kec. kecamatan, Kab. kabupaten, provinsi, Indonesia", 10.sp, color = Gray, textAlign = TextAlign.Center)
+            AppText(saleDate, 10.sp, color = Gray)
         }
         HorizontalDivider(thickness = 1.dp, color = Color.Gray.copy(0.5f))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AppText("ID Transaksi", 8.sp)
-            AppText(sale.id, 8.sp)
+            AppText("ID Transaksi", 10.sp)
+            AppText(sale.id, 10.sp)
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AppText("Kontak", 8.sp)
-            AppText(sale.customer.nama_kontak, 8.sp)
+            AppText("Pelanggan", 10.sp)
+            AppText(sale.customer.nama_kontak, 10.sp)
         }
         HorizontalDivider(thickness = 1.dp, color = Color.Gray.copy(0.5f))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AppText("Deskripsi", 10.sp, FontWeight.SemiBold)
-            AppText("Harga", 10.sp, FontWeight.SemiBold)
+            AppText("Deskripsi", 12.sp, FontWeight.SemiBold)
+            AppText("Harga", 12.sp, FontWeight.SemiBold)
         }
         items.forEach {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                AppText(ProductRepository.getProductById(it.productId)?.productName ?: "Unknown", 8.sp)
-                AppText(hargaFormatter.format(ProductRepository.getProductById(it.productId)?.price) ?: "?", 8.sp)
+                AppText(ProductRepository.getProductById(it.productId)?.productName ?: "Unknown", 10.sp)
+                AppText(hargaFormatter.format(ProductRepository.getProductById(it.productId)?.price) ?: "?", 10.sp)
             }
         }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AppText("Total Pembayaran", 10.sp, FontWeight.SemiBold)
-            AppText(saleTotal, 10.sp, FontWeight.SemiBold)
+            AppText("Total Pembayaran", 12.sp, FontWeight.SemiBold)
+            AppText(saleTotal, 12.sp, FontWeight.SemiBold)
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            AppText("Metode Pembayaran", 10.sp)
+            AppText(sale.paymentMethod, 10.sp)
         }
         HorizontalDivider(thickness = 1.dp, color = Color.Gray.copy(0.5f))
         Column {
-            AppText("Supported By", 8.sp, FontWeight.Bold, Gray)
-            Row(horizontalArrangement = Arrangement.spacedBy(-(4.dp))) {
+            AppText("Supported By", 10.sp, FontWeight.Bold, Gray)
+            Row(horizontalArrangement = Arrangement.spacedBy(-(6.dp))) {
                 Icon(
                     painter = painterResource(R.drawable.img_scaleup_logo),
                     contentDescription = null,
                     tint = Primary,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(30.dp)
                 )
-                AppText("caleUp", 16.sp, FontWeight.Bold, color = Primary)
+                AppText("caleUp", 20.sp, FontWeight.Bold, color = Primary)
             }
         }
     }
