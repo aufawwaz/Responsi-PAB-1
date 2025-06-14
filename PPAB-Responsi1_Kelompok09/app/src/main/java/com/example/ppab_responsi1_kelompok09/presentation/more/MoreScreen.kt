@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
@@ -34,14 +37,17 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
-import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.AuthViewModel
 
 @Composable
 fun MoreScreen (
     navController: NavController,
     loginNavController: NavController,
-    userViewModel: UserViewModel
+    authViewModel: AuthViewModel
 ) {
+
+    val userName by authViewModel.userName.collectAsState()
+
     Box (
         modifier = Modifier
             .fillMaxSize()
@@ -57,7 +63,7 @@ fun MoreScreen (
         ) {
             ProfileContainer(
                 R.drawable.img_profile_picture,
-                userViewModel.username,
+                userName, //authViewModel.name,
                 true
             )
             Box (
@@ -76,13 +82,13 @@ fun MoreScreen (
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp
             )
-            ManajemenItemContainer()
+            ManajemenItemContainer(navController)
             AppText(
                 text = "Laporan Keuangan",
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp
             )
-            LaporanKeuanganItemContainer()
+            LaporanKeuanganItemContainer(navController)
             Box (
                 modifier = Modifier
                     .dropShadow200(8.dp)
@@ -90,14 +96,16 @@ fun MoreScreen (
                     .fillMaxWidth()
                     .height(60.dp)
             ) {
-                Logout(loginNavController, userViewModel)
+                Logout(loginNavController, authViewModel)
             }
         }
     }
 }
 
 @Composable
-private fun ManajemenItemContainer () {
+private fun ManajemenItemContainer (
+    navController: NavController
+) {
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -109,13 +117,16 @@ private fun ManajemenItemContainer () {
             icon = R.drawable.ic_profil_bisnis)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
         OptionItem(
+            onClick = { navController.navigate("balance") },
             text = "Kelola Saldo",
             icon = R.drawable.ic_saldo_fill)
     }
 }
 
 @Composable
-private fun LaporanKeuanganItemContainer() {
+private fun LaporanKeuanganItemContainer(
+    navController: NavController
+) {
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -123,14 +134,17 @@ private fun LaporanKeuanganItemContainer() {
             .clip(RoundedCornerShape(8.dp))
     ) {
         OptionItem(
+            onClick = { navController.navigate("laporan_penjualan") },
             text = "Laporan Penjualan",
             icon = R.drawable.ic_penjualan_fill)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
         OptionItem(
+            onClick = { navController.navigate("laporan_pembelian") },
             text = "Laporan Pembelian",
             icon = R.drawable.ic_pembelian_fill)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
         OptionItem(
+            onClick = { navController.navigate("laporan_tagihan") },
             text = "Laporan Tagihan",
             icon = R.drawable.ic_tagihan_fill)
     }
@@ -145,7 +159,7 @@ private fun OptionItem (
 ) {
     Row (
         modifier = Modifier
-            .clickable{ onClick }
+            .clickable{ onClick() }
             .fillMaxWidth()
             .background(White)
             .padding(horizontal = 16.dp)
@@ -188,11 +202,11 @@ private fun OptionItem (
 }
 
 @Composable
-private fun Logout (loginNavController: NavController, userViewModel: UserViewModel) {
+private fun Logout (loginNavController: NavController, authViewModel: AuthViewModel) {
     Row (
         modifier = Modifier
             .clickable{
-                userViewModel.logout()
+                authViewModel.signOut()
                 loginNavController.navigate("login")
             }
             .fillMaxSize()

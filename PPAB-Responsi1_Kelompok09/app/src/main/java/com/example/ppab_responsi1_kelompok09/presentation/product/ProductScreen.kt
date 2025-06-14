@@ -32,19 +32,23 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.R
+import com.example.ppab_responsi1_kelompok09.domain.model.Product
+import com.example.ppab_responsi1_kelompok09.domain.repository.ProductRepository
 import com.example.ppab_responsi1_kelompok09.presentation.components.BottomSpacer
 import com.example.ppab_responsi1_kelompok09.presentation.components.CustomButton
 import com.example.ppab_responsi1_kelompok09.presentation.components.PageHeader
 import com.example.ppab_responsi1_kelompok09.presentation.components.ProductCard
 import com.example.ppab_responsi1_kelompok09.presentation.components.SearchBarFilter
 import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
-import com.example.ppab_responsi1_kelompok09.domain.model.ProductItem
-import com.example.ppab_responsi1_kelompok09.domain.model.productList
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
+import java.math.BigDecimal
 
 @Composable
 fun ProductScreen(navController: NavController = rememberNavController()) {
+
+    val product = ProductRepository.getAllProducts()
+
     Box (
         modifier = Modifier.fillMaxSize()
     ) {
@@ -59,7 +63,7 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
                 pagetitle = "Produk",
                 title = "Total Produk",
                 iconRes = R.drawable.ic_produk_fill,
-                description = "10 Produk"
+                description = product.size.toString() + " Produk"
             )
 
             Column(
@@ -67,7 +71,7 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
             ) {
                 KategoriSatuanSection(navController)
                 SearchBarFilter("Cari Produk")
-                ProductGrid()
+                ProductGrid(navController, product)
                 BottomSpacer()
             }
         }
@@ -132,7 +136,7 @@ private fun KategoriSatuanItem (
             .background(Primary.copy(0.1f))
             .height(44.dp)
             .padding(horizontal = 16.dp)
-            .clickable{}
+            .clickable {}
     ) {
         Row (
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -161,12 +165,13 @@ private fun KategoriSatuanItem (
 }
 
 @Composable
-private fun ProductGrid () {
+private fun ProductGrid (navController: NavController, productList: List<Product>) {
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier
             .fillMaxSize()
-            .height((productList.size * 264/2).dp + 20.dp),
+            .height((productList.size * 264 / 2).dp + 20.dp),
         userScrollEnabled = false,
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -176,7 +181,7 @@ private fun ProductGrid () {
             val item = productList[i]
 
             ProductCard(
-                onCLick = item.onCLick,
+                onCLick = { navController.navigate("product_detail/${item.id}") },
                 productImage = item.productImage,
                 category = item.category,
                 productName = item.productName,

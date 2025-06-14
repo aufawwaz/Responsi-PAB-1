@@ -22,6 +22,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
 import com.example.ppab_responsi1_kelompok09.domain.model.NavItem
+import com.example.ppab_responsi1_kelompok09.presentation.balance.BalanceScreen
+import com.example.ppab_responsi1_kelompok09.presentation.contact.ContactDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.product.ProductScreen
 import com.example.ppab_responsi1_kelompok09.presentation.contact.ContactScreen
 import com.example.ppab_responsi1_kelompok09.presentation.home.HomeScreen
@@ -30,10 +32,17 @@ import com.example.ppab_responsi1_kelompok09.presentation.transaction.Transactio
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
-import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.AuthViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.product.ProductDetailScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.bill.BillDetailScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.purchase.PurchaseDetailScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.BillReportScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.PurchaseReportScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.SaleDetailScreen
+import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.SaleReportScreen
 
 @Composable
-fun MainNavigation(loginNavController: NavController, userViewModel: UserViewModel) {
+fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewModel) {
     val navController = rememberNavController()
     val dataClassLists = listOf(
         NavItem("home", R.drawable.ic_home, R.drawable.ic_home_fill),
@@ -44,7 +53,20 @@ fun MainNavigation(loginNavController: NavController, userViewModel: UserViewMod
     )
     val otherScreen = listOf(
         "login",
-        "register"
+        "register",
+
+        "laporan_penjualan",
+        "laporan_pembelian",
+        "laporan_tagihan",
+        "penjualan_detail/{saleId}",
+        "pembelian_detail/{purchaseId}",
+        "tagihan_detail/{billId}",
+
+        "balance",
+
+        "product_detail/{productId}",
+
+        "contact_detail/{contactId}"
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -109,14 +131,40 @@ fun MainNavigation(loginNavController: NavController, userViewModel: UserViewMod
             navController = navController,
             startDestination = "home"
         ) {
-            composable("home") { HomeScreen(navController, userViewModel) }
-            composable("product") { ProductScreen(navController) }
-            composable("transaction") { TransactionScreen(navController) }
-            composable("contact") { ContactScreen(navController) }
-            composable("more") { MoreScreen(navController, loginNavController, userViewModel) }
+            composable("home") { HomeScreen(navController, authViewModel) }
 
-//            composable("login") { LoginScreen(navController) }
-//            composable("register") { RegisterScreen(navController) }
+            composable("product") { ProductScreen(navController) }
+            composable("product_detail/{productId}") { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId")
+                ProductDetailScreen(productId = productId ?: "", navController)
+            }
+
+            composable("transaction") { TransactionScreen(navController) }
+            composable("laporan_penjualan") { SaleReportScreen(navController) }
+            composable("laporan_pembelian") { PurchaseReportScreen(navController) }
+            composable("laporan_tagihan") { BillReportScreen(navController) }
+            composable("penjualan_detail/{saleId}"){ backStackEntry ->
+                val saleId = backStackEntry.arguments?.getString("saleId")
+                SaleDetailScreen(navController, saleId = saleId ?: "")
+            }
+            composable("pembelian_detail/{purchaseId}"){ backStackEntry ->
+                val purchaseId = backStackEntry.arguments?.getString("purchaseId")
+                PurchaseDetailScreen(navController, purchaseId = purchaseId ?: "")
+            }
+            composable("tagihan_detail/{billId}"){ backStackEntry ->
+                val billId = backStackEntry.arguments?.getString("billId")
+                BillDetailScreen(navController, billId = billId ?: "")
+            }
+
+            composable("contact") { ContactScreen(navController) }
+            composable("contact_detail/{contactId}") { backStackEntry ->
+                val contactId = backStackEntry.arguments?.getString("contactId")
+                ContactDetailScreen(navController, contactId = contactId ?: "")
+            }
+
+            composable("more") { MoreScreen(navController, loginNavController, authViewModel) }
+
+            composable("balance") { BalanceScreen(navController) }
         }
     }
 }

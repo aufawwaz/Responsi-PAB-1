@@ -27,7 +27,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,10 +59,10 @@ import com.example.ppab_responsi1_kelompok09.domain.model.TabelItem
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
-import com.example.ppab_responsi1_kelompok09.presentation.login.UserViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.login.AuthViewModel
 
 @Composable
-fun HomeScreen(navController: NavController, userViewModel: UserViewModel) {
+fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -70,13 +73,13 @@ fun HomeScreen(navController: NavController, userViewModel: UserViewModel) {
             Modifier
                 .height(1336.dp)
         ) {
-            HeaderHome(userViewModel = userViewModel)
+            HeaderHome(authViewModel = authViewModel)
             Column (
                 modifier = Modifier.offset(y = 206.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
                 PendapatanCard()
-                MenuGrid()
+                MenuGrid(navController)
                 UpgradeButton(navController)
                 KnowledgeCardSection()
                 PesananTerbaru()
@@ -92,7 +95,10 @@ fun HomeScreen(navController: NavController, userViewModel: UserViewModel) {
 }
 
 @Composable
-private fun HeaderHome(userViewModel: UserViewModel) {
+private fun HeaderHome(authViewModel: AuthViewModel) {
+
+    val userName by authViewModel.userName.collectAsState()
+
     Box (
         modifier = Modifier
             .fillMaxWidth()
@@ -113,7 +119,7 @@ private fun HeaderHome(userViewModel: UserViewModel) {
         {
             ProfileContainer(
                 icon = R.drawable.img_profile_picture,
-                text = userViewModel.username,
+                text = userName,
                 isLogin = true
             )
         }
@@ -208,10 +214,12 @@ private fun PendapatanCard() {
 }
 
 @Composable
-private fun MenuGrid() {
+private fun MenuGrid(
+    navController: NavController
+) {
     val gridItems = listOf(
         MenuItem("Transaksi", R.drawable.ic_transaksi_fill),
-        MenuItem("Saldo", R.drawable.ic_saldo_fill),
+        MenuItem("Saldo", R.drawable.ic_saldo_fill) { navController.navigate("balance") },
         MenuItem("Produk", R.drawable.ic_produk_fill),
         MenuItem("Pelanggan", R.drawable.ic_pelanggan_fill),
         MenuItem("Keuangan", R.drawable.ic_keuangan_fill),
@@ -233,6 +241,7 @@ private fun MenuGrid() {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 TonalIcon(
                     isClickable = true,
+                    onClick = item.onClick,
                     iconHeight = 28.dp,
                     iconRes = item.icon,
                     boxSize = 48.dp
