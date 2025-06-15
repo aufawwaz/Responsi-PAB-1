@@ -33,13 +33,10 @@ import com.example.ppab_responsi1_kelompok09.presentation.components.BottomSpace
 import com.example.ppab_responsi1_kelompok09.presentation.components.DateFilter
 import com.example.ppab_responsi1_kelompok09.presentation.components.DateFilterOverlay
 import com.example.ppab_responsi1_kelompok09.presentation.components.HeaderPageOnBack
-import com.example.ppab_responsi1_kelompok09.presentation.components.PurchaseCard
-import com.example.ppab_responsi1_kelompok09.presentation.components.TopSpacer
 import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
 import com.example.ppab_responsi1_kelompok09.presentation.components.getDateRangeValue
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.component.CardTotalTransaction
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.component.DateFilterButton
-import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
@@ -111,7 +108,7 @@ fun BillReportScreen(
                         fontSize = 16.sp
                     )
                 }
-                ListTagihan(tagihan = billList)
+                ListTagihan(tagihan = billList, navController)
                 BottomSpacer(40.dp)
             }
         }
@@ -128,18 +125,21 @@ fun BillReportScreen(
 
 @Composable
 fun ListTagihan(
-    tagihan: List<Transaction.Bill>
+    tagihan: List<Transaction.Bill>,
+    navController : NavController
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier
             .dropShadow200(8.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(White)
-            .padding(8.dp)
     ) {
         tagihan.forEachIndexed { index, transaksi ->
-            BillCard(data = transaksi, isIdVisible = true)
+            BillCard(
+                data = transaksi,
+                isIdVisible = true,
+                onClick = { navController.navigate("tagihan_detail/" + transaksi.id ) }
+            )
             if (index != tagihan.lastIndex) {
                 Box(
                     Modifier
