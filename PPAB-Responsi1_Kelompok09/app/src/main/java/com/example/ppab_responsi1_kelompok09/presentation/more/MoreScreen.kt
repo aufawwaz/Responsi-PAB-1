@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ppab_responsi1_kelompok09.R
+import com.example.ppab_responsi1_kelompok09.domain.model.User
 import com.example.ppab_responsi1_kelompok09.presentation.components.HeaderGradient
 import com.example.ppab_responsi1_kelompok09.presentation.components.ProfileContainer
 import com.example.ppab_responsi1_kelompok09.presentation.components.TonalIcon
@@ -73,9 +74,10 @@ fun MoreScreen (
                     .dropShadow200(8.dp)
                     .clip(RoundedCornerShape(8.dp))
             ) {
-                OptionItem(
+                OptionItemDisabled(
                     isAkun = true,
-                    icon = R.drawable.ic_pelanggan_fill
+                    icon = R.drawable.ic_login_fill,
+                    user = user
                 )
             }
             AppText(
@@ -83,7 +85,7 @@ fun MoreScreen (
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp
             )
-            ManajemenItemContainer(navController)
+            ManajemenItemContainer(user, navController)
             AppText(
                 text = "Laporan Keuangan",
                 fontWeight = FontWeight.Medium,
@@ -105,6 +107,7 @@ fun MoreScreen (
 
 @Composable
 private fun ManajemenItemContainer (
+    user: User?,
     navController: NavController
 ) {
     Column (
@@ -114,6 +117,7 @@ private fun ManajemenItemContainer (
             .clip(RoundedCornerShape(8.dp))
     ) {
         OptionItem(
+            onClick = { navController.navigate("profile/${user?.id?: ""}") },
             text = "Profil Bisnis",
             icon = R.drawable.ic_profil_bisnis)
         Spacer(modifier = Modifier.height(0.5.dp).background(Gray))
@@ -148,6 +152,49 @@ private fun LaporanKeuanganItemContainer(
             onClick = { navController.navigate("laporan_tagihan") },
             text = "Laporan Tagihan",
             icon = R.drawable.ic_tagihan_fill)
+    }
+}
+
+@Composable
+private fun OptionItemDisabled (
+    onClick : () -> Unit = {},
+    isAkun : Boolean = false,
+    user: User?,
+    text : String = "",
+    icon : Int
+) {
+    Row (
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(White)
+            .padding(horizontal = 16.dp)
+            .height(60.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row (
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TonalIcon(
+                iconHeight = 24.dp,
+                iconRes = icon,
+                boxSize = 40.dp
+            )
+            if (isAkun == true) {
+                AppText(
+                    text = user?.namaUsaha ?:"",
+                    color = Primary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            } else {
+                AppText(
+                    text = text,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 14.sp
+                )
+            }
+        }
     }
 }
 

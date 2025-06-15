@@ -20,7 +20,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -37,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -58,10 +62,21 @@ import java.math.BigDecimal
 fun ProductScreen(navController: NavController = rememberNavController()) {
     val product = ProductRepository.getAllProducts()
     var searchQuery by rememberSaveable { mutableStateOf("") }
-    val filteredProducts = if (searchQuery.isBlank()) {
-        product
-    } else {
-        product.filter { it.productName.contains(searchQuery, ignoreCase = true) }
+    // State untuk filter kategori & satuan
+    var selectedCategory by rememberSaveable { mutableStateOf("Semua") }
+    var selectedSatuan by rememberSaveable { mutableStateOf("Semua") }
+    var showCategoryDialog by remember { mutableStateOf(false) }
+    var showSatuanDialog by remember { mutableStateOf(false) }
+
+    // Ambil semua kategori & satuan unik dari produk
+    val allCategories = listOf("Semua") + product.map { it.category }.distinct()
+    val allSatuan = listOf("Semua") + product.map { it.satuan }.distinct()
+
+    // Filter produk sesuai search, kategori, dan satuan
+    val filteredProducts = product.filter {
+        (searchQuery.isBlank() || it.productName.contains(searchQuery, ignoreCase = true)) &&
+        (selectedCategory == "Semua" || it.category == selectedCategory) &&
+        (selectedSatuan == "Semua" || it.satuan == selectedSatuan)
     }
     val listState = rememberLazyListState()
     val isSticky = listState.firstVisibleItemIndex > 0
@@ -82,7 +97,12 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
                     iconRes = R.drawable.ic_produk_fill,
                     description = filteredProducts.size.toString() + " Produk"
                 )
-                KategoriSatuanSection(navController)
+                KategoriSatuanSection(
+                    selectedCategory = selectedCategory,
+                    selectedSatuan = selectedSatuan,
+                    onCategoryClick = { showCategoryDialog = true },
+                    onSatuanClick = { showSatuanDialog = true }
+                )
                 SearchBarFilter(Modifier.padding(top = 16.dp), "Cari Produk", onSearch = { searchQuery = it })
             }
             itemsIndexed(filteredProducts.chunked(2)) { _, rowItems ->
@@ -111,32 +131,112 @@ fun ProductScreen(navController: NavController = rememberNavController()) {
             }
             item { BottomSpacer() }
         }
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .offset(x = -(12.dp), y = -(138.dp))
-                .width(180.dp)
-        ) {
-            CustomButton({ }, {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+        // Dialog Kategori
+        if (showCategoryDialog) {
+            androidx.compose.ui.window.Dialog(onDismissRequest = { showCategoryDialog = false }) {
+                Box(
+                    modifier = Modifier
+                        .width(316.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(White)
+                        .padding(vertical = 16.dp)
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_add_box),
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    AppText("Tambah Produk", 12.sp, color = White)
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .height(44.dp)
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            AppText(
+                                text = "Pilih Kategori",
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 16.sp
+                            )
+                        }
+                        allCategories.forEach { cat ->
+                            Column(
+                                modifier = Modifier
+                                    .clickable {
+                                        selectedCategory = cat
+                                        showCategoryDialog = false
+                                    }
+                                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                AppText(
+                                    text = cat,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 14.sp
+                                )
+                            }
+                        }
+                    }
                 }
-            })
+            }
+        }
+        // Dialog Satuan
+        if (showSatuanDialog) {
+            androidx.compose.ui.window.Dialog(onDismissRequest = { showSatuanDialog = false }) {
+                Box(
+                    modifier = Modifier
+                        .width(316.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(White)
+                        .padding(vertical = 16.dp)
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .height(44.dp)
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            AppText(
+                                text = "Pilih Satuan",
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 16.sp
+                            )
+                        }
+                        allSatuan.forEach { satuan ->
+                            Column(
+                                modifier = Modifier
+                                    .clickable {
+                                        selectedSatuan = satuan
+                                        showSatuanDialog = false
+                                    }
+                                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                                    .fillMaxWidth()
+                            ) {
+                                AppText(
+                                    text = satuan,
+                                    fontWeight = FontWeight.Normal,
+                                    fontSize = 14.sp
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun KategoriSatuanSection(navController: NavController) {
+private fun KategoriSatuanSection(
+    selectedCategory: String,
+    selectedSatuan: String,
+    onCategoryClick: () -> Unit,
+    onSatuanClick: () -> Unit,
+) {
     Row (
         modifier = Modifier
             .padding(top = 16.dp)
@@ -144,36 +244,41 @@ private fun KategoriSatuanSection(navController: NavController) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         KategoriSatuanItem(
-            navController,
             modifier = Modifier.weight(1f),
             iconRes = R.drawable.ic_kategori_fill,
-            text = "Kategori"
+            text = "Kategori",
+            isSelected = selectedCategory != "Semua",
+            onClick = onCategoryClick
         )
         KategoriSatuanItem(
-            navController,
             modifier = Modifier.weight(1f),
             iconRes = R.drawable.ic_satuan_fill,
-            text = "Satuan"
+            text = "Satuan",
+            isSelected = selectedSatuan != "Semua",
+            onClick = onSatuanClick
         )
     }
 }
 
 @Composable
 private fun KategoriSatuanItem (
-    navController: NavController,
     modifier: Modifier = Modifier,
     iconRes : Int,
-    text : String
+    text : String,
+    isSelected: Boolean = false,
+    onClick: () -> Unit
 ) {
     Row (
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
-            .background(Primary.copy(0.1f))
+            .clickable { onClick() }
+            .background(
+                if (isSelected) Primary else Primary.copy(0.1f)
+            )
             .height(44.dp)
             .padding(horizontal = 16.dp)
-            .clickable {}
     ) {
         Row (
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -182,14 +287,14 @@ private fun KategoriSatuanItem (
             Icon (
                 painter = painterResource(iconRes),
                 contentDescription = null,
-                tint = Primary,
+                tint = if (isSelected) White else Primary,
                 modifier = Modifier.size(12.dp)
             )
             AppText(
                 text = text,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 12.sp,
-                color = Primary
+                color = if (isSelected) White else Primary
             )
         }
         Icon (
