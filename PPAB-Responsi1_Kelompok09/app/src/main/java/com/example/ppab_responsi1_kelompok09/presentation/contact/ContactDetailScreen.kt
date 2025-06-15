@@ -185,7 +185,7 @@ private fun ContactActivity(contact: Contact, navController: NavController) {
     val transactions = TransactionRepository.getAllTransaction()
 
     Column (
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ){
         transactions.forEach{
@@ -223,7 +223,7 @@ private fun ContactActivityCardSell(transaction: Transaction.Sell, navController
             .padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        AppText(transaction.id, 16.sp, FontWeight.SemiBold)
+        AppText(transaction.id)
         HorizontalLine(1f, color =  Gray.copy(0.5f))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -276,7 +276,7 @@ private fun ContactActivityCardPurchase(transaction: Transaction.Purchase, navCo
             .padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        AppText(transaction.id, 16.sp, FontWeight.SemiBold)
+        AppText(transaction.id)
         HorizontalLine(1f, color =  Gray.copy(0.5f))
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -327,9 +327,9 @@ private fun ContactActivityCardBill(transaction: Transaction.Bill, navController
             .background(White)
             .clickable{ navController.navigate("tagihan_detail/" + transaction.id )}
             .padding(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        AppText(transaction.id, 16.sp, FontWeight.SemiBold)
+        AppText(transaction.id)
         HorizontalLine(1f, color =  Gray.copy(0.5f))
         Row(
             modifier = Modifier.fillMaxWidth(),

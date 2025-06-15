@@ -68,7 +68,7 @@ fun BalanceScreen (
             ) {
                 Spacer(Modifier.height(1.dp))
                 TotalBalance(total = totalBalance)
-                ListSaldo(balanceList)
+                ListSaldo(balanceList, navController)
                 BottomSpacer(40.dp)
             }
         }
@@ -116,7 +116,8 @@ private fun TotalBalance(
 
 @Composable
 private fun ListSaldo(
-    balanceList : List<Balance>
+    balanceList : List<Balance>,
+    navController: NavController
 ) {
     Column (
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -128,7 +129,10 @@ private fun ListSaldo(
             fontSize = 14.sp
         )
         balanceList.forEach { balance ->
-            BalanceCard(balance)
+            BalanceCard(
+                balance,
+                onClick = { navController.navigate("balance_detail/${balance.id}") }
+            )
         }
     }
 }

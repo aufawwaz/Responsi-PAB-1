@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
 import com.example.ppab_responsi1_kelompok09.domain.model.NavItem
 import com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository
+import com.example.ppab_responsi1_kelompok09.presentation.balance.BalanceDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.balance.BalanceScreen
 import com.example.ppab_responsi1_kelompok09.presentation.contact.ContactDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.product.ProductScreen
@@ -71,6 +72,7 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
         "tagihan_detail/{billId}",
 
         "balance",
+        "balance_detail/{balanceId}",
 
         "product_detail/{productId}",
 
@@ -201,6 +203,10 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
             composable("more") { MoreScreen(navController, loginNavController, authViewModel) }
 
             composable("balance") { BalanceScreen(navController) }
+            composable("balance_detail/{balanceId}") { backStackEntry ->
+                val balanceId = backStackEntry.arguments?.getString("balanceId")
+                BalanceDetailScreen(navController, balanceId = balanceId ?: "")
+            }
 
             composable("news"){ NewsScreen(navController) }
             composable("news_detail/{newsId}"){ backStackEntry ->
