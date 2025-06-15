@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,24 +28,36 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.domain.model.Product
+import com.example.ppab_responsi1_kelompok09.domain.model.Transaction
+import com.example.ppab_responsi1_kelompok09.domain.model.TransactionItem
 import com.example.ppab_responsi1_kelompok09.domain.repository.ProductRepository
+import com.example.ppab_responsi1_kelompok09.domain.repository.TransactionItemRepository
 import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
 import com.example.ppab_responsi1_kelompok09.presentation.components.CustomSwitch
+import com.example.ppab_responsi1_kelompok09.presentation.components.HorizontalLine
 import com.example.ppab_responsi1_kelompok09.presentation.components.TopSpacer
 import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
 import com.example.ppab_responsi1_kelompok09.presentation.components.formatToCurrency
+import com.example.ppab_responsi1_kelompok09.presentation.components.shadow
+import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
+import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun ProductDetailScreen (
@@ -62,7 +75,7 @@ fun ProductDetailScreen (
         ) {
             Column (
                 verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())
             ) {
                 ImageBox(navController, product)
 
@@ -109,7 +122,7 @@ fun ProductDetailScreen (
                 }
 
                 if(!isChecked) ProductDescription(product)
-                else ProductActivity(product)
+                else ProductActivity(product, navController)
             }
         }
     }
@@ -278,7 +291,152 @@ private fun ProductDescription(
 
 @Composable
 private fun ProductActivity(
-    product: Product
+    product: Product,
+    navController: NavController
 ) {
+    val transactions = TransactionItemRepository.getAllTransactionWithProduct(product.id)
 
+    Column (
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ){
+        transactions.forEach{
+            when(it){
+                is Transaction.Sell -> ProductActivityCardSell(it, product, navController)
+                is Transaction.Purchase -> ProductActivityCardPurchase(it, product, navController)
+                is Transaction.Bill -> ProductActivityCardBill(it, product, navController)
+            }
+        }
+        Spacer(Modifier.height(30.dp))
+    }
+}
+
+@Composable
+private fun ProductActivityCardSell(transaction: Transaction.Sell, product: Product, navController: NavController){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(Color.Black.copy(0.1f), 16.dp, 8.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(White)
+            .clickable{navController.navigate("penjualan_detail" + transaction.id )}
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("id", "ID"))
+        val date = transaction.date
+        val localDate = date.toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+        val formattedDate = dateFormatter.format(localDate)
+
+        val transactionItems = TransactionItemRepository.getTransactionItems(transaction.id)
+        val thisProductTransaction = transactionItems.find{ it.productId == product.id }
+
+        AppText("Penjualan", 16.sp, FontWeight.SemiBold)
+        HorizontalLine(1f, color = Gray.copy(0.5f))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                AppText(transaction.customer.nama_kontak)
+                AppText(formattedDate, 10.sp, color = Gray)
+            }
+            AppText(
+                "- " + thisProductTransaction?.amount + " " + product.satuan,
+                16.sp,
+                FontWeight.SemiBold,
+                Danger
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProductActivityCardPurchase(transaction: Transaction.Purchase, product: Product, navController: NavController){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(Color.Black.copy(0.1f), 16.dp, 8.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(White)
+            .clickable{navController.navigate("pembelian_detail" + transaction.id )}
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("id", "ID"))
+        val date = transaction.date
+        val localDate = date.toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+        val formattedDate = dateFormatter.format(localDate)
+
+        val transactionItems = TransactionItemRepository.getTransactionItems(transaction.id)
+        val thisProductTransaction = transactionItems.find{ it.productId == product.id }
+
+        AppText("Pembelian", 16.sp, FontWeight.SemiBold)
+        HorizontalLine(1f, color = Gray.copy(0.5f))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                AppText(transaction.supplier.nama_kontak)
+                AppText(formattedDate, 10.sp, color = Gray)
+            }
+            AppText(
+                "- " + thisProductTransaction?.amount + " " + product.satuan,
+                16.sp,
+                FontWeight.SemiBold,
+                Danger
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProductActivityCardBill(transaction: Transaction.Bill, product: Product, navController: NavController){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(Color.Black.copy(0.1f), 16.dp, 8.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(White)
+            .clickable{navController.navigate("tagihan_detail" + transaction.id )}
+            .padding(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("id", "ID"))
+        val date = transaction.date
+        val localDate = date.toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate()
+        val formattedDate = dateFormatter.format(localDate)
+
+        val transactionItems = TransactionItemRepository.getTransactionItems(transaction.id)
+        val thisProductTransaction = transactionItems.find{ it.productId == product.id }
+
+        AppText("Tagihan", 16.sp, FontWeight.SemiBold)
+        HorizontalLine(1f, color =  Gray.copy(0.5f))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column {
+                AppText(transaction.customer.nama_kontak)
+                AppText(formattedDate, 10.sp, color = Gray)
+            }
+            AppText(
+                "- " + thisProductTransaction?.amount + " " + product.satuan  ,
+                16.sp,
+                FontWeight.SemiBold,
+                Success
+            )
+        }
+    }
 }
