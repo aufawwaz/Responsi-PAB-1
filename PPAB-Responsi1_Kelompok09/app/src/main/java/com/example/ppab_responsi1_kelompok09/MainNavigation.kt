@@ -33,6 +33,8 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Primary
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import com.example.ppab_responsi1_kelompok09.presentation.login.AuthViewModel
+import com.example.ppab_responsi1_kelompok09.presentation.news.NewsDetailScreen
+import com.example.ppab_responsi1_kelompok09.presentation.news.NewsScreen
 import com.example.ppab_responsi1_kelompok09.presentation.product.ProductDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.bill.BillDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.purchase.PurchaseDetailScreen
@@ -66,7 +68,10 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
 
         "product_detail/{productId}",
 
-        "contact_detail/{contactId}"
+        "contact_detail/{contactId}",
+
+        "news",
+        "news_detail/{newsId}",
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -165,6 +170,12 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
             composable("more") { MoreScreen(navController, loginNavController, authViewModel) }
 
             composable("balance") { BalanceScreen(navController) }
+
+            composable("news"){ NewsScreen(navController) }
+            composable("news_detail/{newsId}"){ backStackEntry ->
+                val newsId = backStackEntry.arguments?.getString("newsId")
+                NewsDetailScreen(navController, newsId = newsId ?: "")
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
@@ -27,6 +28,8 @@ fun AppText(
     textAlign : TextAlign = TextAlign.Start,
     lineHeight : TextUnit = fontSize,
     isClickable: Boolean = false,
+    maxLines : Int = Int.MAX_VALUE,
+    overflow: TextOverflow = TextOverflow.Ellipsis,
     onClick : () -> Unit = {}
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -50,6 +53,8 @@ fun AppText(
         lineHeight = lineHeight,
         fontFamily = Poppins,
         color = color,
+        maxLines = maxLines,
+        overflow = overflow,
         modifier = finalModifier
     )
 }
