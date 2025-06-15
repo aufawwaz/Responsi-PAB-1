@@ -8,5 +8,3 @@ data class Balance(
     val nama : String,
     val saldo : BigDecimal
 )
-
-
