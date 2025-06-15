@@ -52,7 +52,7 @@ fun getPreviousDateRange(filter: DateFilter): Pair<LocalDate, LocalDate> {
             prev to prev
         }
         DateFilter.YESTERDAY -> {
-            val prev = start.minusDays(1)
+            val prev = start.minusDays(2)
             prev to prev
         }
         DateFilter.THIS_WEEK -> {
@@ -71,7 +71,8 @@ fun getPreviousDateRange(filter: DateFilter): Pair<LocalDate, LocalDate> {
 
 fun getPrevPeriodLabel(filter: DateFilter): String {
     return when (filter) {
-        DateFilter.TODAY, DateFilter.YESTERDAY -> "Dari Hari lalu"
+        DateFilter.TODAY -> "Dari Kemarin"
+        DateFilter.YESTERDAY -> "Dari Dua hari lalu"
         DateFilter.THIS_WEEK -> "Dari Minggu lalu"
         DateFilter.THIS_MONTH -> "Dari Bulan lalu"
     }

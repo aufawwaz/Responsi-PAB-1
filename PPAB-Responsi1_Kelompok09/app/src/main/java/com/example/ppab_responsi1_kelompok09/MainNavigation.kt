@@ -1,5 +1,6 @@
 package com.example.ppab_responsi1_kelompok09
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -47,6 +48,7 @@ import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.Purch
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.SaleDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.SaleReportScreen
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewModel) {
     val navController = rememberNavController()
@@ -103,7 +105,7 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
                     containerColor = navbarColor
                 ) {
                     dataClassLists.forEach { navItem ->
-                        val isSelected = currentRoute == navItem.route
+                        val isSelected = currentRoute?.startsWith(navItem.route) == true
                         val iconRes = if (isSelected) navItem.selectedIcon else navItem.icon
                         val tintColor = if (isSelected) selectedColor else unselectedColor
 
@@ -111,10 +113,20 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
                             selected = isSelected,
                             onClick = {
                                 navController.navigate(navItem.route) {
-                                    launchSingleTop = true
-                                    restoreState = true
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        saveState = true
+                                    if (navItem.route == "home") {
+                                        popUpTo("home") {
+                                            inclusive = false
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = false
+                                    } else {
+                                        popUpTo(navController.graph.startDestinationId) {
+                                            inclusive = false
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
                                     }
                                 }
                             },
@@ -160,7 +172,10 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
                 ProductDetailScreen(productId = productId ?: "", navController)
             }
 
-            composable("transaction") { TransactionScreen(navController) }
+            composable("transaction?category={category}") { backStackEntry ->
+                val category = backStackEntry.arguments?.getString("category") ?: "Semua"
+                TransactionScreen(navController, initialCategory = category)
+            }
             composable("laporan_penjualan") { SaleReportScreen(navController) }
             composable("laporan_pembelian") { PurchaseReportScreen(navController) }
             composable("laporan_tagihan") { BillReportScreen(navController) }

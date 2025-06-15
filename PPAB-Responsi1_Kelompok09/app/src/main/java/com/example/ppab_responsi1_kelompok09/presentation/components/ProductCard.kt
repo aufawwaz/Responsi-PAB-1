@@ -70,12 +70,13 @@ fun ProductCard (
     productName : String,
     sold : Int,
     stock : Long,
-    price : BigDecimal
+    price : BigDecimal,
+    modifier : Modifier
 ) {
     var satuan by remember { mutableStateOf("/Pcs") }
 
     Column (
-        modifier = Modifier
+        modifier = modifier
             .dropShadow200(16.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(White)

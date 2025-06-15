@@ -1,12 +1,16 @@
 package com.example.ppab_responsi1_kelompok09.presentation.finance
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -23,6 +27,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,7 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ppab_responsi1_kelompok09.R
+import com.example.ppab_responsi1_kelompok09.domain.model.Contact
 import com.example.ppab_responsi1_kelompok09.domain.model.Transaction
+import com.example.ppab_responsi1_kelompok09.domain.repository.ProductRepository
+import com.example.ppab_responsi1_kelompok09.domain.repository.TransactionItemRepository
 import com.example.ppab_responsi1_kelompok09.domain.repository.TransactionRepository
 import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
 import com.example.ppab_responsi1_kelompok09.presentation.components.DateFilter
@@ -53,11 +61,6 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.Primary500
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 import java.time.ZoneId
-import kotlin.collections.plusAssign
-import kotlin.div
-import kotlin.text.compareTo
-import kotlin.text.toFloat
-import kotlin.times
 
 @Composable
 fun FinanceReportScreen(navController: NavController) {
@@ -133,9 +136,16 @@ fun FinanceReportScreen(navController: NavController) {
                 )
                 DonutChart(
                     transaction = filteredTransaction,
-                    percentChange = percentChange,
-                    isUp = isUp,
+                    prevTransaction = prevTransaction,
                     prevPeriodLabel = getPrevPeriodLabel(selectedFilter)
+                )
+                PelangganTeratasSection(
+                    navController = navController,
+                    transaction = filteredTransaction
+                )
+                ProdukTeratasSection(
+                    navController = navController,
+                    transaction = filteredTransaction
                 )
                 Spacer(modifier = Modifier.height(24.dp))
             }
@@ -261,27 +271,33 @@ data class DonutChartData(val value: Float, val color: Color, val label: String)
 @Composable
 fun DonutChart(
     transaction: List<Transaction>,
-    percentChange: Float,
-    isUp: Boolean,
+    prevTransaction: List<Transaction>,
     prevPeriodLabel: String
 ) {
-    val tunai = transaction
-        .filterIsInstance<Transaction.Sell>()
+    val currTotal = transaction.filterIsInstance<Transaction.Sell>().sumOf { it.total }
+    val prevTotal = prevTransaction.filterIsInstance<Transaction.Sell>().sumOf { it.total }
+    val percentChange = when {
+        prevTotal.compareTo(java.math.BigDecimal.ZERO) == 0 && currTotal.compareTo(java.math.BigDecimal.ZERO) == 0 -> 0f
+        prevTotal.compareTo(java.math.BigDecimal.ZERO) == 0 -> 100f
+        else -> ((currTotal - prevTotal).toFloat() / prevTotal.toFloat()) * 100
+    }
+    val isUp = currTotal >= prevTotal
+
+    val sellList = transaction.filterIsInstance<Transaction.Sell>()
+
+    val tunai = sellList
         .filter { it.paymentMethod == "Tunai" }
         .sumOf { it.total }
 
-    val qris = transaction
-        .filterIsInstance<Transaction.Sell>()
+    val qris = sellList
         .filter { it.paymentMethod == "QRIS" }
         .sumOf { it.total }
 
-    val kredit = transaction
-        .filterIsInstance<Transaction.Sell>()
+    val kredit = sellList
         .filter { it.paymentMethod == "Kartu Kredit" }
         .sumOf { it.total }
 
-    val lainnya = transaction
-        .filterIsInstance<Transaction.Sell>()
+    val lainnya = sellList
         .filter { it.paymentMethod != "Tunai" && it.paymentMethod != "Kartu Kredit" && it.paymentMethod != "QRIS" }
         .sumOf { it.total }
 
@@ -295,9 +311,7 @@ fun DonutChart(
     val total = data.sumOf { it.value.toDouble() }.toFloat()
     var startAngle = -90f
 
-    val grossIncome = transaction
-        .filterIsInstance<Transaction.Sell>()
-        .sumOf { it.total }
+    val grossIncome = sellList.sumOf { it.total }
 
     Column (
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -429,6 +443,229 @@ fun DonutChart(
         Row( Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
             AppText("Lainnya")
             AppText(formatToCurrency(lainnya))
+        }
+    }
+}
+
+
+@Composable
+private fun PelangganTeratasSection(
+    navController: NavController,
+    transaction: List<Transaction>
+) {
+    // Ambil hanya penjualan
+    val sellList = transaction.filterIsInstance<Transaction.Sell>()
+
+    // Ambil pelanggan teratas
+    val topCustomers = sellList
+        .groupBy { it.customer.id }
+        .map { (_, list) ->
+            val contact = list.first().customer
+            contact to list.size
+        }
+        .sortedByDescending { it.second }
+        .take(5)
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .dropShadow200(16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(White)
+            .padding(16.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            AppText("PELANGGAN TERATAS", 14.sp, FontWeight.Bold)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = { navController.navigate("contact") }
+                )
+            ) {
+                AppText("Lihat Semua", color = Primary)
+                Icon(
+                    painter = painterResource(R.drawable.ic_next),
+                    contentDescription = null,
+                    tint = Primary,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        }
+
+        DrawLine()
+
+        if (topCustomers.isEmpty()) {
+            AppText(
+                text = "Belum ada data pelanggan.",
+                fontSize = 12.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+        } else {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                topCustomers.forEach { (customer, count) ->
+                    Column {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp)
+                                .height(40.dp)
+                        ) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Image(
+                                    painter = painterResource(customer.image_kontak),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clip(CircleShape),
+                                    contentScale = ContentScale.Crop
+                                )
+                                AppText(
+                                    text = customer.nama_kontak,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            }
+                            AppText(
+                                text = "$count Penjualan",
+                                fontWeight = FontWeight.Light,
+                                fontSize = 10.sp
+                            )
+                        }
+                        DrawLine()
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProdukTeratasSection(
+    navController: NavController,
+    transaction: List<Transaction>
+) {
+    // Ambil hanya penjualan
+    val sellList = transaction.filterIsInstance<Transaction.Sell>()
+
+    // Ambil semua item dari penjualan
+    val allItems = sellList.flatMap { sell ->
+        TransactionItemRepository.getTransactionItems(sell.id)
+    }
+
+    // Hitung total penjualan tiap produk berdasarkan jumlah item
+    val topProducts = allItems
+        .groupBy { it.productId }
+        .map { (productId, items) ->
+            val totalAmount = items.sumOf { it.amount }
+            productId to totalAmount
+        }
+        .sortedByDescending { it.second }
+        .take(5)
+
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .dropShadow200(16.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(White)
+            .padding(16.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            AppText("PRODUK TERATAS", 14.sp, FontWeight.Bold)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onClick = { navController.navigate("product") }
+                )
+            ) {
+                AppText("Lihat Semua", color = Primary)
+                Icon(
+                    painter = painterResource(R.drawable.ic_next),
+                    contentDescription = null,
+                    tint = Primary,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        }
+
+        DrawLine()
+
+        if (topProducts.isEmpty()) {
+            AppText(
+                text = "Belum ada produk terjual.",
+                fontSize = 12.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(vertical = 16.dp)
+            )
+        } else {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                topProducts.forEach { (productId, totalSold) ->
+                    val product = ProductRepository.getProductById(productId)
+                    if (product != null) {
+                        Column {
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
+                                    .height(40.dp)
+                            ) {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Image(
+                                        painter = painterResource(product.productImage),
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(24.dp)
+                                            .clip(CircleShape),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                    AppText(
+                                        text = product.productName,
+                                        fontWeight = FontWeight.Medium
+                                    )
+                                }
+                                AppText(
+                                    text = "$totalSold Terjual",
+                                    fontWeight = FontWeight.Light,
+                                    fontSize = 10.sp
+                                )
+                            }
+                            DrawLine()
+                        }
+                    }
+                }
+            }
         }
     }
 }

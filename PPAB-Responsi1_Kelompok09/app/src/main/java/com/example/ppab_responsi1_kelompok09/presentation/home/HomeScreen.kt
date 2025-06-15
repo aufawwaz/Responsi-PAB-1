@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,8 +61,15 @@ import com.example.ppab_responsi1_kelompok09.domain.model.KnowledgeCardItem
 import com.example.ppab_responsi1_kelompok09.domain.model.MenuItem
 import com.example.ppab_responsi1_kelompok09.domain.model.News
 import com.example.ppab_responsi1_kelompok09.domain.model.TabelItem
+import com.example.ppab_responsi1_kelompok09.domain.model.Transaction
 import com.example.ppab_responsi1_kelompok09.domain.repository.NewsRepository
 import com.example.ppab_responsi1_kelompok09.domain.model.User
+import com.example.ppab_responsi1_kelompok09.domain.repository.TransactionRepository
+import com.example.ppab_responsi1_kelompok09.presentation.components.DateFilter
+import com.example.ppab_responsi1_kelompok09.presentation.components.formatToCurrency
+import com.example.ppab_responsi1_kelompok09.presentation.components.getDateRangeValue
+import com.example.ppab_responsi1_kelompok09.presentation.components.getPrevPeriodLabel
+import com.example.ppab_responsi1_kelompok09.presentation.components.getPreviousDateRange
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
@@ -71,9 +79,20 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material3.shimmer
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import kotlin.compareTo
+import kotlin.math.abs
+import kotlin.text.compareTo
+import kotlin.text.toDouble
+import kotlin.text.toFloat
 
 @Composable
 fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, user: User?) {
+
+    val transaction = TransactionRepository.getAllTransaction()
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -82,7 +101,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, user:
     ) {
         Box (
             Modifier
-                .height(1336.dp)
+                .height(1280.dp)
         ) {
             HeaderHome(authViewModel = authViewModel, navController, user)
             Column (
@@ -91,12 +110,11 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, user:
             ) {
                 PendapatanCard()
                 MenuGrid(navController)
-                UpgradeButton(navController)
                 KnowledgeCardSection(navController)
-                PesananTerbaru()
+                PesananTerbaru(navController)
             }
             Box(modifier = Modifier
-                .offset(y = 548.dp)
+                .offset(y = 484.dp)
                 .fillMaxWidth()
                 .background(Gray.copy(0.1f))
                 .height(300.dp)
@@ -155,6 +173,30 @@ private fun HeaderHome(authViewModel: AuthViewModel, navController: NavControlle
 
 @Composable
 private fun PendapatanCard() {
+    val transaction = TransactionRepository.getAllTransaction()
+    val selectedFilter = DateFilter.TODAY
+    val (startDate, endDate) = getDateRangeValue(selectedFilter)
+    val (prevStart, prevEnd) = getPreviousDateRange(selectedFilter)
+
+    val todaySales = transaction.filterIsInstance<Transaction.Sell>().filter {
+        val localDate = it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        localDate in startDate..endDate
+    }
+    val prevSales = transaction.filterIsInstance<Transaction.Sell>().filter {
+        val localDate = it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        localDate in prevStart..prevEnd
+    }
+
+    val todayTotal = todaySales.sumOf { it.total }
+    val prevTotal = prevSales.sumOf { it.total }
+
+    val percentChange = when {
+        prevTotal.compareTo(java.math.BigDecimal.ZERO) == 0 && todayTotal.compareTo(java.math.BigDecimal.ZERO) == 0 -> 0f
+        prevTotal.compareTo(java.math.BigDecimal.ZERO) == 0 -> 100f
+        else -> ((todayTotal - prevTotal).toFloat() / prevTotal.toFloat()) * 100
+    }
+    val isUp = todayTotal >= prevTotal
+
     Row (
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -189,7 +231,7 @@ private fun PendapatanCard() {
                         fontWeight = FontWeight.Normal
                     )
                     AppText(
-                        text = "Rp1.000.000",
+                        text = formatToCurrency(todayTotal),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -201,16 +243,16 @@ private fun PendapatanCard() {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_pendapatan_naik),
+                        painter = if (isUp) painterResource(R.drawable.ic_pendapatan_naik) else painterResource(R.drawable.ic_pendapatan_turun),
                         contentDescription = null,
-                        tint = Success,
+                        tint = if (isUp) Success else Danger,
                         modifier = Modifier.width(16.dp)
                     )
                     AppText (
-                        text = "50%",
+                        text = "%.0f".format(abs(percentChange)) + "%",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = Success
+                        color = if (isUp) Success else Danger
                     )
                 }
                 AppText (
@@ -228,14 +270,14 @@ private fun MenuGrid(
     navController: NavController
 ) {
     val gridItems = listOf(
-        MenuItem("Transaksi", R.drawable.ic_transaksi_fill),
+        MenuItem("Transaksi", R.drawable.ic_transaksi_fill) { navController.navigate("transaction") },
         MenuItem("Saldo", R.drawable.ic_saldo_fill) { navController.navigate("balance") },
-        MenuItem("Produk", R.drawable.ic_produk_fill),
-        MenuItem("Pelanggan", R.drawable.ic_pelanggan_fill),
+        MenuItem("Produk", R.drawable.ic_produk_fill) { navController.navigate("product") },
+        MenuItem("Pelanggan", R.drawable.ic_pelanggan_fill) { navController.navigate("contact") },
         MenuItem("Keuangan", R.drawable.ic_keuangan_fill) { navController.navigate("finance_report") },
-        MenuItem("Penjualan", R.drawable.ic_penjualan_fill),
-        MenuItem("Pembelian", R.drawable.ic_pembelian_fill),
-        MenuItem("Tagihan", R.drawable.ic_tagihan_fill)
+        MenuItem("Penjualan", R.drawable.ic_penjualan_fill) { navController.navigate("transaction?category=Penjualan") },
+        MenuItem("Pembelian", R.drawable.ic_pembelian_fill) { navController.navigate("transaction?category=Pembelian") },
+        MenuItem("Tagihan", R.drawable.ic_tagihan_fill) { navController.navigate("transaction?category=Tagihan") }
     )
 
     LazyVerticalGrid(
@@ -264,48 +306,6 @@ private fun MenuGrid(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun UpgradeButton(navController: NavController) {
-    Row (
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .height(40.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable{}
-            .background(Success.copy(0.1f)),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row (
-            modifier = Modifier.padding(start = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_premium_fill),
-                contentDescription = null,
-                tint = Success,
-                modifier = Modifier.width(24.dp)
-            )
-            AppText(
-                text = "Peroleh semua fitur!",
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 12.sp,
-                color = Success
-            )
-        }
-        Icon(
-            painter = painterResource(R.drawable.ic_next),
-            contentDescription = null,
-            tint = Success,
-            modifier = Modifier
-                .padding(end = 12.dp)
-                .height(18.dp)
-        )
     }
 }
 
@@ -392,7 +392,14 @@ private fun KnowledgeCardSection(navController: NavController) {
 }
 
 @Composable
-private fun PesananTerbaru() {
+private fun PesananTerbaru(
+    navController: NavController
+) {
+    val transaction = TransactionRepository.getAllTransaction()
+        .filterIsInstance<Transaction.Sell>()
+        .sortedByDescending { it.date }
+        .take(5)
+
     Column (
         modifier = Modifier
             .padding(horizontal = 16.dp)
@@ -417,8 +424,9 @@ private fun PesananTerbaru() {
                 modifier = Modifier
                     .clickable(
                         indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {  }
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = { navController.navigate("transaction") }
+                    )
             ) {
                 AppText(
                     text = "Lihat semua",
@@ -441,29 +449,19 @@ private fun PesananTerbaru() {
                 .background(Gray.copy(0.5f))
                 .height(1.dp)
         )
-        TabelPesanan()
-    }
-}
-
-@Composable
-private fun TabelPesanan() {
-    val tabelItem = listOf(
-        TabelItem(R.drawable.img_profile_picture, "John Doe", "11 Mei 2025", "+ Rp100.000"),
-        TabelItem(R.drawable.img_profile_picture, "Ariel Josua", "09 Mei 2025", "+ Rp200.000"),
-        TabelItem(R.drawable.img_profile_picture, "Aufa Fawwaz", "09 Mei 2025", "+ Rp1.000.000"),
-        TabelItem(R.drawable.img_profile_picture, "Aril Fadla Huda...", "01 Mei 2025", "+ Rp300.000"),
-        TabelItem(R.drawable.img_profile_picture, "Budiman", "01 Januari 2025", "+ Rp300.000"),
-    )
-
-    LazyColumn {
-        items(tabelItem.size) { i ->
-            val item = tabelItem[i]
-            TabelItemRow(
-                image = item.imageRes,
-                name = item.name,
-                date = item.date,
-                money = item.money
-            )
+        LazyColumn {
+            items(transaction.size) { trx ->
+                val item = transaction[trx]
+                TabelItemRow(
+                    image = item.customer.image_kontak,
+                    name = item.customer.nama_kontak,
+                    date = SimpleDateFormat("dd MMM yyyy").format(item.date),
+                    money = "+ " + formatToCurrency(item.total),
+                    onClick = {
+                        navController.navigate("penjualan_detail/${item.id}")
+                    }
+                )
+            }
         }
     }
 }
