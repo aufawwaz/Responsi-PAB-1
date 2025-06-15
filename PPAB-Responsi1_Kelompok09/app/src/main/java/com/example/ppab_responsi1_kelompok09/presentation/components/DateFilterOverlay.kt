@@ -44,6 +44,39 @@ fun getDateRangeValue(filter: DateFilter): Pair<LocalDate, LocalDate> {
     }
 }
 
+fun getPreviousDateRange(filter: DateFilter): Pair<LocalDate, LocalDate> {
+    val (start, end) = getDateRangeValue(filter)
+    return when (filter) {
+        DateFilter.TODAY -> {
+            val prev = start.minusDays(1)
+            prev to prev
+        }
+        DateFilter.YESTERDAY -> {
+            val prev = start.minusDays(1)
+            prev to prev
+        }
+        DateFilter.THIS_WEEK -> {
+            val prevStart = start.minusWeeks(1)
+            val prevEnd = end.minusWeeks(1)
+            prevStart to prevEnd
+        }
+        DateFilter.THIS_MONTH -> {
+            val prevMonth = start.minusMonths(1)
+            val prevStart = prevMonth.withDayOfMonth(1)
+            val prevEnd = prevMonth.withDayOfMonth(prevMonth.lengthOfMonth())
+            prevStart to prevEnd
+        }
+    }
+}
+
+fun getPrevPeriodLabel(filter: DateFilter): String {
+    return when (filter) {
+        DateFilter.TODAY, DateFilter.YESTERDAY -> "Dari Hari lalu"
+        DateFilter.THIS_WEEK -> "Dari Minggu lalu"
+        DateFilter.THIS_MONTH -> "Dari Bulan lalu"
+    }
+}
+
 fun getDateRange(filter: DateFilter): String {
     val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
     val (start, end) = getDateRangeValue(filter)

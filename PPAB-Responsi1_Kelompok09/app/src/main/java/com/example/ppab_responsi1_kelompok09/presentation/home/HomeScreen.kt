@@ -61,6 +61,7 @@ import com.example.ppab_responsi1_kelompok09.domain.model.MenuItem
 import com.example.ppab_responsi1_kelompok09.domain.model.News
 import com.example.ppab_responsi1_kelompok09.domain.model.TabelItem
 import com.example.ppab_responsi1_kelompok09.domain.repository.NewsRepository
+import com.example.ppab_responsi1_kelompok09.domain.model.User
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
@@ -72,7 +73,7 @@ import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
 
 @Composable
-fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
+fun HomeScreen(navController: NavController, authViewModel: AuthViewModel, user: User?) {
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -83,7 +84,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
             Modifier
                 .height(1336.dp)
         ) {
-            HeaderHome(authViewModel = authViewModel)
+            HeaderHome(authViewModel = authViewModel, navController, user)
             Column (
                 modifier = Modifier.offset(y = 206.dp),
                 verticalArrangement = Arrangement.spacedBy(24.dp)
@@ -105,9 +106,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
 }
 
 @Composable
-private fun HeaderHome(authViewModel: AuthViewModel) {
-
-    val userName by authViewModel.userName.collectAsState()
+private fun HeaderHome(authViewModel: AuthViewModel, navController: NavController, user: User?) {
 
     Box (
         modifier = Modifier
@@ -129,8 +128,9 @@ private fun HeaderHome(authViewModel: AuthViewModel) {
         {
             ProfileContainer(
                 icon = R.drawable.img_profile_picture,
-                text = userName,
-                isLogin = true
+                text = user?.name ?: "",
+                isLogin = true,
+                onClick = { navController.navigate("profile/${user?.id?: ""}") }
             )
         }
         Column (
@@ -232,7 +232,7 @@ private fun MenuGrid(
         MenuItem("Saldo", R.drawable.ic_saldo_fill) { navController.navigate("balance") },
         MenuItem("Produk", R.drawable.ic_produk_fill),
         MenuItem("Pelanggan", R.drawable.ic_pelanggan_fill),
-        MenuItem("Keuangan", R.drawable.ic_keuangan_fill),
+        MenuItem("Keuangan", R.drawable.ic_keuangan_fill) { navController.navigate("finance_report") },
         MenuItem("Penjualan", R.drawable.ic_penjualan_fill),
         MenuItem("Pembelian", R.drawable.ic_pembelian_fill),
         MenuItem("Tagihan", R.drawable.ic_tagihan_fill)

@@ -46,7 +46,7 @@ fun MoreScreen (
     authViewModel: AuthViewModel
 ) {
 
-    val userName by authViewModel.userName.collectAsState()
+    val user by authViewModel.user.collectAsState()
 
     Box (
         modifier = Modifier
@@ -62,9 +62,10 @@ fun MoreScreen (
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ProfileContainer(
-                R.drawable.img_profile_picture,
-                userName, //authViewModel.name,
-                true
+                icon = R.drawable.img_profile_picture,
+                text = user?.name ?: "",
+                isLogin = true,
+                onClick = { navController.navigate("profile/${user?.id?: ""}") }
             )
             Box (
                 modifier = Modifier

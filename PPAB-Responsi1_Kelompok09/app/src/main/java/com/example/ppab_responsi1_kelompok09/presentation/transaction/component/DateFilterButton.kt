@@ -40,9 +40,9 @@ fun DateFilterButton(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .dropShadow200(8.dp)
+            .dropShadow200(16.dp)
+            .clip(RoundedCornerShape(16.dp))
             .background(White)
-            .clip(RoundedCornerShape(8.dp))
             .clickable(onClick = { onClickShowOverlay() })
     ) {
         Row (
@@ -55,7 +55,7 @@ fun DateFilterButton(
                 contentDescription = null,
                 tint = Dark,
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(20.dp)
             )
             AppText(
                 text = range,

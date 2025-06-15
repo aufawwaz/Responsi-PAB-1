@@ -41,7 +41,10 @@ object TransactionRepository {
         Transaction.Purchase(parseDate("15-06-2025"), Kontak[2], balance[1], "TRSPBL150625006", "Diterima", BigDecimal("1230000")),
         Transaction.Bill(parseDate("15-06-2025"), parseDate("26-06-2025"), Kontak[2], balance[2], "TRSTGH150625007", "Diproses", BigDecimal("450000")),
         Transaction.Sell(parseDate("16-06-2025"), Kontak[1], balance[3], "TRSPJL160625007", "Transfer", BigDecimal("900000")),
-        Transaction.Purchase(parseDate("16-06-2025"), Kontak[1], balance[4], "TRSPBL160625007", "Proses", BigDecimal("2500000"))
+        Transaction.Purchase(parseDate("16-06-2025"), Kontak[1], balance[4], "TRSPBL160625007", "Proses", BigDecimal("2500000")),
+
+        Transaction.Sell(parseDate("10-05-2025"), Kontak[0], balance[0], "TRSPJL100525001", "Tunai", BigDecimal("100000")),
+        Transaction.Sell(parseDate("15-05-2025"), Kontak[1], balance[1], "TRSPJL150525002", "QRIS", BigDecimal("200000")),
     )
 
     fun getTransactionById(id : String): Transaction? {

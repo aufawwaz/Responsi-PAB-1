@@ -10,6 +10,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,10 +23,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
 import com.example.ppab_responsi1_kelompok09.domain.model.NavItem
+import com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository
 import com.example.ppab_responsi1_kelompok09.presentation.balance.BalanceScreen
 import com.example.ppab_responsi1_kelompok09.presentation.contact.ContactDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.product.ProductScreen
 import com.example.ppab_responsi1_kelompok09.presentation.contact.ContactScreen
+import com.example.ppab_responsi1_kelompok09.presentation.finance.FinanceReportScreen
 import com.example.ppab_responsi1_kelompok09.presentation.home.HomeScreen
 import com.example.ppab_responsi1_kelompok09.presentation.more.MoreScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.TransactionScreen
@@ -38,6 +41,7 @@ import com.example.ppab_responsi1_kelompok09.presentation.news.NewsScreen
 import com.example.ppab_responsi1_kelompok09.presentation.product.ProductDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.bill.BillDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.purchase.PurchaseDetailScreen
+import com.example.ppab_responsi1_kelompok09.presentation.profile.ProfileScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.BillReportScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.PurchaseReportScreen
 import com.example.ppab_responsi1_kelompok09.presentation.transaction.sale.SaleDetailScreen
@@ -68,6 +72,9 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
 
         "product_detail/{productId}",
 
+        "contact_detail/{contactId}",
+
+        "finance_report",
         "contact_detail/{contactId}",
 
         "news",
@@ -136,7 +143,16 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
             navController = navController,
             startDestination = "home"
         ) {
-            composable("home") { HomeScreen(navController, authViewModel) }
+            composable("profile/{userId}") { backStackEntry ->
+                val userId = backStackEntry.arguments?.getString("userId") ?: ""
+                val user = UserRepository.getUserById(userId)
+                ProfileScreen(user = user, navController = navController)
+            }
+
+            composable("home") {
+                val user = authViewModel.user.collectAsState().value
+                HomeScreen(navController, authViewModel, user)
+            }
 
             composable("product") { ProductScreen(navController) }
             composable("product_detail/{productId}") { backStackEntry ->
@@ -176,6 +192,8 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
                 val newsId = backStackEntry.arguments?.getString("newsId")
                 NewsDetailScreen(navController, newsId = newsId ?: "")
             }
+
+            composable("finance_report") { FinanceReportScreen(navController) }
         }
     }
 }
