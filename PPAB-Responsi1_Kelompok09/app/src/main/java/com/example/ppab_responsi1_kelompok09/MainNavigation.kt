@@ -64,6 +64,8 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
         "login",
         "register",
 
+        "profile/{userId}",
+
         "laporan_penjualan",
         "laporan_pembelian",
         "laporan_tagihan",

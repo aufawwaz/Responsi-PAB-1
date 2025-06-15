@@ -161,16 +161,16 @@ private fun TransactionList(
             }
             Box(
                 modifier = Modifier
-                    .clickable { navController.navigate(transactionDetailRoute) }
                     .fillMaxWidth()
                     .dropShadow200(8.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .background(White)
+                    .clickable { navController.navigate(transactionDetailRoute) }
                     .padding(horizontal = 8.dp, vertical = 8.dp)
             ){
                 TransactionCard(
                     transaction = transaction,
-                    onClick = { navController.navigate(transactionDetailRoute) }
+                    isIdInCard = false
                 )
             }
         }
