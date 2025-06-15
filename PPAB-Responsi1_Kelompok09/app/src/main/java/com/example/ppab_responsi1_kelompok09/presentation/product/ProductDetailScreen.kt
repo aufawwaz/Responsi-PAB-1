@@ -319,7 +319,7 @@ private fun ProductActivityCardSell(transaction: Transaction.Sell, product: Prod
             .shadow(Color.Black.copy(0.1f), 16.dp, 8.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(White)
-            .clickable{navController.navigate("penjualan_detail" + transaction.id )}
+            .clickable{navController.navigate("penjualan_detail/" + transaction.id )}
             .padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -363,7 +363,7 @@ private fun ProductActivityCardPurchase(transaction: Transaction.Purchase, produ
             .shadow(Color.Black.copy(0.1f), 16.dp, 8.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(White)
-            .clickable{navController.navigate("pembelian_detail" + transaction.id )}
+            .clickable{navController.navigate("pembelian_detail/" + transaction.id )}
             .padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -406,7 +406,7 @@ private fun ProductActivityCardBill(transaction: Transaction.Bill, product: Prod
             .shadow(Color.Black.copy(0.1f), 16.dp, 8.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(White)
-            .clickable{navController.navigate("tagihan_detail" + transaction.id )}
+            .clickable{navController.navigate("tagihan_detail/" + transaction.id )}
             .padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
