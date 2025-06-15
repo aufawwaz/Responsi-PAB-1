@@ -27,10 +27,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,11 +58,18 @@ import com.example.ppab_responsi1_kelompok09.presentation.components.HomeTextHea
 import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
 import com.example.ppab_responsi1_kelompok09.domain.model.KnowledgeCardItem
 import com.example.ppab_responsi1_kelompok09.domain.model.MenuItem
+import com.example.ppab_responsi1_kelompok09.domain.model.News
 import com.example.ppab_responsi1_kelompok09.domain.model.TabelItem
+import com.example.ppab_responsi1_kelompok09.domain.repository.NewsRepository
 import com.example.ppab_responsi1_kelompok09.ui.theme.Dark
 import com.example.ppab_responsi1_kelompok09.ui.theme.Gray
 import com.example.ppab_responsi1_kelompok09.ui.theme.Success
 import com.example.ppab_responsi1_kelompok09.presentation.login.AuthViewModel
+import com.example.ppab_responsi1_kelompok09.ui.theme.Danger
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material3.shimmer
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 
 @Composable
 fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
@@ -81,7 +91,7 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
                 PendapatanCard()
                 MenuGrid(navController)
                 UpgradeButton(navController)
-                KnowledgeCardSection()
+                KnowledgeCardSection(navController)
                 PesananTerbaru()
             }
             Box(modifier = Modifier
@@ -300,64 +310,83 @@ private fun UpgradeButton(navController: NavController) {
 }
 
 @Composable
-private fun KnowledgeCardSection() {
-    val knowledgeCardItem = listOf(
-        KnowledgeCardItem(R.drawable.img_business_1, "Mau Jadi Pebisnis Sukses? Yuk Terapkan 7 Kebiasaan Positif ...", "Ada begitu banyak contoh pebisnis sukses diberbagai ..."),
-        KnowledgeCardItem(R.drawable.img_business_2, "Mau Jadi Pebisnis Sukses? Yuk Terapkan 7 Kebiasaan Positif ...", "Ada begitu banyak contoh pebisnis sukses diberbagai ..."),
-        KnowledgeCardItem(R.drawable.img_business_3, "Mau Jadi Pebisnis Sukses? Yuk Terapkan 7 Kebiasaan Positif ...", "Ada begitu banyak contoh pebisnis sukses diberbagai ..."),
-        KnowledgeCardItem(R.drawable.img_business_4, "Mau Jadi Pebisnis Sukses? Yuk Terapkan 7 Kebiasaan Positif ...", "Ada begitu banyak contoh pebisnis sukses diberbagai ..."),
-        )
-
-    Spacer(Modifier.height(10.dp))
-    Row (
-        modifier = Modifier
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        HomeTextHeader(text = "BERITA")
-        Box (
-            modifier = Modifier
-                .weight(1f)
-                .background(Gray.copy(0.5f))
-                .height(1.dp)
-        )
-        Row (
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier
-                .clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) {  }
-        ) {
-            AppText(
-                text = "Lihat semua",
-                color = Primary,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Normal
-            )
-            Icon (
-                painter = painterResource(R.drawable.ic_next),
-                contentDescription = null,
-                tint = Primary,
-                modifier = Modifier.height(20.dp)
-            )
+private fun KnowledgeCardSection(navController: NavController) {
+    val knowledgeCardItem = remember { mutableStateListOf<KnowledgeCardItem>() }
+    var newsList by remember { mutableStateOf<List<News>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    var errorMsg by remember { mutableStateOf<String?>(null) }
+    LaunchedEffect(Unit) {
+        try {
+            newsList = NewsRepository.getAll(5)
+        } catch(e: Exception) {
+            errorMsg = "Gagal memuat berita"
+        } finally {
+            newsList.forEach(){ news ->
+                knowledgeCardItem.add(KnowledgeCardItem(news.id, news.imageUrl, news.title, news.description))
+            }
+            isLoading = false
         }
     }
-    LazyRow (
-        modifier = Modifier
-            .fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items (knowledgeCardItem.size) { i ->
-            val item = knowledgeCardItem[i]
-            KnowledgeCard(
-                imageRes = item.imageRes,
-                title = item.title,
-                description = item.description
+    if (isLoading) {
+        KnowledgeCardSectionLoading()
+
+    } else if (errorMsg != null) {
+
+        AppText(errorMsg!!, color = Danger)
+
+    } else {
+        Spacer(Modifier.height(10.dp))
+        Row (
+            modifier = Modifier
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            HomeTextHeader(text = "BERITA")
+            Box (
+                modifier = Modifier
+                    .weight(1f)
+                    .background(Gray.copy(0.5f))
+                    .height(1.dp)
             )
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) { navController.navigate("news") }
+            ) {
+                AppText(
+                    text = "Lihat semua",
+                    color = Primary,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Normal,
+                )
+                Icon (
+                    painter = painterResource(R.drawable.ic_next),
+                    contentDescription = null,
+                    tint = Primary,
+                    modifier = Modifier.height(20.dp)
+                )
+            }
+        }
+        LazyRow (
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items (knowledgeCardItem.size) { i ->
+                val item = knowledgeCardItem[i]
+                KnowledgeCard(
+                    imageUrl = item.imageUrl,
+                    title = item.title,
+                    description = item.description,
+                    onClick = { navController.navigate("news_detail/" + item.id ) }
+                )
+            }
         }
     }
 }
@@ -395,7 +424,7 @@ private fun PesananTerbaru() {
                     text = "Lihat semua",
                     color = Primary,
                     fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal
+                    fontWeight = FontWeight.Normal,
                 )
                 Icon (
                     painter = painterResource(R.drawable.ic_next),
@@ -487,5 +516,70 @@ private fun TabelItemRow(
             fontSize = 12.sp,
             color = Success
         )
+    }
+}
+
+@Composable
+private fun KnowledgeCardSectionLoading() {
+    Spacer(Modifier.height(10.dp))
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(width = 80.dp, height = 20.dp)
+                .placeholder(
+                    visible = true,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(4.dp),
+                    highlight = PlaceholderHighlight.shimmer(
+                        highlightColor = Color(0xFFBBBBBB)
+                    )
+                )
+        )
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(1.dp)
+                .background(Color.Gray.copy(0.5f))
+        )
+        Box(
+            modifier = Modifier
+                .width(70.dp)
+                .height(20.dp)
+                .placeholder(
+                    visible = true,
+                    color = Color.LightGray,
+                    shape = RoundedCornerShape(4.dp),
+                    highlight = PlaceholderHighlight.shimmer(
+                        highlightColor = Color(0xFFBBBBBB)
+                    )
+                )
+        )
+    }
+    Spacer(Modifier.height(16.dp))
+    LazyRow(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(3) {
+            Box(
+                modifier = Modifier
+                    .width(240.dp)
+                    .height(150.dp)
+                    .placeholder(
+                        visible = true,
+                        color = Color.LightGray,
+                        shape = RoundedCornerShape(12.dp),
+                        highlight = PlaceholderHighlight.shimmer(
+                            highlightColor = Color(0xFFBBBBBB)
+                        )
+                    )
+            )
+        }
     }
 }

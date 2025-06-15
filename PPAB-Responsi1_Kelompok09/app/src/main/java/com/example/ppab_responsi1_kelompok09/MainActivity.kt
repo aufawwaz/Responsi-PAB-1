@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = loginNavController,
-                    startDestination = "splash"
+                    startDestination = "main" // defaultnya adalah 'splash' tetapi karena error ganti jadi main dulu
                 ) {
                     composable("splash") {
                         LaunchedEffect(authViewModel.isInitialized) {
