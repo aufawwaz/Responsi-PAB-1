@@ -170,20 +170,20 @@ fun TransactionScreen(navController: NavController = rememberNavController(), in
                 .offset(x = -(12.dp), y = -(138.dp))
                 .width(200.dp)
         ) {
-            CustomButton({ }, {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_transaksi_fill),
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    AppText("Tambah Transaksi", 12.sp, color = White)
-                }
-            })
+//            CustomButton({ }, {
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Icon(
+//                        painter = painterResource(R.drawable.ic_transaksi_fill),
+//                        contentDescription = null,
+//                        modifier = Modifier.size(20.dp)
+//                    )
+//                    Spacer(Modifier.width(8.dp))
+//                    AppText("Tambah Transaksi", 12.sp, color = White)
+//                }
+//            })
         }
     }
 }
@@ -203,21 +203,30 @@ private fun KategoriTransaksi (
             iconRes = R.drawable.ic_penjualan_fill,
             category = "Penjualan",
             isSelected = selectedCategory == "Penjualan",
-            onClick = { onCategorySelected("Penjualan") },
+            onClick = {
+                if (selectedCategory == "Penjualan") onCategorySelected("Semua")
+                else onCategorySelected("Penjualan")
+            },
             modifier = Modifier.weight(1f)
         )
         KategoriTransaksiItem(
             iconRes = R.drawable.ic_pembelian_fill,
             category = "Pembelian",
             isSelected = selectedCategory == "Pembelian",
-            onClick = { onCategorySelected("Pembelian") },
+            onClick = {
+                if (selectedCategory == "Pembelian") onCategorySelected("Semua")
+                else onCategorySelected("Pembelian")
+            },
             modifier = Modifier.weight(1f)
         )
         KategoriTransaksiItem(
             iconRes = R.drawable.ic_tagihan_fill,
             category = "Tagihan",
             isSelected = selectedCategory == "Tagihan",
-            onClick = { onCategorySelected("Tagihan") },
+            onClick = {
+                if (selectedCategory == "Tagihan") onCategorySelected("Semua")
+                else onCategorySelected("Tagihan")
+            },
             modifier = Modifier.weight(1f)
         )
     }
@@ -235,15 +244,17 @@ private fun KategoriTransaksiItem(
         modifier = modifier
             .height(44.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(Primary.copy(0.1f))
-            .clickable{ onClick() },
+            .background(
+                if (isSelected) Primary else Primary.copy(0.1f)
+            )
+            .clickable { onClick() },
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             painter = painterResource(iconRes),
             contentDescription = null,
-            tint = Primary,
+            tint = if (isSelected) White else Primary,
             modifier = Modifier.height(14.dp)
         )
         Spacer(Modifier.width(4.dp))
@@ -251,7 +262,7 @@ private fun KategoriTransaksiItem(
             text = category,
             fontWeight = FontWeight.SemiBold,
             fontSize = 12.sp,
-            color = Primary
+            color = if (isSelected) White else Primary
         )
     }
 }

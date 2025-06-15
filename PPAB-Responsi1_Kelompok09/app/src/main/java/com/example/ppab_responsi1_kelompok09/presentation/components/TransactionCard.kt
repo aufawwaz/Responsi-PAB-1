@@ -42,8 +42,9 @@ fun TransactionCard (
     isIdInCard: Boolean = true,
     onClick: () -> Unit = {}
 ) {
+    val clickableModifier = if (isIdInCard) modifier.fillMaxWidth().clickable { onClick() } else modifier.fillMaxWidth()
     Column (
-        modifier = modifier.fillMaxWidth().clickable{ onClick() },
+        modifier = clickableModifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         when (transaction) {
@@ -60,11 +61,9 @@ fun SellCard(
     isIdVisible: Boolean,
     onClick: () -> Unit = {}
 ) {
+    val clickableModifier = if (isIdVisible) Modifier.fillMaxWidth().clickable { onClick() } else Modifier.fillMaxWidth()
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(8.dp),
+        modifier = clickableModifier.padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
@@ -115,16 +114,10 @@ fun PurchaseCard(
     isIdVisible: Boolean,
     onClick: () -> Unit = {}
 ) {
-    val arrangement = if (isIdVisible) {
-        Arrangement.SpaceBetween
-    } else {
-        Arrangement.End
-    }
+    val arrangement = if (isIdVisible) Arrangement.SpaceBetween else Arrangement.End
+    val clickableModifier = if (isIdVisible) Modifier.fillMaxWidth().clickable { onClick() } else Modifier.fillMaxWidth()
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(8.dp),
+        modifier = clickableModifier.padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
@@ -172,11 +165,9 @@ fun BillCard(
     onClick: () -> Unit = {}
 ) {
     val statusColor = getStatusColor(data.status)
+    val clickableModifier = if (isIdVisible) Modifier.fillMaxWidth().clickable { onClick() } else Modifier.fillMaxWidth()
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(8.dp),
+        modifier = clickableModifier.padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(

@@ -375,24 +375,31 @@ fun DonutChart(
             Box(
                 modifier = Modifier
                     .height(152.dp)
-                    .aspectRatio(1f)
+                    .aspectRatio(1f),
+                contentAlignment = Alignment.Center
             ) {
                 Canvas(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .size(152.dp) // Ukuran sama dengan Box
                         .align(Alignment.Center)
                 ) {
+                    val strokeWidth = 40.dp.toPx() // Lebar stroke proporsional
+                    val diameter = size.minDimension - strokeWidth
+                    val topLeft = Offset(strokeWidth / 2, strokeWidth / 2)
+                    val arcSize = Size(diameter, diameter)
+                    var angle = -90f
                     data.forEach { item ->
                         val sweepAngle = if (total == 0f) 0f else (item.value / total) * 360f
                         drawArc(
                             color = item.color,
-                            startAngle = startAngle,
+                            startAngle = angle,
                             sweepAngle = sweepAngle,
                             useCenter = false,
-                            style = Stroke(width = 100f),
-                            size = Size(size.width, size.height)
+                            style = Stroke(width = strokeWidth),
+                            size = arcSize,
+                            topLeft = topLeft
                         )
-                        startAngle += sweepAngle
+                        angle += sweepAngle
                     }
                 }
             }

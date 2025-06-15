@@ -76,13 +76,17 @@ fun ContactScreen(navController: NavController = rememberNavController()) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ){
                 var contactSearchValue by rememberSaveable { mutableStateOf("") }
+                val filteredContact = contact.filter {
+                    it.nama_kontak.contains(contactSearchValue, ignoreCase = true) ||
+                    it.nomor_kontak.contains(contactSearchValue, ignoreCase = true)
+                }
                 InputTextForm(
                     contactSearchValue,
                     { contactSearchValue = it },
                     "Search Contact",
                     R.drawable.ic_search
                 )
-                ShowContact(navController, contact)
+                ShowContact(navController, filteredContact)
             }
         }
         Box(
@@ -91,20 +95,20 @@ fun ContactScreen(navController: NavController = rememberNavController()) {
                 .offset(x = -(12.dp), y = -(138.dp))
                 .width(180.dp)
         ){
-            CustomButton({ }, {
-                Row (
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ){
-                    Icon(
-                        painter = painterResource(R.drawable.ic_add_pelanggan),
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    AppText("Tambah Kontak", 12.sp, color = White)
-                }
-            })
+//            CustomButton({ }, {
+//                Row (
+//                    modifier = Modifier.fillMaxWidth(),
+//                    verticalAlignment = Alignment.CenterVertically
+//                ){
+//                    Icon(
+//                        painter = painterResource(R.drawable.ic_add_pelanggan),
+//                        contentDescription = null,
+//                        modifier = Modifier.size(20.dp)
+//                    )
+//                    Spacer(Modifier.width(8.dp))
+//                    AppText("Tambah Kontak", 12.sp, color = White)
+//                }
+//            })
         }
     }
 }
