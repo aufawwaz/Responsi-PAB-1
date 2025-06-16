@@ -7,12 +7,13 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.ppab_responsi1_kelompok09.domain.model.User
+import com.example.ppab_responsi1_kelompok09.data.local.dataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 //// DataStore Extension
-val Context.dataStore by preferencesDataStore(name = "user_prefs")
+//val Context.dataStore by preferencesDataStore(name = "user_prefs")
 //
 //// key (untuk data di user_prefs)
 //private val USER_LIST_KEY = stringPreferencesKey("user_list")

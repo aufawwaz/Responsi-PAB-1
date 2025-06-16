@@ -2,25 +2,34 @@ package com.example.ppab_responsi1_kelompok09.presentation.login
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.data.getOnboardingState
+import com.example.ppab_responsi1_kelompok09.data.local.TokenDataStore
 import com.example.ppab_responsi1_kelompok09.domain.model.User
+import com.example.ppab_responsi1_kelompok09.data.local.dataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.apply
-import androidx.core.content.edit
-import com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository
+import kotlinx.coroutines.flow.first
+import com.example.ppab_responsi1_kelompok09.data.mapper.toDomain
+import com.example.ppab_responsi1_kelompok09.data.remote.AuthApi
+import com.example.ppab_responsi1_kelompok09.data.remote.RetrofitInstance
+import com.example.ppab_responsi1_kelompok09.domain.model.LoginRequest
+//import com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository
 
 class AuthViewModel(application: Application) : AndroidViewModel(application) {
-
-    @SuppressLint("StaticFieldLeak")
     private val context = application.applicationContext
+
+    //private val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
+    private val tokenDataStore = TokenDataStore.getInstance(context)
+
+    private val authApi = RetrofitInstance.api  // Langsung pakai Auth API dari Laravel
 
     private val _authState = MutableStateFlow<AuthUiState>(AuthUiState.Unauthenticated)
     val authState: StateFlow<AuthUiState> = _authState
@@ -28,60 +37,91 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val _user = MutableStateFlow<User?>(null)
     val user: StateFlow<User?> = _user
 
+    var isLogin by mutableStateOf(false)
+        private set
+
     var onboardingHasOpened by mutableStateOf(false)
         private set
 
     var isInitialized by mutableStateOf(false)
         private set
 
-    var isLogin by mutableStateOf(false)
-        private set
-
-    private val prefs = context.getSharedPreferences("app_prefs", android.content.Context.MODE_PRIVATE)
-
-    private fun saveLoginState(isLogin: Boolean, userId: String?) {
-        prefs.edit {
-            putBoolean("isLogin", isLogin)
-                .putString("userId", userId)
-        }
-    }
-
-    private fun getSavedUserId(): String? = prefs.getString("userId", null)
-    private fun getSavedLoginState(): Boolean = prefs.getBoolean("isLogin", false)
-
     init {
         viewModelScope.launch {
-            onboardingHasOpened = getOnboardingState(context)
             isLogin = getSavedLoginState()
-            val userId = getSavedUserId()
-            _user.value = if (userId != null) com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository.getUserById(userId) else null
+            fetchProfile()
+            onboardingHasOpened = getOnboardingState(context)
             isInitialized = true
         }
     }
 
-    fun signUp(email: String, password: String, username: String) {
-        // Dummy sign up: just pick the next available user or create a new one
-        val user = com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository.getUserById("2")
-        _user.value = user
-        _authState.value = AuthUiState.Authenticated
-        isLogin = true
-        saveLoginState(true, user?.id)
-    }
 
     fun login(email: String, password: String) {
-        // ... your login logic
-        val dummyUser = UserRepository.getUserById("1") // or "2" for the other user
-        _user.value = dummyUser
-        _authState.value = AuthUiState.Authenticated
-        isLogin = true
-        saveLoginState(true, dummyUser?.id)
+        viewModelScope.launch {
+            try {
+                val response = authApi.login(LoginRequest(email, password))
+                val token = response.token
+                tokenDataStore.saveToken(token)
+                println("Token saved to DataStore: $token")
+                saveLoginState(true)
+                fetchProfile()
+            } catch (e: Exception) {
+                _authState.value = AuthUiState.Error("Login failed: ${e.message}")
+            }
+        }
+    }
+
+    fun fetchProfile() {
+        viewModelScope.launch {
+            try {
+                val token = tokenDataStore.getToken.first()
+                println("Token fetched from DataStore: $token")
+                if (!token.isNullOrBlank()) {
+                    val response = authApi.getProfile("Bearer $token")
+                    _user.value = response.user.toDomain()
+                    _authState.value = AuthUiState.Authenticated
+                } else {
+                    _authState.value = AuthUiState.Error("Token kosong, silakan login ulang.")
+                    signOut()
+                }
+            } catch (e: Exception) {
+                _authState.value = AuthUiState.Error("Gagal mengambil token atau profil: ${e.message}")
+                signOut()
+            }
+        }
+    }
+
+//    // Token helpers
+//    private fun saveToken(token: String) {
+//        prefs.edit().putString("token", token).apply()
+//        println("Token disimpan: $token") // Logging token yang disimpan
+//    }
+//
+//    private fun getSavedToken(): String? {
+//        val token = prefs.getString("token", null)
+//        println("Token diambil dari SharedPreferences: $token") // Logging token yang diambil
+//        return token
+//    }
+//
+//    private fun clearToken() {
+//        prefs.edit().remove("token").apply()
+//    }
+//
+    private suspend fun saveLoginState(isLogin: Boolean) {
+        tokenDataStore.saveLoginState(isLogin)
+    }
+
+    private suspend fun getSavedLoginState(): Boolean {
+        return tokenDataStore.getLoginState.first()
     }
 
     fun signOut() {
-        _user.value = null
-        _authState.value = AuthUiState.Unauthenticated
-        isLogin = false
-        saveLoginState(false, null)
+        viewModelScope.launch {
+            tokenDataStore.clearAll()
+            _user.value = null
+            _authState.value = AuthUiState.Unauthenticated
+            isLogin = false
+        }
     }
 
     fun seenOnboarding() {
@@ -91,6 +131,109 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
 //        }
     }
 }
+
+
+//    @SuppressLint("StaticFieldLeak")
+//    private val context = application.applicationContext
+//
+//    private val _authState = MutableStateFlow<AuthUiState>(AuthUiState.Unauthenticated)
+//    val authState: StateFlow<AuthUiState> = _authState
+//
+//    private val _user = MutableStateFlow<User?>(null)
+//    val user: StateFlow<User?> = _user
+//
+//    var onboardingHasOpened by mutableStateOf(false)
+//        private set
+//
+//    var isInitialized by mutableStateOf(false)
+//        private set
+//
+//    var isLogin by mutableStateOf(false)
+//        private set
+//
+//    private val prefs = context.getSharedPreferences("app_prefs", android.content.Context.MODE_PRIVATE)
+//
+//    private fun saveLoginState(isLogin: Boolean, userId: String?) {
+//        prefs.edit {
+//            putBoolean("isLogin", isLogin)
+//                .putString("userId", userId)
+//        }
+//    }
+//
+//    private fun getSavedUserId(): String? = prefs.getString("userId", null)
+//    private fun getSavedLoginState(): Boolean = prefs.getBoolean("isLogin", false)
+//
+//    init {
+//        viewModelScope.launch {
+//            onboardingHasOpened = getOnboardingState(context)
+//            isLogin = getSavedLoginState()
+//            val userId = getSavedUserId()
+////            _user.value = if (userId != null) com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository.getUserById(userId) else null
+//            fetchProfile()
+//            isInitialized = true
+//        }
+//    }
+//
+//    fun fetchProfile() {
+//        val token = getSavedToken() // ambil token dari SharedPreferences
+//        if (token != null) {
+//            viewModelScope.launch {
+//                try {
+//                    val response = authApi.getProfile("Bearer $token")
+//                    _user.value = response
+//                    _authState.value = AuthUiState.Authenticated
+//                    isLogin = true
+//                } catch (e: Exception) {
+//                    _authState.value = AuthUiState.Unauthenticated
+//                }
+//            }
+//        }
+//    }
+//
+//
+////    fun signUp(email: String, password: String, username: String) {
+////        // Dummy sign up: just pick the next available user or create a new one
+////        val user = com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository.getUserById("2")
+////        _user.value = user
+////        _authState.value = AuthUiState.Authenticated
+////        isLogin = true
+////        saveLoginState(true, user?.id)
+////    }
+//
+//    fun login(email: String, password: String) {
+//        viewModelScope.launch {
+//            try {
+//                val response = authApi.login(LoginRequest(email, password))
+//                val token = response.token
+//
+//                saveToken(token)
+//                fetchProfile() // ambil data user setelah login
+//
+//            } catch (e: Exception) {
+//                _authState.value = AuthUiState.Error("Login gagal: ${e.message}")
+//            }
+//        }
+//    }
+//
+//    private fun saveToken(token: String) {
+//        prefs.edit().putString("token", token).apply()
+//    }
+//    private fun getSavedToken(): String? = prefs.getString("token", null)
+//
+//    fun signOut() {
+//        _user.value = null
+//        _authState.value = AuthUiState.Unauthenticated
+//        isLogin = false
+//        saveLoginState(false, null)
+//    }
+//
+//    fun seenOnboarding() {
+//        onboardingHasOpened = true
+////        viewModelScope.launch {
+////            seenOnboardingState(context) // ini menyimpan state ke local storage
+////        }
+//    }
+//}
 
 
 //import android.annotation.SuppressLint

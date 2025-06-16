@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,18 +21,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontVariation.width
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.example.ppab_responsi1_kelompok09.R
 import com.example.ppab_responsi1_kelompok09.domain.model.User
-import com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository
+//import com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository
 import com.example.ppab_responsi1_kelompok09.presentation.components.AppText
 import com.example.ppab_responsi1_kelompok09.presentation.components.TopSpacer
 import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
@@ -42,28 +40,38 @@ import com.example.ppab_responsi1_kelompok09.ui.theme.PrimaryGradient
 import com.example.ppab_responsi1_kelompok09.ui.theme.White
 
 @Composable
-fun ProfileScreen ( user: User?, navController: NavController) {
-
-    if (user == null) {
-        Box(Modifier.fillMaxSize().background(Dark))
-    } else {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Column (
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.fillMaxWidth()
+fun ProfileScreen (user: User?, navController: NavController) {
+    when {
+        user == null -> {
+            // Show a loading or error state instead of a blank box
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Dark),
+                contentAlignment = Alignment.Center
             ) {
-                ImageBox(user, navController)
-                InformasiUsahaSection(user)
-                AlamatUsahaSection(user)
+                AppText(text = "Memuat profil...", color = White, fontSize = 16.sp)
+            }
+        }
+        else -> {
+            Box(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Column (
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    ImageBox(user, navController)
+                    InformasiUsahaSection(user)
+                    AlamatUsahaSection(user)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun ImageBox(user: User, navController: NavController) {
+private fun ImageBox(user: User?, navController: NavController) {
     Box (
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -78,26 +86,40 @@ private fun ImageBox(user: User, navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .offset(y = (-20).dp)
             ) {
-                Image(
-                    painter = painterResource(user.profilePhoto?.toInt() ?: R.drawable.img_profile_picture),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(110.dp)
-                        .clip(CircleShape)
-                        .border(
-                            width = 1.dp,
-                            color = White,
-                            shape = CircleShape
-                        ),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(32.dp))
+                // Profile image with safe fallback
+                if (!user?.profilePhoto.isNullOrBlank()) {
+                    AsyncImage(
+                        model = user?.profilePhoto,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(96.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, White, CircleShape)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.img_profile_picture),
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(96.dp)
+                            .clip(CircleShape)
+                            .border(2.dp, White, CircleShape)
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
                 AppText(
-                    text = user.namaUsaha?: "-",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    text = user?.name ?: "-",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = White
+                )
+                AppText(
+                    text = user?.email ?: "-",
+                    fontSize = 14.sp,
                     color = White
                 )
             }
@@ -154,17 +176,17 @@ private fun ImageBox(user: User, navController: NavController) {
 }
 
 @Composable
-private fun InformasiUsahaSection(user: User) {
+private fun InformasiUsahaSection(user: User?) {
     data class InfoUsaha (
         val text: String,
         val userData: String
     )
 
     val InformasiUsahaList = listOf(
-        InfoUsaha("Nama Usaha", user.namaUsaha?: "-"),
-        InfoUsaha("Nomor Telepon", user.nomorHandphone?: "-"),
-        InfoUsaha("Tipe Usaha", user.tipeUsaha?: "-"),
-        InfoUsaha("NPWP Pribadi", user.npwp?: "-")
+        InfoUsaha("Nama Usaha", user?.namaUsaha ?: "-"),
+        InfoUsaha("Nomor Telepon", user?.nomorHandphone ?: "-"),
+        InfoUsaha("Tipe Usaha", user?.tipeUsaha ?: "-"),
+        InfoUsaha("NPWP Pribadi", user?.npwp ?: "-")
     )
 
     Column (
@@ -203,17 +225,17 @@ private fun InformasiUsahaSection(user: User) {
 }
 
 @Composable
-private fun AlamatUsahaSection(user: User) {
+private fun AlamatUsahaSection(user: User?) {
     data class AlamatUsaha (
         val text: String,
         val userData: String
     )
 
     val AlamatUsahaList = listOf(
-        AlamatUsaha("Provinsi", user.provinsi?: "-"),
-        AlamatUsaha("Kabupaten/Kota", user.kabupatenKota?: "-"),
-        AlamatUsaha("Kecamatan", user.kecamatan?: "-"),
-        AlamatUsaha("Kelurahan", user.desa?: "-")
+        AlamatUsaha("Provinsi", user?.provinsi ?: "-"),
+        AlamatUsaha("Kabupaten/Kota", user?.kabupatenKota ?: "-"),
+        AlamatUsaha("Kecamatan", user?.kecamatan ?: "-"),
+        AlamatUsaha("Kelurahan", user?.desa ?: "-")
     )
 
     Column (

@@ -193,7 +193,7 @@ private fun RegisterForm(navController: NavController, authViewModel: AuthViewMo
             }
             CustomButton(
                 {
-                    authViewModel.signUp(emailSignUp, passwordSignUp, usernameSignUp)
+//                    authViewModel.signUp(emailSignUp, passwordSignUp, usernameSignUp)
                 },
                 "Sign Up"
             )

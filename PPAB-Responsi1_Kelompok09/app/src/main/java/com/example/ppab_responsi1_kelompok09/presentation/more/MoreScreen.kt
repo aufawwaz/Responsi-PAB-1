@@ -63,10 +63,11 @@ fun MoreScreen (
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ProfileContainer(
-                icon = R.drawable.img_profile_picture,
+                imageUrl = user?.profilePhoto, // Use the profile photo URL from API
+                placeholder = R.drawable.img_profile_picture, // Fallback image
                 text = user?.name ?: "",
-                isLogin = true,
-                onClick = { navController.navigate("profile/${user?.id?: ""}") }
+                isLogin = user != null,
+                onClick = { navController.navigate("profile/${user?.id ?: ""}") }
             )
             Box (
                 modifier = Modifier

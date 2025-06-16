@@ -24,7 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.ppab_responsi1_kelompok09.presentation.components.dropShadow200
 import com.example.ppab_responsi1_kelompok09.domain.model.NavItem
-import com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository
+//import com.example.ppab_responsi1_kelompok09.domain.repository.UserRepository
 import com.example.ppab_responsi1_kelompok09.presentation.balance.BalanceDetailScreen
 import com.example.ppab_responsi1_kelompok09.presentation.balance.BalanceScreen
 import com.example.ppab_responsi1_kelompok09.presentation.contact.ContactDetailScreen
@@ -159,9 +159,8 @@ fun MainNavigation(loginNavController: NavController, authViewModel: AuthViewMod
             navController = navController,
             startDestination = "home"
         ) {
-            composable("profile/{userId}") { backStackEntry ->
-                val userId = backStackEntry.arguments?.getString("userId") ?: ""
-                val user = UserRepository.getUserById(userId)
+            composable("profile") {
+                val user = authViewModel.user.collectAsState().value
                 ProfileScreen(user = user, navController = navController)
             }
 
